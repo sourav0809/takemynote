@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import { NoteListFilterTabs } from "@/components/note-list/note-list-filter-tabs";
 import { NoteListGrid } from "@/components/note-list/note-list-grid";
 import { NoteListItem } from "@/components/note-list/note-list-item";
@@ -27,6 +29,11 @@ export function NoteListPane() {
   const updateNote = useUpdateNote();
   const deleteNotePermanently = useDeleteNotePermanently();
   const emptyTrash = useEmptyTrash();
+
+  useEffect(() => {
+    if (selectedNoteId || activeFolder === "trash" || notes.length === 0) return;
+    setSelectedNoteId(notes[0].id);
+  }, [selectedNoteId, activeFolder, notes, setSelectedNoteId]);
 
   const categoryById = new Map(categories.map((category) => [category.id, category]));
 

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useAppState } from "@/hooks/use-app-state";
-import { useCreateNote, useNotes } from "@/hooks/use-notes";
+import { useCreateNote, useGetOrCreateScratchpadNote, useNotes } from "@/hooks/use-notes";
 import { APP_NAME } from "@/lib/constants";
 
 export function AppSidebar() {
@@ -15,6 +15,7 @@ export function AppSidebar() {
     useAppState();
   const { data: notes } = useNotes();
   const createNote = useCreateNote();
+  const getOrCreateScratchpadNote = useGetOrCreateScratchpadNote();
 
   const favoritesCount = notes.filter((note) => note.favorited && !note.trashed).length;
   const notesCount = notes.filter((note) => !note.trashed && !note.scratchpad).length;
@@ -53,7 +54,9 @@ export function AppSidebar() {
             isActive={activeFolder === "scratchpad"}
             onClick={() => {
               setActiveFolder("scratchpad");
-              setSelectedNoteId("note-scratchpad");
+              getOrCreateScratchpadNote.mutate(undefined, {
+                onSuccess: (note) => setSelectedNoteId(note.id),
+              });
             }}
           />
           <SidebarNavItem

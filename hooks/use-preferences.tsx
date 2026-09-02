@@ -1,38 +1,55 @@
 "use client";
 
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useMemo, useSyncExternalStore } from "react";
 
-interface Preferences {
-  activeLineHighlight: boolean;
-  scrollPastEnd: boolean;
-  sortBy: "updated" | "created" | "title";
-  textDirection: "ltr" | "rtl";
-  setPreference: <K extends keyof PreferenceValues>(
+import {
+  DEFAULT_PREFERENCES,
+  readPreferences,
+  writePreferences,
+  type StoredPreferences,
+} from "@/lib/data/preferences-storage";
+
+interface Preferences extends StoredPreferences {
+  setPreference: <K extends keyof StoredPreferences>(
     key: K,
-    value: PreferenceValues[K]
+    value: StoredPreferences[K]
   ) => void;
 }
 
-type PreferenceValues = Pick<
-  Preferences,
-  "activeLineHighlight" | "scrollPastEnd" | "sortBy" | "textDirection"
->;
-
 const PreferencesContext = createContext<Preferences | null>(null);
 
+const listeners = new Set<() => void>();
+let cachedSnapshot: StoredPreferences | null = null;
+
+function subscribe(callback: () => void): () => void {
+  listeners.add(callback);
+  return () => listeners.delete(callback);
+}
+
+function getSnapshot(): StoredPreferences {
+  if (!cachedSnapshot) {
+    cachedSnapshot = readPreferences();
+  }
+  return cachedSnapshot;
+}
+
+function getServerSnapshot(): StoredPreferences {
+  return DEFAULT_PREFERENCES;
+}
+
+function commitPreferences(next: StoredPreferences): void {
+  writePreferences(next);
+  cachedSnapshot = next;
+  listeners.forEach((listener) => listener());
+}
+
 export function PreferencesProvider({ children }: { children: React.ReactNode }) {
-  const [values, setValues] = useState<PreferenceValues>({
-    activeLineHighlight: true,
-    scrollPastEnd: false,
-    sortBy: "updated",
-    textDirection: "ltr",
-  });
+  const values = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   const value = useMemo<Preferences>(
     () => ({
       ...values,
-      setPreference: (key, val) =>
-        setValues((prev) => ({ ...prev, [key]: val })),
+      setPreference: (key, val) => commitPreferences({ ...values, [key]: val }),
     }),
     [values]
   );

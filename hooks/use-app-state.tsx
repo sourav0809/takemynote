@@ -27,7 +27,7 @@ const AppStateContext = createContext<AppState | null>(null);
 export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const [activeFolder, setActiveFolderState] = useState<FolderId>("notes");
   const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
-  const [selectedNoteId, setSelectedNoteId] = useState<string | null>("note-1");
+  const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [listView, setListView] = useState<NoteListView>("list");
   const [listFilter, setListFilter] = useState<NoteListFilter>("all");

@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { notesStore } from "@/lib/notes-store";
+import { dataAdapter } from "@/lib/data";
 import type { Note } from "@/types/note";
 
 const NOTES_QUERY_KEY = ["notes"] as const;
@@ -8,8 +8,8 @@ const NOTES_QUERY_KEY = ["notes"] as const;
 export function useNotes() {
   return useQuery({
     queryKey: NOTES_QUERY_KEY,
-    queryFn: async () => notesStore.getNotes(),
-    initialData: () => notesStore.getNotes(),
+    queryFn: async () => dataAdapter.getNotes(),
+    initialData: [] as Note[],
   });
 }
 
@@ -18,7 +18,7 @@ export function useCreateNote() {
 
   return useMutation({
     mutationFn: async (categoryId: string | null) =>
-      notesStore.createNote(categoryId),
+      dataAdapter.createNote(categoryId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: NOTES_QUERY_KEY });
     },
@@ -35,7 +35,7 @@ export function useUpdateNote() {
     }: {
       id: string;
       changes: Partial<Note>;
-    }) => notesStore.updateNote(id, changes),
+    }) => dataAdapter.updateNote(id, changes),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: NOTES_QUERY_KEY });
     },
@@ -46,7 +46,7 @@ export function useDeleteNotePermanently() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (id: string) => notesStore.deleteNotePermanently(id),
+    mutationFn: async (id: string) => dataAdapter.deleteNotePermanently(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: NOTES_QUERY_KEY });
     },
@@ -57,7 +57,18 @@ export function useEmptyTrash() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async () => notesStore.emptyTrash(),
+    mutationFn: async () => dataAdapter.emptyTrash(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: NOTES_QUERY_KEY });
+    },
+  });
+}
+
+export function useGetOrCreateScratchpadNote() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async () => dataAdapter.getOrCreateScratchpadNote(),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: NOTES_QUERY_KEY });
     },
