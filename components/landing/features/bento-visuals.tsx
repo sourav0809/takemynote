@@ -7,11 +7,11 @@ const ICON_CLASS = "flex size-9 shrink-0 items-center justify-center rounded-xl"
 export function PrivacyVisual() {
   return (
     <div aria-hidden className={ROW_CLASS}>
-      <span className={cn(ICON_CLASS, "bg-mint-tint text-mint-ink")}>
+      <span className={cn(ICON_CLASS, "bg-sky-tint text-sky-ink")}>
         <Lock className="size-4" />
       </span>
       <div className="min-w-0">
-        <p className="truncate text-[13px] font-semibold text-ink">Saved on this device</p>
+        <p className="truncate text-[13px] font-semibold text-ink">On this device only</p>
         <p className="truncate text-[12px] text-muted">No account · No server</p>
       </div>
     </div>
@@ -79,13 +79,13 @@ const BACKUP_ROWS = [
     icon: FileJson,
     title: "takemynote-backup.json",
     meta: "Notes, categories and preferences",
-    iconClass: "bg-violet-tint text-violet-ink",
+    iconClass: "bg-sky-tint text-sky-ink",
   },
   {
     icon: FileText,
     title: "weekend-in-lisbon.md",
     meta: "Single note as Markdown",
-    iconClass: "bg-peach-tint text-peach-ink",
+    iconClass: "bg-sky-edge text-brand-deep",
   },
 ];
 

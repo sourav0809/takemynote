@@ -10,11 +10,11 @@ export function ProductStage() {
     <div className="relative isolate overflow-hidden rounded-[28px] border border-stage-line bg-stage p-3 stage-ruled sm:p-6 lg:p-10">
       <div
         aria-hidden
-        className="absolute -top-24 left-1/4 -z-10 h-64 w-1/2 rounded-full bg-accent/20 blur-3xl"
+        className="absolute -top-24 left-1/4 -z-10 h-64 w-1/2 rounded-full bg-sky-ink/30 blur-3xl"
       />
       <div
         aria-hidden
-        className="absolute -right-16 bottom-0 -z-10 h-56 w-72 rounded-full bg-violet-ink/25 blur-3xl"
+        className="absolute -right-16 bottom-0 -z-10 h-56 w-72 rounded-full bg-accent-edge/25 blur-3xl"
       />
 
       <div className="overflow-hidden rounded-[20px] border border-white/10 bg-surface shadow-window">

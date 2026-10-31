@@ -8,7 +8,7 @@ const ctaLinkVariants = cva(
   {
     variants: {
       variant: {
-        primary: "bg-ink text-white hover:bg-ink-soft",
+        primary: "bg-brand text-brand-foreground hover:bg-brand-deep",
         accent: "border border-accent-edge/70 bg-accent text-ink hover:bg-accent-deep",
         secondary: "border border-line bg-surface text-ink shadow-card hover:bg-sunken",
       },

@@ -53,7 +53,7 @@ export function LandingNav() {
           className="flex items-center gap-2 rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-edge"
         >
           <LogoMark className="size-7" />
-          <span className="text-[15px] leading-none font-semibold tracking-tight text-ink">
+          <span className="text-[15px] leading-none font-semibold tracking-tight text-ink italic">
             {APP_NAME}
           </span>
         </Link>

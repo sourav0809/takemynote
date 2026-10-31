@@ -15,7 +15,7 @@ export function LandingFooter() {
           <div className="max-w-xs">
             <Link href={ROUTES.home} className="flex items-center gap-2">
               <LogoMark className="size-7" />
-              <span className="text-[15px] leading-none font-semibold tracking-tight text-ink">
+              <span className="text-[15px] leading-none font-semibold tracking-tight text-ink italic">
                 {APP_NAME}
               </span>
             </Link>

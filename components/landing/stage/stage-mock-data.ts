@@ -8,9 +8,9 @@ export const STAGE_FOLDERS = [
 ];
 
 export const STAGE_CATEGORIES = [
-  { label: "Ideas", dotClass: "bg-violet-ink" },
-  { label: "Work", dotClass: "bg-sky-ink" },
-  { label: "Travel", dotClass: "bg-peach-ink" },
+  { label: "Ideas", dotClass: "bg-accent-edge" },
+  { label: "Work", dotClass: "bg-brand" },
+  { label: "Travel", dotClass: "bg-brand-deep" },
 ];
 
 export const STAGE_NOTES = [

@@ -10,7 +10,7 @@ export function LandingHero() {
   return (
     <section className="relative isolate overflow-hidden">
       {/* Height grows with width so the dunes stay level just under the button. */}
-      <div className="absolute inset-x-0 top-0 -z-10 h-[520px] sm:h-[640px] md:h-[calc(470px_+_20vw)] xl:h-[calc(430px_+_23vw)]">
+      <div className="absolute inset-x-0 top-0 -z-10 h-[500px] sm:h-[575px] lg:h-[calc(427px_+_14vw)]">
         <Image
           src={heroDunes}
           alt=""
@@ -36,7 +36,7 @@ export function LandingHero() {
         </CtaLink>
       </div>
 
-      <div className="mx-auto mt-28 max-w-6xl animate-rise px-3 [animation-delay:150ms] sm:mt-36 sm:px-6 md:mt-[calc(4rem_+_9vw)] lg:px-8">
+      <div className="mx-auto mt-28 max-w-6xl animate-rise px-3 [animation-delay:150ms] sm:px-6 lg:px-8">
         <ProductStage />
       </div>
     </section>

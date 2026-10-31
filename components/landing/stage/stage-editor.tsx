@@ -8,7 +8,7 @@ export function StageEditor() {
   return (
     <div className="relative min-w-0 bg-surface px-5 pt-6 pb-8 sm:px-8 sm:pt-8">
       <p className="text-[11px] font-medium text-subtle">
-        <span className="text-peach-ink">Travel</span> · Edited just now
+        <span className="text-brand">Travel</span> · Edited just now
       </p>
       <h3 className="mt-2 text-[22px] leading-tight font-semibold tracking-[-0.02em] text-ink sm:text-[26px]">
         Weekend in Lisbon
@@ -25,7 +25,7 @@ export function StageEditor() {
             <span
               className={cn(
                 "flex size-4 shrink-0 items-center justify-center rounded-[5px] border",
-                done ? "border-ink bg-ink text-white" : "border-line-strong bg-surface"
+                done ? "border-brand bg-brand text-brand-foreground" : "border-line-strong bg-surface"
               )}
             >
               {done && <Check className="size-3" strokeWidth={3} />}

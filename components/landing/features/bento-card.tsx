@@ -1,13 +1,10 @@
 import { cn } from "@/lib/utils";
 
-export type BentoTone = "plain" | "violet" | "sky" | "peach" | "mint";
+export type BentoTone = "plain" | "sky";
 
 const TONE_CLASSES: Record<BentoTone, { card: string; accent: string }> = {
-  plain: { card: "border-line bg-surface", accent: "text-muted" },
-  violet: { card: "border-violet-edge bg-violet-tint", accent: "text-violet-ink" },
+  plain: { card: "border-line bg-surface", accent: "text-sky-ink" },
   sky: { card: "border-sky-edge bg-sky-tint", accent: "text-sky-ink" },
-  peach: { card: "border-peach-edge bg-peach-tint", accent: "text-peach-ink" },
-  mint: { card: "border-mint-edge bg-mint-tint", accent: "text-mint-ink" },
 };
 
 interface BentoCardProps {

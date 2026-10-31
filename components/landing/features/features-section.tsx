@@ -28,7 +28,7 @@ export function FeaturesSection() {
 
       <div className="reveal mt-12 grid grid-cols-1 gap-4 sm:mt-14 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
         <BentoCard
-          tone="violet"
+          tone="sky"
           titleAccent="Type /"
           title="for any block"
           description="Headings, task lists, quotes and code blocks appear the moment you need them."
@@ -37,7 +37,6 @@ export function FeaturesSection() {
           <SlashMenuPreview className="max-w-none shadow-card sm:max-w-72" />
         </BentoCard>
         <BentoCard
-          tone="mint"
           titleAccent="Private"
           title="by default"
           description="Notes live in your browser. Nothing to sign up for or sync."
@@ -45,6 +44,7 @@ export function FeaturesSection() {
           <PrivacyVisual />
         </BentoCard>
         <BentoCard
+          tone="sky"
           titleAccent="Tidy"
           title="without trying"
           description="Categories, pins and favourites keep the right note close."
@@ -52,7 +52,6 @@ export function FeaturesSection() {
           <OrganiseVisual />
         </BentoCard>
         <BentoCard
-          tone="sky"
           titleAccent="Find it"
           title="as you type"
           description="Search titles and text across every note instantly."
@@ -60,7 +59,7 @@ export function FeaturesSection() {
           <SearchVisual />
         </BentoCard>
         <BentoCard
-          tone="peach"
+          tone="sky"
           titleAccent="Scratchpad"
           title="for quick bits"
           description="One always-there page for numbers, links and half-ideas."

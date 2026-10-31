@@ -15,14 +15,35 @@ export function StageNoteList() {
             key={title}
             className={cn(
               "rounded-xl border px-2.5 py-2",
-              active ? "border-line bg-sunken" : "border-transparent"
+              active ? "border-brand bg-brand" : "border-transparent"
             )}
           >
             <div className="flex items-baseline justify-between gap-2">
-              <span className="truncate text-[12px] font-semibold text-ink">{title}</span>
-              <span className="shrink-0 font-mono text-[10px] text-subtle">{time}</span>
+              <span
+                className={cn(
+                  "truncate text-[12px] font-semibold",
+                  active ? "text-brand-foreground" : "text-ink"
+                )}
+              >
+                {title}
+              </span>
+              <span
+                className={cn(
+                  "shrink-0 font-mono text-[10px]",
+                  active ? "text-brand-foreground/70" : "text-subtle"
+                )}
+              >
+                {time}
+              </span>
             </div>
-            <p className="mt-0.5 truncate text-[11px] text-muted">{preview}</p>
+            <p
+              className={cn(
+                "mt-0.5 truncate text-[11px]",
+                active ? "text-brand-foreground/75" : "text-muted"
+              )}
+            >
+              {preview}
+            </p>
           </li>
         ))}
       </ul>
