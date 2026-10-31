@@ -54,7 +54,7 @@ export function LayoutPreview({ layout }: { layout: AppLayout }) {
   return (
     <span
       aria-hidden
-      className="flex h-28 overflow-hidden rounded-lg border border-border bg-sidebar"
+      className="flex h-20 overflow-hidden rounded-lg border border-border bg-sidebar sm:h-28"
     >
       {layout === "classic" ? (
         <>

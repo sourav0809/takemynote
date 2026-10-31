@@ -2,9 +2,13 @@ import { STORAGE_KEYS } from "@/lib/data/storage-keys";
 
 export type AppLayout = "classic" | "library";
 
+/** Where the note text sits in the writing area. */
+export type WritingPosition = "start" | "center" | "full";
+
 export interface StoredPreferences {
   /** Classic three columns, or Library + Page. */
   layout: AppLayout;
+  writingPosition: WritingPosition;
   /** Set once the first-run welcome has been finished or skipped. */
   onboardingCompleted: boolean;
   activeLineHighlight: boolean;
@@ -16,6 +20,7 @@ export interface StoredPreferences {
 export const DEFAULT_PREFERENCES: StoredPreferences = {
   // New visitors see the three-column layout shown on the landing page.
   layout: "classic",
+  writingPosition: "start",
   onboardingCompleted: false,
   activeLineHighlight: true,
   scrollPastEnd: false,

@@ -4,71 +4,57 @@ import { useEffect } from "react";
 
 import { useAppState } from "@/hooks/use-app-state";
 import { useCreateAndOpenNote } from "@/hooks/use-create-and-open-note";
-import { useNotes, useUpdateNote } from "@/hooks/use-notes";
+import { useNoteActions } from "@/hooks/use-note-actions";
+import { useNotes } from "@/hooks/use-notes";
 import { useThemeToggle } from "@/hooks/use-theme-toggle";
+import { findShortcut } from "@/lib/shortcuts";
 
 export const NOTE_SEARCH_INPUT_ID = "note-search-input";
 
+/** Wires the shortcuts defined in lib/shortcuts.ts to their actions. */
 export function useGlobalShortcuts(): void {
-  const { selectedNoteId, setSelectedNoteId } = useAppState();
+  const { selectedNoteId } = useAppState();
   const { data: notes } = useNotes();
   const createAndOpenNote = useCreateAndOpenNote();
-  const updateNote = useUpdateNote();
+  const actions = useNoteActions();
   const { toggleTheme } = useThemeToggle();
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      const isModifierPressed = event.metaKey || event.ctrlKey;
-      if (!isModifierPressed || !event.altKey) return;
-
-      const key = event.key.toLowerCase();
+      const shortcut = findShortcut(event);
+      if (!shortcut) return;
       const activeNote = notes.find((note) => note.id === selectedNoteId);
 
-      switch (key) {
-        case "n": {
+      switch (shortcut.id) {
+        case "newNote":
           event.preventDefault();
           createAndOpenNote();
           break;
-        }
-        case "f": {
+        case "search": {
+          const searchInput = document.getElementById(NOTE_SEARCH_INPUT_ID);
+          if (!searchInput) return;
           event.preventDefault();
-          document.getElementById(NOTE_SEARCH_INPUT_ID)?.focus();
+          searchInput.focus();
           break;
         }
-        case "l": {
-          event.preventDefault();
-          toggleTheme();
-          break;
-        }
-        case "s": {
-          if (!activeNote) return;
-          event.preventDefault();
-          updateNote.mutate({
-            id: activeNote.id,
-            changes: { favorited: !activeNote.favorited },
-          });
-          break;
-        }
-        case "d": {
+        case "favorite":
           if (!activeNote || activeNote.trashed) return;
           event.preventDefault();
-          updateNote.mutate({ id: activeNote.id, changes: { trashed: true } });
-          setSelectedNoteId(null);
+          actions.toggleFavorite(activeNote);
           break;
-        }
-        default:
+        case "trash":
+          if (!activeNote || activeNote.trashed || activeNote.scratchpad) return;
+          event.preventDefault();
+          actions.moveToTrash(activeNote);
+          break;
+        case "theme":
+          event.preventDefault();
+          toggleTheme();
           break;
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [
-    notes,
-    selectedNoteId,
-    createAndOpenNote,
-    updateNote,
-    toggleTheme,
-    setSelectedNoteId,
-  ]);
+  }, [notes, selectedNoteId, createAndOpenNote, actions, toggleTheme]);
 }

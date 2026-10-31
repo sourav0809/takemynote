@@ -22,7 +22,13 @@ import { APP_NAME } from "@/lib/constants";
 
 /** Tabs sit beside the content from this width, and in a row above it on phones. */
 const SIDE_TABS_MEDIA_QUERY = "(min-width: 768px)";
-const TAB_TRIGGER_CLASS = "flex-none justify-start gap-2.5 px-3 py-2 md:py-2.5";
+/** In the side list (md and up) the current tab gets the app's light-blue highlight. */
+const TAB_TRIGGER_CLASS = [
+  "flex-none justify-start gap-2.5 px-3 py-2 md:py-2.5",
+  "md:not-data-active:hover:bg-muted md:not-data-active:hover:text-foreground",
+  "md:data-active:bg-sidebar-accent md:data-active:text-sidebar-accent-foreground md:data-active:[&_svg]:text-primary",
+  "md:dark:data-active:border-transparent md:dark:data-active:bg-sidebar-accent",
+].join(" ");
 
 export function SettingsDialog() {
   const { isSettingsOpen, setSettingsOpen } = useAppState();

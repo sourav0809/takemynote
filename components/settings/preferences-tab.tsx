@@ -1,4 +1,5 @@
 import { LayoutPicker } from "@/components/settings/layout-picker";
+import { WritingPositionPicker } from "@/components/settings/writing-position-picker";
 import { PreferenceSelectRow } from "@/components/settings/preference-select-row";
 import { PreferenceToggleRow } from "@/components/settings/preference-toggle-row";
 import { usePreferences } from "@/hooks/use-preferences";
@@ -11,6 +12,7 @@ export function PreferencesTab() {
   return (
     <div className="flex flex-col">
       <LayoutPicker />
+      <WritingPositionPicker />
       <PreferenceToggleRow
         title="Scroll past end"
         description="Allow scrolling past the last line of a note."

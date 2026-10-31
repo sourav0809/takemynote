@@ -17,11 +17,19 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAiAssist } from "@/hooks/use-ai-assist";
 import { useNoteEditor } from "@/hooks/use-note-editor";
 import { usePreferences } from "@/hooks/use-preferences";
+import type { WritingPosition } from "@/lib/data/preferences-storage";
 import { cn } from "@/lib/utils";
 import type { NoteContent } from "@/types/note";
 
 const DARK_THEME = "dark";
 const SCROLL_VIEWPORT_SELECTOR = '[data-slot="scroll-area-viewport"]';
+
+/** Note column width and placement for each "Writing area" preference. */
+const WRITING_COLUMN_CLASS: Record<WritingPosition, string> = {
+  start: "max-w-[820px]",
+  center: "mx-auto max-w-[760px]",
+  full: "max-w-none",
+};
 
 export interface NoteEditorProps {
   initialContent: NoteContent;
@@ -38,7 +46,7 @@ export interface NoteEditorProps {
  */
 export function NoteEditor({ initialContent, onContentChange, noteTitle, header }: NoteEditorProps) {
   const { resolvedTheme } = useTheme();
-  const { textDirection, scrollPastEnd } = usePreferences();
+  const { textDirection, scrollPastEnd, writingPosition } = usePreferences();
   const editor = useNoteEditor(initialContent);
   const ai = useAiAssist(editor, noteTitle);
   const [scrollViewport, setScrollViewport] = useState<HTMLElement | null>(null);
@@ -67,7 +75,11 @@ export function NoteEditor({ initialContent, onContentChange, noteTitle, header 
         <ScrollArea className="h-full">
           <div
             ref={editorContainerRef}
-            className={cn("w-full max-w-[820px]", scrollPastEnd ? "pb-[60vh]" : "pb-40")}
+            className={cn(
+              "w-full",
+              WRITING_COLUMN_CLASS[writingPosition],
+              scrollPastEnd ? "pb-[60vh]" : "pb-40"
+            )}
           >
             {header}
             <div className="note-editor pt-3" dir={textDirection}>

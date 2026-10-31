@@ -39,7 +39,7 @@ export function LayoutOptionCards({ className }: { className?: string }) {
   };
 
   return (
-    <div role="radiogroup" aria-label="Layout" className={cn("grid grid-cols-1 gap-3 sm:grid-cols-2", className)}>
+    <div role="radiogroup" aria-label="Layout" className={cn("grid grid-cols-2 gap-2.5 sm:gap-3", className)}>
       {LAYOUT_OPTIONS.map((option) => {
         const isSelected = option.value === layout;
         return (
@@ -50,7 +50,7 @@ export function LayoutOptionCards({ className }: { className?: string }) {
             aria-checked={isSelected}
             onClick={() => handleSelect(option.value)}
             className={cn(
-              "flex flex-col gap-2.5 rounded-xl border p-2.5 text-left transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              "flex flex-col gap-2 rounded-xl border p-2 text-left transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring sm:gap-2.5 sm:p-2.5",
               isSelected
                 ? "border-primary ring-1 ring-primary"
                 : "border-border hover:border-foreground/25"
@@ -60,7 +60,9 @@ export function LayoutOptionCards({ className }: { className?: string }) {
             <span className="flex items-start justify-between gap-2 px-0.5">
               <span>
                 <span className="block text-sm font-medium">{option.label}</span>
-                <span className="block text-xs text-muted-foreground">{option.description}</span>
+                <span className="hidden text-xs text-muted-foreground sm:block">
+                  {option.description}
+                </span>
               </span>
               <CircleCheck
                 className={cn("mt-0.5 size-4 shrink-0", isSelected ? "text-primary" : "invisible")}

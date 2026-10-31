@@ -120,6 +120,8 @@ Chosen direction: **see "Layout decision" at the end of this file.** Whatever th
 - **Warm stone neutrals + highlighter yellow were rejected** for the same reason: the app theme comes first.
 - **A first in-place polish of the 3-pane layout was rejected and reverted** ("old app design was better"). It kept the copied 3-pane structure and added: light-blue tinted note cards with a ring, an icon-in-a-tinted-square empty state with a CTA, a sidebar footer, pill buttons everywhere, a centred reading column. Lesson: restyling a borrowed layout is not enough, and generic "polish" moves read as generated. Decide the layout and UX first, agree on it, then style.
 - The owner wants the app to feel **human-designed and very simple**, keeping every current feature.
+- **Small controls on coloured backgrounds** (the ⋯ on the blue selected note) must not inherit the generic grey ghost/focus styles. A grey focus ring and a grey "open" circle on blue were flagged as "breaking". Use tints of the foreground colour for hover, open and focus, and no ring on tiny round buttons that sit next to text.
+- **Every selected state needs a visible highlight**, including the Settings tab list (light-blue `sidebar-accent`, the same as the sidebar). Hover must never override the selected style.
 - After seeing Library + Page, the owner asked to **let users choose** between it and the 3-column look of the landing mock, saved locally, with a Settings preview. They also asked for the **note text to start at the left of the writing area** (toolbar centred is fine), a modern "/" menu with Lucide icons, and **working AI in every layout**.
 
 ## Layouts (user's choice)
@@ -134,6 +136,14 @@ The app ships **two layouts**. The user picks one in Settings → Preferences �
 Both layouts reuse the same parts: `NoteListBody`, `NoteListControls`, `NewNoteButton`, `useFolderNavigation`, `EditorPane`. A change to a note row or the Page appears in both automatically. Never fork them per layout.
 
 **Page alignment:** the note column (title, meta, body) starts at the left of the writing area with the shared gutter (`NOTE_GUTTER_CLASS`); it is not centred. The formatting toolbar is centred.
+
+## Writing area (user's choice)
+
+Settings → Preferences → Writing area: **Left** (default; the note column starts at the edge of the writing area), **Centered** (Notion-style reading column), or **Full width**. Stored as `preferences.writingPosition` and included in backups. Applied in `note-editor.tsx` (`WRITING_COLUMN_CLASS`). The toolbar is always centred.
+
+## Keyboard shortcuts
+
+Defined once in `lib/shortcuts.ts` and used by both the handler and the Settings list. ⌘⌥ / Ctrl+Alt plus N (new), F (search), S (favorite), ⌫ (trash), T (theme). Match on `event.code`, never `event.key`: on a Mac, Option changes the character (⌥N → "˜"). Avoid OS and browser combos: ⌘⌥D toggles the macOS Dock and ⌘⌥L opens Chrome's downloads; D and L remain as hidden aliases. Ignore auto-repeat.
 
 ## First-run welcome
 

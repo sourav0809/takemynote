@@ -28,7 +28,7 @@ export function WelcomeStep() {
       <LogoMark className="size-11" />
       <h2 className="mt-5 text-2xl font-semibold tracking-tight">Welcome to {APP_NAME}</h2>
       <p className="mt-1.5 text-sm text-muted-foreground">
-        A calm place to write things down. Two quick choices and you’re in.
+        A calm place to write things down. A few quick choices and you’re in.
       </p>
       <ul className="mt-6 flex flex-col gap-4">
         {HIGHLIGHTS.map(({ icon: Icon, title, text }) => (
