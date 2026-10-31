@@ -15,7 +15,7 @@ export function LandingFooter() {
         <div className="flex flex-col gap-10 sm:flex-row sm:justify-between">
           <div className="max-w-xs">
             <Link href={ROUTES.home} className="flex items-center gap-2">
-              <BrandLockup tone="light" className="h-10" />
+              <BrandLockup tone="light" className="h-9" />
             </Link>
             <p className="mt-4 text-[14px] leading-relaxed text-muted">
               A calm, private notebook that lives in your browser.

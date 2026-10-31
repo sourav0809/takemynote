@@ -17,7 +17,7 @@ export function BrandHomeLink({ className }: BrandHomeLinkProps) {
       aria-label={`${APP_NAME} home`}
       className="-m-1 flex items-center rounded-lg p-1 transition-opacity outline-none hover:opacity-80 focus-visible:ring-2 focus-visible:ring-ring"
     >
-      <BrandLockup className={cn("h-8", className)} />
+      <BrandLockup className={cn("h-7", className)} />
     </Link>
   );
 }

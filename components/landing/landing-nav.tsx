@@ -52,7 +52,7 @@ export function LandingNav() {
           href={ROUTES.home}
           className="flex items-center gap-2 rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-edge"
         >
-          <BrandLockup tone="light" className="h-9" priority />
+          <BrandLockup tone="light" className="h-8" priority />
         </Link>
 
         <ul className="hidden items-center gap-1 lg:flex">

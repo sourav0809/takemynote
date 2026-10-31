@@ -16,7 +16,7 @@ export function FeaturesSection() {
   return (
     <section
       id={LANDING_SECTION_IDS.features}
-      className="mx-auto max-w-6xl scroll-mt-24 px-4 py-16 sm:px-6 sm:py-24 lg:py-32 lg:px-8"
+      className="mx-auto max-w-6xl scroll-mt-24 px-4 pt-16 sm:px-6 sm:pt-24 lg:pt-28 lg:px-8"
     >
       <SectionHeading
         command="features"
