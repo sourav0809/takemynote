@@ -21,8 +21,8 @@ const LAYOUT_OPTIONS: { value: AppLayout; label: string; description: string }[]
   },
 ];
 
-/** Lets the user choose the app layout; saved with their preferences. */
-export function LayoutPicker() {
+/** The two layout cards (radio group). Applies the choice immediately. */
+export function LayoutOptionCards({ className }: { className?: string }) {
   const { layout, setPreference } = usePreferences();
 
   const handleSelect = (value: AppLayout) => {
@@ -39,42 +39,49 @@ export function LayoutPicker() {
   };
 
   return (
+    <div role="radiogroup" aria-label="Layout" className={cn("grid grid-cols-1 gap-3 sm:grid-cols-2", className)}>
+      {LAYOUT_OPTIONS.map((option) => {
+        const isSelected = option.value === layout;
+        return (
+          <button
+            key={option.value}
+            type="button"
+            role="radio"
+            aria-checked={isSelected}
+            onClick={() => handleSelect(option.value)}
+            className={cn(
+              "flex flex-col gap-2.5 rounded-xl border p-2.5 text-left transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              isSelected
+                ? "border-primary ring-1 ring-primary"
+                : "border-border hover:border-foreground/25"
+            )}
+          >
+            <LayoutPreview layout={option.value} />
+            <span className="flex items-start justify-between gap-2 px-0.5">
+              <span>
+                <span className="block text-sm font-medium">{option.label}</span>
+                <span className="block text-xs text-muted-foreground">{option.description}</span>
+              </span>
+              <CircleCheck
+                className={cn("mt-0.5 size-4 shrink-0", isSelected ? "text-primary" : "invisible")}
+              />
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/** Settings → Preferences: the layout choice with a short explanation. */
+export function LayoutPicker() {
+  return (
     <div className="border-b border-border pb-5">
       <p className="text-sm font-medium">Layout</p>
       <p className="mt-0.5 text-xs text-muted-foreground">
         Choose how the app is arranged. On phones, both show one screen at a time.
       </p>
-      <div role="radiogroup" aria-label="Layout" className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-        {LAYOUT_OPTIONS.map((option) => {
-          const isSelected = option.value === layout;
-          return (
-            <button
-              key={option.value}
-              type="button"
-              role="radio"
-              aria-checked={isSelected}
-              onClick={() => handleSelect(option.value)}
-              className={cn(
-                "flex flex-col gap-2.5 rounded-xl border p-2.5 text-left transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                isSelected
-                  ? "border-primary ring-1 ring-primary"
-                  : "border-border hover:border-foreground/25"
-              )}
-            >
-              <LayoutPreview layout={option.value} />
-              <span className="flex items-start justify-between gap-2 px-0.5">
-                <span>
-                  <span className="block text-sm font-medium">{option.label}</span>
-                  <span className="block text-xs text-muted-foreground">{option.description}</span>
-                </span>
-                <CircleCheck
-                  className={cn("mt-0.5 size-4 shrink-0", isSelected ? "text-primary" : "invisible")}
-                />
-              </span>
-            </button>
-          );
-        })}
-      </div>
+      <LayoutOptionCards className="mt-3" />
     </div>
   );
 }

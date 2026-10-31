@@ -135,6 +135,10 @@ Both layouts reuse the same parts: `NoteListBody`, `NoteListControls`, `NewNoteB
 
 **Page alignment:** the note column (title, meta, body) starts at the left of the writing area with the shared gutter (`NOTE_GUTTER_CLASS`); it is not centred. The formatting toolbar is centred.
 
+## First-run welcome
+
+`components/onboarding/onboarding-dialog.tsx` appears once per browser, the first time someone opens /notes. It has three steps: **Welcome** (logo, one line, three facts: private, "/" to format, AI when you ask) → **Pick a layout** (the same cards as Settings, applied live) → **Light or dark?** (Light / Dark / Match system, applied live) → "Start writing". "Skip" on step 1, or closing the dialog, keeps the defaults (Classic, system theme). Completion is stored as `preferences.onboardingCompleted`, which is included in backups, so restoring on a new device skips it. It renders only after hydration, so returning users never see a flash.
+
 ## AI (real, opt-in)
 
 - Four actions in `lib/ai/ai-actions.ts`: Summarize (adds bullets at the top), Make a checklist (appends tasks), Fix spelling (replaces the note), Continue writing (appends).

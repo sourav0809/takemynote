@@ -68,6 +68,7 @@ export function DataManagementTab() {
               categories,
               preferences: {
                 layout: preferences.layout,
+                onboardingCompleted: preferences.onboardingCompleted,
                 activeLineHighlight: preferences.activeLineHighlight,
                 scrollPastEnd: preferences.scrollPastEnd,
                 sortBy: preferences.sortBy,

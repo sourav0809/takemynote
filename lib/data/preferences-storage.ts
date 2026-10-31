@@ -5,6 +5,8 @@ export type AppLayout = "classic" | "library";
 export interface StoredPreferences {
   /** Classic three columns, or Library + Page. */
   layout: AppLayout;
+  /** Set once the first-run welcome has been finished or skipped. */
+  onboardingCompleted: boolean;
   activeLineHighlight: boolean;
   scrollPastEnd: boolean;
   sortBy: "updated" | "created" | "title";
@@ -14,6 +16,7 @@ export interface StoredPreferences {
 export const DEFAULT_PREFERENCES: StoredPreferences = {
   // New visitors see the three-column layout shown on the landing page.
   layout: "classic",
+  onboardingCompleted: false,
   activeLineHighlight: true,
   scrollPastEnd: false,
   sortBy: "updated",

@@ -18,7 +18,7 @@ export function NoteSearchBar({ value, onChange }: NoteSearchBarProps) {
         placeholder="Search notes"
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-10 bg-background pl-9 lg:h-9"
+        className="h-10 border-border bg-muted/60 pl-9 shadow-none hover:bg-muted focus-visible:bg-background lg:h-9 dark:bg-input/40"
       />
     </div>
   );
