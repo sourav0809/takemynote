@@ -2,9 +2,17 @@ import { useMemo } from "react";
 
 import { useAppState } from "@/hooks/use-app-state";
 import { useNotes } from "@/hooks/use-notes";
+import { usePreferences } from "@/hooks/use-preferences";
 import { RECENT_NOTE_WINDOW_DAYS } from "@/lib/constants";
-import { getNotePlainText, sortNotesByUpdatedAt } from "@/lib/note-utils";
+import type { StoredPreferences } from "@/lib/data/preferences-storage";
+import { getNoteDisplayTitle, getNotePlainText } from "@/lib/note-utils";
 import type { Note } from "@/types/note";
+
+const NOTE_COMPARATORS: Record<StoredPreferences["sortBy"], (a: Note, b: Note) => number> = {
+  updated: (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+  created: (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+  title: (a, b) => getNoteDisplayTitle(a.title).localeCompare(getNoteDisplayTitle(b.title)),
+};
 
 function isWithinRecentWindow(isoDate: string): boolean {
   const diffMs = Date.now() - new Date(isoDate).getTime();
@@ -15,6 +23,7 @@ function isWithinRecentWindow(isoDate: string): boolean {
 export function useFilteredNotes(): Note[] {
   const { activeFolder, activeCategoryId, searchQuery, listFilter } = useAppState();
   const { data: notes } = useNotes();
+  const { sortBy } = usePreferences();
 
   return useMemo(() => {
     let filtered = notes.filter((note) => {
@@ -42,7 +51,9 @@ export function useFilteredNotes(): Note[] {
       );
     }
 
-    const sorted = sortNotesByUpdatedAt(filtered);
-    return [...sorted].sort((a, b) => Number(b.pinned) - Number(a.pinned));
-  }, [notes, activeFolder, activeCategoryId, searchQuery, listFilter]);
+    // Pinned notes stay on top; the user's "Sort by" preference orders the rest.
+    return [...filtered].sort(
+      (a, b) => Number(b.pinned) - Number(a.pinned) || NOTE_COMPARATORS[sortBy](a, b)
+    );
+  }, [notes, activeFolder, activeCategoryId, searchQuery, listFilter, sortBy]);
 }

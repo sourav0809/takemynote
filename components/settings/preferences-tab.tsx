@@ -1,3 +1,4 @@
+import { LayoutPicker } from "@/components/settings/layout-picker";
 import { PreferenceSelectRow } from "@/components/settings/preference-select-row";
 import { PreferenceToggleRow } from "@/components/settings/preference-toggle-row";
 import { usePreferences } from "@/hooks/use-preferences";
@@ -9,14 +10,7 @@ export function PreferencesTab() {
 
   return (
     <div className="flex flex-col">
-      <PreferenceToggleRow
-        title="Active block highlight"
-        description="Highlight the paragraph you're currently editing."
-        checked={preferences.activeLineHighlight}
-        onCheckedChange={(checked) =>
-          preferences.setPreference("activeLineHighlight", checked)
-        }
-      />
+      <LayoutPicker />
       <PreferenceToggleRow
         title="Scroll past end"
         description="Allow scrolling past the last line of a note."

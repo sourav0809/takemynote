@@ -1,28 +1,19 @@
-import { Badge } from "@/components/ui/badge";
 import { formatFullDate, getReadingTimeMinutes, getWordCount } from "@/lib/note-utils";
-import type { Category, NoteContent } from "@/types/note";
+import type { NoteContent } from "@/types/note";
 
 interface NoteMetaLineProps {
   updatedAt: string;
   content: NoteContent;
-  category: Category | undefined;
 }
 
-export function NoteMetaLine({ updatedAt, content, category }: NoteMetaLineProps) {
+export function NoteMetaLine({ updatedAt, content }: NoteMetaLineProps) {
   const wordCount = getWordCount(content);
   const readingTime = getReadingTimeMinutes(content);
 
   return (
-    <div className="mt-1 flex flex-wrap items-center gap-2">
-      <p className="text-sm text-muted-foreground">
-        Updated {formatFullDate(updatedAt)} · {wordCount} words · {readingTime} min read
-      </p>
-      {category && (
-        <Badge variant="secondary" className="gap-1.5">
-          <span className="size-1.5 rounded-full bg-primary" />
-          {category.name}
-        </Badge>
-      )}
-    </div>
+    <p className="mt-1 text-[13px] text-muted-foreground tabular-nums">
+      Updated {formatFullDate(updatedAt)} · {wordCount} {wordCount === 1 ? "word" : "words"} ·{" "}
+      {readingTime} min read
+    </p>
   );
 }

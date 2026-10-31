@@ -1,8 +1,8 @@
-import { Star } from "lucide-react";
+import { Pin, Star } from "lucide-react";
 
 import { NoteContextMenuItems } from "@/components/note-list/note-context-menu-items";
+import { NoteRowMenu } from "@/components/note-list/note-row-menu";
 import { RelativeTime } from "@/components/note-list/relative-time";
-import { Badge } from "@/components/ui/badge";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -10,107 +10,75 @@ import {
 } from "@/components/ui/context-menu";
 import { getNoteDisplayTitle, getNoteExcerpt } from "@/lib/note-utils";
 import { cn } from "@/lib/utils";
-import type { Category, Note } from "@/types/note";
+import type { Note } from "@/types/note";
 
 interface NoteGridCardProps {
   note: Note;
-  category: Category | undefined;
   isSelected: boolean;
   onSelect: () => void;
-  onToggleFavorite: () => void;
-  onTogglePinned: () => void;
-  onMoveToTrash: () => void;
-  onRestore: () => void;
-  onDeletePermanently: () => void;
 }
 
-export function NoteGridCard({
-  note,
-  category,
-  isSelected,
-  onSelect,
-  onToggleFavorite,
-  onTogglePinned,
-  onMoveToTrash,
-  onRestore,
-  onDeletePermanently,
-}: NoteGridCardProps) {
+export function NoteGridCard({ note, isSelected, onSelect }: NoteGridCardProps) {
   const excerpt = getNoteExcerpt(note.content);
 
   return (
     <ContextMenu>
-      <ContextMenuTrigger>
-        <button
-          type="button"
-          onClick={onSelect}
+      <ContextMenuTrigger className="h-full">
+        <div
           data-selected={isSelected}
           className={cn(
-            "flex h-full min-h-40 w-full flex-col gap-2 rounded-2xl border border-border bg-background p-3.5 text-left transition-colors",
-            "hover:border-primary/40",
-            "data-[selected=true]:border-primary data-[selected=true]:bg-primary data-[selected=true]:hover:border-primary"
+            "group/row relative h-full rounded-xl border transition-colors",
+            isSelected
+              ? "border-primary bg-primary text-primary-foreground"
+              : "border-border bg-card hover:border-foreground/20"
           )}
         >
-          <div className="flex items-center gap-1.5">
-            {note.favorited && (
-              <Star
-                className={cn(
-                  "size-3 shrink-0 fill-current text-amber-500",
-                  isSelected && "text-primary-foreground"
-                )}
-              />
-            )}
+          <button
+            type="button"
+            onClick={onSelect}
+            aria-current={isSelected ? "true" : undefined}
+            className="flex h-full min-h-36 w-full flex-col gap-1.5 rounded-xl p-3.5 text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <span className="flex items-center gap-1.5">
+              {note.pinned && (
+                <Pin className={cn("size-3 shrink-0", !isSelected && "text-primary")} />
+              )}
+              {note.favorited && (
+                <Star
+                  className={cn("size-3 shrink-0 fill-current", !isSelected && "text-amber-500")}
+                />
+              )}
+              <span className="truncate text-sm font-semibold">
+                {getNoteDisplayTitle(note.title)}
+              </span>
+            </span>
             <span
               className={cn(
-                "truncate text-sm font-semibold text-foreground",
-                isSelected && "text-primary-foreground"
+                "line-clamp-4 text-[13px] leading-snug",
+                isSelected ? "text-primary-foreground/80" : "text-muted-foreground"
               )}
             >
-              {getNoteDisplayTitle(note.title)}
+              {excerpt}
             </span>
-          </div>
-
-          <p
-            className={cn(
-              "line-clamp-3 min-h-12 text-xs text-muted-foreground",
-              isSelected && "text-primary-foreground/70"
-            )}
-          >
-            {excerpt}
-          </p>
-
-          <div className="mt-auto flex items-center justify-between gap-2 pt-1">
-            {category ? (
-              <Badge
-                variant="secondary"
-                className={cn(
-                  isSelected && "bg-primary-foreground/15 text-primary-foreground"
-                )}
-              >
-                {category.name}
-              </Badge>
-            ) : (
-              <span />
-            )}
             <span
               className={cn(
-                "text-xs text-muted-foreground",
-                isSelected && "text-primary-foreground/70"
+                "mt-auto pt-1 text-xs tabular-nums",
+                isSelected ? "text-primary-foreground/75" : "text-muted-foreground"
               )}
             >
               <RelativeTime isoDate={note.updatedAt} />
             </span>
-          </div>
-        </button>
+          </button>
+
+          <NoteRowMenu
+            note={note}
+            isSelected={isSelected}
+            className="absolute right-1.5 bottom-1.5"
+          />
+        </div>
       </ContextMenuTrigger>
       <ContextMenuContent>
-        <NoteContextMenuItems
-          note={note}
-          onToggleFavorite={onToggleFavorite}
-          onTogglePinned={onTogglePinned}
-          onMoveToTrash={onMoveToTrash}
-          onRestore={onRestore}
-          onDeletePermanently={onDeletePermanently}
-        />
+        <NoteContextMenuItems note={note} />
       </ContextMenuContent>
     </ContextMenu>
   );

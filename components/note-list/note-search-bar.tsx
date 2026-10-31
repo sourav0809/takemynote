@@ -15,10 +15,10 @@ export function NoteSearchBar({ value, onChange }: NoteSearchBarProps) {
       <Input
         id={NOTE_SEARCH_INPUT_ID}
         type="search"
-        placeholder="Search for notes"
+        placeholder="Search notes"
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="pl-9"
+        className="h-10 bg-background pl-9 lg:h-9"
       />
     </div>
   );

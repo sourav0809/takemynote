@@ -1,5 +1,5 @@
 import { NOTE_EXCERPT_LENGTH, UNTITLED_NOTE_TITLE, WORDS_PER_MINUTE } from "@/lib/constants";
-import type { Note, NoteContent } from "@/types/note";
+import type { NoteContent } from "@/types/note";
 
 export function getNoteDisplayTitle(title: string): string {
   return title.trim() || UNTITLED_NOTE_TITLE;
@@ -89,10 +89,4 @@ export function formatFullDate(isoDate: string): string {
     day: "numeric",
     year: "numeric",
   });
-}
-
-export function sortNotesByUpdatedAt(notes: Note[]): Note[] {
-  return [...notes].sort(
-    (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-  );
 }

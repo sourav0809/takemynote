@@ -67,6 +67,7 @@ export function DataManagementTab() {
               notes,
               categories,
               preferences: {
+                layout: preferences.layout,
                 activeLineHighlight: preferences.activeLineHighlight,
                 scrollPastEnd: preferences.scrollPastEnd,
                 sortBy: preferences.sortBy,

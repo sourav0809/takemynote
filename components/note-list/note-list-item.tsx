@@ -1,123 +1,88 @@
-import { MoreHorizontal, Star } from "lucide-react";
+import { Pin, Star } from "lucide-react";
 
+import { NoteContextMenuItems } from "@/components/note-list/note-context-menu-items";
+import { NoteRowMenu } from "@/components/note-list/note-row-menu";
+import { RelativeTime } from "@/components/note-list/relative-time";
 import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import { NoteContextMenuItems } from "@/components/note-list/note-context-menu-items";
-import { RelativeTime } from "@/components/note-list/relative-time";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
 import { getNoteDisplayTitle, getNoteExcerpt } from "@/lib/note-utils";
-import type { Category, Note } from "@/types/note";
+import { cn } from "@/lib/utils";
+import type { Note } from "@/types/note";
 
 interface NoteListItemProps {
   note: Note;
-  category: Category | undefined;
   isSelected: boolean;
   onSelect: () => void;
-  onToggleFavorite: () => void;
-  onTogglePinned: () => void;
-  onMoveToTrash: () => void;
-  onRestore: () => void;
-  onDeletePermanently: () => void;
 }
 
-export function NoteListItem({
-  note,
-  category,
-  isSelected,
-  onSelect,
-  onToggleFavorite,
-  onTogglePinned,
-  onMoveToTrash,
-  onRestore,
-  onDeletePermanently,
-}: NoteListItemProps) {
+export function NoteListItem({ note, isSelected, onSelect }: NoteListItemProps) {
   const excerpt = getNoteExcerpt(note.content);
 
   return (
     <ContextMenu>
       <ContextMenuTrigger>
-        <button
-          type="button"
-          onClick={onSelect}
+        <div
           data-selected={isSelected}
           className={cn(
-            "group flex w-full min-h-27 flex-col gap-1 border-b border-border px-4 py-3.5 text-left transition-colors",
-            "hover:bg-muted",
-            "data-[selected=true]:bg-primary data-[selected=true]:hover:bg-primary"
+            "group/row relative rounded-xl transition-colors",
+            isSelected ? "bg-primary text-primary-foreground" : "hover:bg-muted/70"
           )}
         >
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex min-w-0 items-center gap-1.5">
-              {note.favorited && (
-                <Star
-                  className={cn(
-                    "size-3 shrink-0 fill-current text-amber-500",
-                    isSelected && "text-primary-foreground"
-                  )}
-                />
-              )}
-              <span
-                className={cn(
-                  "truncate text-sm font-semibold text-foreground",
-                  isSelected && "text-primary-foreground"
+          <button
+            type="button"
+            onClick={onSelect}
+            aria-current={isSelected ? "true" : undefined}
+            className="flex w-full flex-col gap-0.5 rounded-xl px-3 py-2.5 text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <span className="flex items-center gap-2">
+              <span className="flex min-w-0 flex-1 items-center gap-1.5">
+                {note.pinned && (
+                  <Pin
+                    aria-label="Pinned"
+                    className={cn("size-3 shrink-0", !isSelected && "text-primary")}
+                  />
                 )}
-              >
-                {getNoteDisplayTitle(note.title)}
+                {note.favorited && (
+                  <Star
+                    aria-label="Favorite"
+                    className={cn("size-3 shrink-0 fill-current", !isSelected && "text-amber-500")}
+                  />
+                )}
+                <span className="truncate text-sm font-semibold">
+                  {getNoteDisplayTitle(note.title)}
+                </span>
               </span>
-            </div>
-            <div className="flex shrink-0 items-center gap-2">
               <span
                 className={cn(
-                  "text-xs text-muted-foreground",
-                  isSelected && "text-primary-foreground/70"
+                  "shrink-0 text-xs tabular-nums",
+                  isSelected ? "text-primary-foreground/75" : "text-muted-foreground"
                 )}
               >
                 <RelativeTime isoDate={note.updatedAt} />
               </span>
-              <MoreHorizontal
-                className={cn(
-                  "size-4 text-muted-foreground opacity-0 group-hover:opacity-100",
-                  isSelected && "text-primary-foreground/80"
-                )}
-              />
-            </div>
-          </div>
-
-          <p
-            className={cn(
-              "line-clamp-2 min-h-8 text-xs text-muted-foreground",
-              isSelected && "text-primary-foreground/70"
-            )}
-          >
-            {excerpt}
-          </p>
-
-          {category && (
-            <Badge
-              variant="secondary"
+            </span>
+            <span
               className={cn(
-                "mt-0.5 w-fit",
-                isSelected && "bg-primary-foreground/15 text-primary-foreground"
+                "line-clamp-2 pr-8 text-[13px] leading-snug",
+                isSelected ? "text-primary-foreground/80" : "text-muted-foreground"
               )}
             >
-              {category.name}
-            </Badge>
-          )}
-        </button>
+              {excerpt || "No additional text"}
+            </span>
+          </button>
+
+          <NoteRowMenu
+            note={note}
+            isSelected={isSelected}
+            className="absolute right-1.5 bottom-1.5"
+          />
+        </div>
       </ContextMenuTrigger>
       <ContextMenuContent>
-        <NoteContextMenuItems
-          note={note}
-          onToggleFavorite={onToggleFavorite}
-          onTogglePinned={onTogglePinned}
-          onMoveToTrash={onMoveToTrash}
-          onRestore={onRestore}
-          onDeletePermanently={onDeletePermanently}
-        />
+        <NoteContextMenuItems note={note} />
       </ContextMenuContent>
     </ContextMenu>
   );

@@ -3,16 +3,16 @@
 import { useEffect } from "react";
 
 import { useAppState } from "@/hooks/use-app-state";
-import { useCreateNote, useNotes, useUpdateNote } from "@/hooks/use-notes";
+import { useCreateAndOpenNote } from "@/hooks/use-create-and-open-note";
+import { useNotes, useUpdateNote } from "@/hooks/use-notes";
 import { useThemeToggle } from "@/hooks/use-theme-toggle";
 
 export const NOTE_SEARCH_INPUT_ID = "note-search-input";
 
 export function useGlobalShortcuts(): void {
-  const { activeCategoryId, selectedNoteId, setActiveFolder, setSelectedNoteId } =
-    useAppState();
+  const { selectedNoteId, setSelectedNoteId } = useAppState();
   const { data: notes } = useNotes();
-  const createNote = useCreateNote();
+  const createAndOpenNote = useCreateAndOpenNote();
   const updateNote = useUpdateNote();
   const { toggleTheme } = useThemeToggle();
 
@@ -27,12 +27,7 @@ export function useGlobalShortcuts(): void {
       switch (key) {
         case "n": {
           event.preventDefault();
-          createNote.mutate(activeCategoryId, {
-            onSuccess: (note) => {
-              setActiveFolder("notes");
-              setSelectedNoteId(note.id);
-            },
-          });
+          createAndOpenNote();
           break;
         }
         case "f": {
@@ -71,11 +66,9 @@ export function useGlobalShortcuts(): void {
   }, [
     notes,
     selectedNoteId,
-    activeCategoryId,
-    createNote,
+    createAndOpenNote,
     updateNote,
     toggleTheme,
-    setActiveFolder,
     setSelectedNoteId,
   ]);
 }

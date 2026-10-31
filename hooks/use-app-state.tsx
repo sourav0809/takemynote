@@ -13,6 +13,8 @@ interface AppState {
   listView: NoteListView;
   listFilter: NoteListFilter;
   isSettingsOpen: boolean;
+  /** Phone/tablet layout only: whether the Page is showing instead of the Library. */
+  isNoteOpen: boolean;
   setActiveFolder: (folder: FolderId) => void;
   setActiveCategory: (categoryId: string) => void;
   setSelectedNoteId: (noteId: string | null) => void;
@@ -20,6 +22,9 @@ interface AppState {
   setListView: (view: NoteListView) => void;
   setListFilter: (filter: NoteListFilter) => void;
   setSettingsOpen: (open: boolean) => void;
+  /** Selects a note and, on small screens, opens it full screen. */
+  openNote: (noteId: string) => void;
+  closeNote: () => void;
 }
 
 const AppStateContext = createContext<AppState | null>(null);
@@ -32,6 +37,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const [listView, setListView] = useState<NoteListView>("list");
   const [listFilter, setListFilter] = useState<NoteListFilter>("all");
   const [isSettingsOpen, setSettingsOpen] = useState(false);
+  const [isNoteOpen, setNoteOpen] = useState(false);
 
   const value = useMemo<AppState>(
     () => ({
@@ -42,6 +48,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       listView,
       listFilter,
       isSettingsOpen,
+      isNoteOpen,
       setActiveFolder: (folder) => {
         setActiveFolderState(folder);
         setActiveCategoryId(null);
@@ -50,13 +57,31 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         setActiveFolderState("notes");
         setActiveCategoryId(categoryId);
       },
-      setSelectedNoteId,
+      setSelectedNoteId: (noteId) => {
+        setSelectedNoteId(noteId);
+        // A cleared selection (e.g. note moved to trash) returns phones to the Library.
+        if (noteId === null) setNoteOpen(false);
+      },
       setSearchQuery,
       setListView,
       setListFilter,
       setSettingsOpen,
+      openNote: (noteId) => {
+        setSelectedNoteId(noteId);
+        setNoteOpen(true);
+      },
+      closeNote: () => setNoteOpen(false),
     }),
-    [activeFolder, activeCategoryId, selectedNoteId, searchQuery, listView, listFilter, isSettingsOpen]
+    [
+      activeFolder,
+      activeCategoryId,
+      selectedNoteId,
+      searchQuery,
+      listView,
+      listFilter,
+      isSettingsOpen,
+      isNoteOpen,
+    ]
   );
 
   return (

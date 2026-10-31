@@ -23,18 +23,19 @@ export function PreferenceSelectRow({
   onValueChange,
 }: PreferenceSelectRowProps) {
   return (
-    <div className="flex items-center justify-between gap-8 border-b border-border py-4 last:border-b-0">
+    <div className="flex items-center justify-between gap-4 border-b border-border py-4 last:border-b-0 sm:gap-8">
       <div className="flex flex-col gap-0.5">
         <Label htmlFor={title}>{title}</Label>
         <p className="text-xs text-muted-foreground">{description}</p>
       </div>
       <Select
+        items={options}
         value={value}
         onValueChange={(newValue) => {
           if (newValue) onValueChange(newValue);
         }}
       >
-        <SelectTrigger id={title} className="w-44 shrink-0">
+        <SelectTrigger id={title} className="w-36 shrink-0 sm:w-44">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

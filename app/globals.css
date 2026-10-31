@@ -315,6 +315,25 @@ html:has(.landing) body {
   font-family: inherit;
   font-size: 1.0625rem;
   line-height: 1.7;
+  /* Matches NOTE_GUTTER_CLASS (components/editor/editor-header.tsx) so the
+     title and body text share one left edge. The wider desktop gutter holds
+     BlockNote's drag handle. */
+  padding-inline: 1.25rem;
+}
+
+@media (min-width: 1024px) {
+  .note-editor .bn-editor {
+    padding-inline: 54px;
+  }
+}
+
+/* Horizontal scrollers (the formatting toolbar on phones) without a visible bar. */
+@utility no-scrollbar {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .note-editor .bn-inline-content code {

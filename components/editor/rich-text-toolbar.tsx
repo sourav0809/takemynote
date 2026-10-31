@@ -9,7 +9,6 @@ import {
   ListChecks,
   ListOrdered,
   Quote,
-  Sparkles,
   Strikethrough,
   Underline,
 } from "lucide-react";
@@ -18,7 +17,6 @@ import { Fragment } from "react";
 
 import { LinkPopoverButton } from "@/components/editor/link-popover-button";
 import { ToolbarIconButton } from "@/components/editor/toolbar-icon-button";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
   type BlockTypeTarget,
@@ -60,9 +58,11 @@ const BLOCK_TYPE_GROUPS: (ToolbarAction & { target: BlockTypeTarget })[][] = [
 
 interface RichTextToolbarProps {
   editor: NoteBlockEditor;
+  /** Pinned to the right end of the toolbar (the AI menu). */
+  trailing?: React.ReactNode;
 }
 
-export function RichTextToolbar({ editor }: RichTextToolbarProps) {
+export function RichTextToolbar({ editor, trailing }: RichTextToolbarProps) {
   const state = useEditorState({
     editor,
     selector: ({ editor: currentEditor }) => ({
@@ -83,8 +83,8 @@ export function RichTextToolbar({ editor }: RichTextToolbarProps) {
   };
 
   return (
-    <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-1.5 sm:px-6">
-      <div className="flex items-center gap-0.5 overflow-x-auto">
+    <div className="flex shrink-0 items-center gap-2 border-y border-border px-2 py-1.5 lg:px-4">
+      <div className="no-scrollbar mx-auto flex min-w-0 items-center gap-0.5 overflow-x-auto">
         {TEXT_STYLE_ACTIONS.map(({ icon, label, style }) => (
           <ToolbarIconButton
             key={style}
@@ -97,7 +97,7 @@ export function RichTextToolbar({ editor }: RichTextToolbarProps) {
 
         {BLOCK_TYPE_GROUPS.map((group, groupIndex) => (
           <Fragment key={groupIndex}>
-            <Separator orientation="vertical" className="mx-1 h-5" />
+            <Separator orientation="vertical" className="mx-1 h-5 shrink-0" />
             {group.map(({ icon, label, target }) => (
               <ToolbarIconButton
                 key={label}
@@ -109,13 +109,10 @@ export function RichTextToolbar({ editor }: RichTextToolbarProps) {
             ))}
           </Fragment>
         ))}
+        <Separator orientation="vertical" className="mx-1 h-5 shrink-0" />
         <LinkPopoverButton editor={editor} isActive={state.isLink} />
       </div>
-
-      <Button size="sm" className="shrink-0 gap-1.5">
-        <Sparkles />
-        AI Assist
-      </Button>
+      {trailing}
     </div>
   );
 }

@@ -1,53 +1,20 @@
-import { AppSidebar } from "@/components/sidebar/app-sidebar";
-import { NoteListPane } from "@/components/note-list/note-list-pane";
-import { EditorPane } from "@/components/editor/editor-pane";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
-import { useAppState } from "@/hooks/use-app-state";
-import {
-  NOTE_LIST_DEFAULT_SIZE,
-  NOTE_LIST_MAX_SIZE,
-  NOTE_LIST_MIN_SIZE,
-  SIDEBAR_DEFAULT_SIZE,
-  SIDEBAR_MAX_SIZE,
-  SIDEBAR_MIN_SIZE,
-} from "@/lib/constants";
+import { ClassicDesktopShell, LibraryDesktopShell } from "@/components/app-shell/desktop-shells";
+import { MobileShell } from "@/components/app-shell/mobile-shell";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { usePreferences } from "@/hooks/use-preferences";
+import { DESKTOP_MEDIA_QUERY } from "@/lib/constants";
 
+/** Picks the layout the user chose in Settings (Classic by default) for this screen size. */
 export function AppShell() {
-  const { activeFolder } = useAppState();
-  const isScratchpad = activeFolder === "scratchpad";
+  const isDesktop = useMediaQuery(DESKTOP_MEDIA_QUERY);
+  const { layout } = usePreferences();
 
-  return (
-    <ResizablePanelGroup orientation="horizontal" className="h-screen w-full">
-      <ResizablePanel
-        id="sidebar"
-        defaultSize={SIDEBAR_DEFAULT_SIZE}
-        minSize={SIDEBAR_MIN_SIZE}
-        maxSize={SIDEBAR_MAX_SIZE}
-      >
-        <AppSidebar />
-      </ResizablePanel>
-      <ResizableHandle />
+  // Unknown until hydration: render nothing rather than the wrong layout, so
+  // only one editor instance ever mounts.
+  if (isDesktop === null) {
+    return <div className="h-dvh bg-background" aria-busy="true" />;
+  }
 
-      {!isScratchpad && (
-        <>
-          <ResizablePanel
-            id="note-list"
-            defaultSize={NOTE_LIST_DEFAULT_SIZE}
-            minSize={NOTE_LIST_MIN_SIZE}
-            maxSize={NOTE_LIST_MAX_SIZE}
-          >
-            <NoteListPane />
-          </ResizablePanel>
-          <ResizableHandle />
-        </>
-      )}
-      <ResizablePanel id="editor">
-        <EditorPane />
-      </ResizablePanel>
-    </ResizablePanelGroup>
-  );
+  if (!isDesktop) return <MobileShell layout={layout} />;
+  return layout === "library" ? <LibraryDesktopShell /> : <ClassicDesktopShell />;
 }

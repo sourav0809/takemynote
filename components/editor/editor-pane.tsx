@@ -1,18 +1,20 @@
-import { toast } from "sonner";
-
 import { DynamicNoteEditor } from "@/components/editor/dynamic-note-editor";
-import { EditorBottomBar } from "@/components/editor/editor-bottom-bar";
 import { EditorEmptyState } from "@/components/editor/editor-empty-state";
 import { EditorHeader } from "@/components/editor/editor-header";
+import { PageTopBar } from "@/components/editor/page-top-bar";
 import { useAppState } from "@/hooks/use-app-state";
-import { useCategories } from "@/hooks/use-categories";
 import { useNotes, useUpdateNote } from "@/hooks/use-notes";
-import { downloadNoteAsMarkdown } from "@/lib/download-note";
 
-export function EditorPane() {
-  const { selectedNoteId, setSelectedNoteId } = useAppState();
+interface EditorPaneProps {
+  /** Phone/tablet only: shows a back link to the Library. */
+  onBack?: () => void;
+  backLabel?: string;
+}
+
+/** The Page: top bar, formatting toolbar, then the note in a reading column. */
+export function EditorPane({ onBack, backLabel }: EditorPaneProps) {
+  const { selectedNoteId } = useAppState();
   const { data: notes } = useNotes();
-  const { data: categories } = useCategories();
   const updateNote = useUpdateNote();
 
   const activeNote = notes.find((note) => note.id === selectedNoteId);
@@ -21,52 +23,27 @@ export function EditorPane() {
     return <EditorEmptyState />;
   }
 
-  const category = activeNote.categoryId
-    ? categories.find((item) => item.id === activeNote.categoryId)
-    : undefined;
-
-  const handleDownload = async () => {
-    try {
-      await downloadNoteAsMarkdown(activeNote);
-    } catch {
-      toast.error("Could not export this note");
-    }
-  };
-
   return (
-    <div className="flex h-full flex-col">
-      <EditorHeader
-        note={activeNote}
-        category={category}
-        onTitleChange={(title) =>
-          updateNote.mutate({ id: activeNote.id, changes: { title } })
-        }
-      />
+    <div className="flex h-full flex-col bg-background">
+      <PageTopBar note={activeNote} onBack={onBack} backLabel={backLabel} />
 
       {/* Keyed by note id: switching notes mounts a fresh editor, while typing
           in the current note never resets cursor position or undo history. */}
       <DynamicNoteEditor
         key={activeNote.id}
         initialContent={activeNote.content}
+        noteTitle={activeNote.title}
         onContentChange={(content) =>
           updateNote.mutate({ id: activeNote.id, changes: { content } })
         }
-      />
-
-      <EditorBottomBar
-        note={activeNote}
-        onToggleFavorite={() =>
-          updateNote.mutate({
-            id: activeNote.id,
-            changes: { favorited: !activeNote.favorited },
-          })
+        header={
+          <EditorHeader
+            note={activeNote}
+            onTitleChange={(title) =>
+              updateNote.mutate({ id: activeNote.id, changes: { title } })
+            }
+          />
         }
-        onMoveToTrash={() => {
-          updateNote.mutate({ id: activeNote.id, changes: { trashed: true } });
-          setSelectedNoteId(null);
-          toast.success("Note moved to trash");
-        }}
-        onDownload={() => void handleDownload()}
       />
     </div>
   );

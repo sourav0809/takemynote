@@ -4,21 +4,9 @@ export function EditorEmptyState() {
   const { mod, alt } = usePlatformModifierKeys();
 
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-3 bg-background text-center">
-      <p className="text-base font-medium text-foreground">Create a note</p>
-      <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
-        Select a note from the list, or press
-        <kbd className="rounded-md border border-border bg-muted px-1.5 py-0.5 font-mono text-xs">
-          {mod}
-        </kbd>
-        +
-        <kbd className="rounded-md border border-border bg-muted px-1.5 py-0.5 font-mono text-xs">
-          {alt}
-        </kbd>
-        +
-        <kbd className="rounded-md border border-border bg-muted px-1.5 py-0.5 font-mono text-xs">
-          N
-        </kbd>
+    <div className="flex h-full items-center justify-center bg-background px-6">
+      <p className="text-sm text-muted-foreground">
+        Pick a note on the left, or press {mod} {alt} N to start a new one.
       </p>
     </div>
   );

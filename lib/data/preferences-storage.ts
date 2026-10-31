@@ -1,6 +1,10 @@
 import { STORAGE_KEYS } from "@/lib/data/storage-keys";
 
+export type AppLayout = "classic" | "library";
+
 export interface StoredPreferences {
+  /** Classic three columns, or Library + Page. */
+  layout: AppLayout;
   activeLineHighlight: boolean;
   scrollPastEnd: boolean;
   sortBy: "updated" | "created" | "title";
@@ -8,6 +12,8 @@ export interface StoredPreferences {
 }
 
 export const DEFAULT_PREFERENCES: StoredPreferences = {
+  // New visitors see the three-column layout shown on the landing page.
+  layout: "classic",
   activeLineHighlight: true,
   scrollPastEnd: false,
   sortBy: "updated",

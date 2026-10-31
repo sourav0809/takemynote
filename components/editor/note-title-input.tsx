@@ -11,8 +11,9 @@ export function NoteTitleInput({ title, onChange }: NoteTitleInputProps) {
       value={title}
       onChange={(event) => onChange(event.target.value)}
       placeholder="Untitled"
-      className="h-auto border-none bg-transparent px-0 py-2 text-2xl leading-tight font-bold tracking-tight
-        shadow-none placeholder:text-muted-foreground/40 focus-visible:ring-0 md:text-3xl"
+      aria-label="Note title"
+      className="h-auto rounded-none border-none bg-transparent px-0 py-1 text-[28px] leading-tight font-bold tracking-tight
+        shadow-none placeholder:text-muted-foreground/40 focus-visible:ring-0 md:text-[28px] lg:text-[32px] dark:bg-transparent"
     />
   );
 }

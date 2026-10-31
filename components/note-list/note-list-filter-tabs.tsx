@@ -18,9 +18,9 @@ export function NoteListFilterTabs({ value, onValueChange }: NoteListFilterTabsP
       value={value}
       onValueChange={(newValue) => onValueChange(newValue as NoteListFilter)}
     >
-      <TabsList>
+      <TabsList variant="line" className="h-8 gap-3 p-0 pl-1">
         {FILTERS.map((filter) => (
-          <TabsTrigger key={filter.value} value={filter.value}>
+          <TabsTrigger key={filter.value} value={filter.value} className="flex-none px-0.5 text-[13px]">
             {filter.label}
           </TabsTrigger>
         ))}
