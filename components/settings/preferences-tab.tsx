@@ -1,12 +1,11 @@
-import { useTheme } from "next-themes";
-
 import { PreferenceSelectRow } from "@/components/settings/preference-select-row";
 import { PreferenceToggleRow } from "@/components/settings/preference-toggle-row";
 import { usePreferences } from "@/hooks/use-preferences";
+import { useThemeToggle } from "@/hooks/use-theme-toggle";
 
 export function PreferencesTab() {
   const preferences = usePreferences();
-  const { theme, setTheme } = useTheme();
+  const { isDark, setThemeSmoothly } = useThemeToggle();
 
   return (
     <div className="flex flex-col">
@@ -29,8 +28,8 @@ export function PreferencesTab() {
       <PreferenceToggleRow
         title="Dark mode"
         description="Switch between light and dark appearance."
-        checked={theme === "dark"}
-        onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
+        checked={isDark}
+        onCheckedChange={(checked) => void setThemeSmoothly(checked ? "dark" : "light")}
       />
       <PreferenceSelectRow
         title="Sort by"

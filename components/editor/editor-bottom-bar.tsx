@@ -8,11 +8,11 @@ import {
   Tag,
   Trash2,
 } from "lucide-react";
-import { useTheme } from "next-themes";
 
 import { ToolbarIconButton } from "@/components/editor/toolbar-icon-button";
 import { RelativeTime } from "@/components/note-list/relative-time";
 import { useAppState } from "@/hooks/use-app-state";
+import { useThemeToggle } from "@/hooks/use-theme-toggle";
 import { getWordCount } from "@/lib/note-utils";
 import type { Note } from "@/types/note";
 
@@ -30,7 +30,7 @@ export function EditorBottomBar({
   onDownload,
 }: EditorBottomBarProps) {
   const { setSettingsOpen } = useAppState();
-  const { theme, setTheme } = useTheme();
+  const { isDark, toggleTheme } = useThemeToggle();
 
   return (
     <div className="flex h-11 shrink-0 items-center justify-between border-t border-border bg-background px-3">
@@ -65,9 +65,9 @@ export function EditorBottomBar({
       <div className="flex items-center gap-0.5">
         <ToolbarIconButton icon={RefreshCw} label="Sync" onClick={() => {}} />
         <ToolbarIconButton
-          icon={theme === "dark" ? Sun : Moon}
-          label={theme === "dark" ? "Light mode" : "Dark mode"}
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          icon={isDark ? Sun : Moon}
+          label={isDark ? "Light mode" : "Dark mode"}
+          onClick={toggleTheme}
         />
         <ToolbarIconButton
           icon={Settings}

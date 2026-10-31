@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
-import { useTheme } from "next-themes";
 
 import { useAppState } from "@/hooks/use-app-state";
 import { useCreateNote, useNotes, useUpdateNote } from "@/hooks/use-notes";
+import { useThemeToggle } from "@/hooks/use-theme-toggle";
 
 export const NOTE_SEARCH_INPUT_ID = "note-search-input";
 
@@ -14,7 +14,7 @@ export function useGlobalShortcuts(): void {
   const { data: notes } = useNotes();
   const createNote = useCreateNote();
   const updateNote = useUpdateNote();
-  const { theme, setTheme } = useTheme();
+  const { toggleTheme } = useThemeToggle();
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -42,7 +42,7 @@ export function useGlobalShortcuts(): void {
         }
         case "l": {
           event.preventDefault();
-          setTheme(theme === "dark" ? "light" : "dark");
+          toggleTheme();
           break;
         }
         case "s": {
@@ -72,10 +72,9 @@ export function useGlobalShortcuts(): void {
     notes,
     selectedNoteId,
     activeCategoryId,
-    theme,
     createNote,
     updateNote,
-    setTheme,
+    toggleTheme,
     setActiveFolder,
     setSelectedNoteId,
   ]);
