@@ -149,6 +149,13 @@ Defined once in `lib/shortcuts.ts` and used by both the handler and the Settings
 
 `components/onboarding/onboarding-dialog.tsx` appears once per browser, the first time someone opens /notes. It has three steps: **Welcome** (logo, one line, three facts: private, "/" to format, AI when you ask) → **Pick a layout** (the same cards as Settings, applied live) → **Light or dark?** (Light / Dark / Match system, applied live) → "Start writing". "Skip" on step 1, or closing the dialog, keeps the defaults (Classic, system theme). Completion is stored as `preferences.onboardingCompleted`, which is included in backups, so restoring on a new device skips it. It renders only after hydration, so returning users never see a flash.
 
+## Templates
+
+- **Never block note creation.** "New note" is instant and blank. While a note is blank, a quiet row offers 4 quick picks plus "Browse all"; it disappears as soon as you type. "Hide suggestions" and Settings → Template suggestions turn it off. "New from template" (the layout icon next to New note) opens the gallery to create a new note.
+- **Gallery** (`components/templates/`): search, category chips, cards with tags and a "Popular" badge, and a live preview. On phones it's the list, then a full preview screen. Opened from a blank note it fills that note ("Use template"); otherwise it creates one ("Create note").
+- **Content** lives in `lib/templates/library/*.ts` as Markdown: real structure (tables, trackers, task lists, dividers), short italic prompts, and example rows. Placeholders `{{date}} {{weekday}} {{month}} {{weekRange}} {{mon}}…{{sun}}` are filled when the template is used. Convert with `templateMarkdownToBlocks`, which keeps empty list items as real empty blocks.
+- The owner rejected thin outline templates ("people won't use these"). New templates must be genuinely useful: structure, examples and dates, not just headings.
+
 ## AI (real, opt-in)
 
 - Four actions in `lib/ai/ai-actions.ts`: Summarize (adds bullets at the top), Make a checklist (appends tasks), Fix spelling (replaces the note), Continue writing (appends).

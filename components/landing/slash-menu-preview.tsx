@@ -7,9 +7,11 @@ const ACTIVE_INDEX = 1;
 
 interface SlashMenuPreviewProps {
   className?: string;
+  /** Titles only, for tight spaces like the feature grid. */
+  compact?: boolean;
 }
 
-export function SlashMenuPreview({ className }: SlashMenuPreviewProps) {
+export function SlashMenuPreview({ className, compact }: SlashMenuPreviewProps) {
   return (
     <div
       aria-hidden
@@ -29,7 +31,8 @@ export function SlashMenuPreview({ className }: SlashMenuPreviewProps) {
             <li
               key={item.label}
               className={cn(
-                "flex items-center gap-2.5 rounded-xl px-2 py-1.5",
+                "flex items-center gap-2.5 rounded-xl px-2",
+                compact ? "py-1" : "py-1.5",
                 isActive && "bg-sunken"
               )}
             >
@@ -45,7 +48,9 @@ export function SlashMenuPreview({ className }: SlashMenuPreviewProps) {
                 <span className="block truncate text-[13px] font-semibold text-ink">
                   {item.label}
                 </span>
-                <span className="block truncate text-[11px] text-muted">{item.hint}</span>
+                {!compact && (
+                  <span className="block truncate text-[11px] text-muted">{item.hint}</span>
+                )}
               </span>
             </li>
           );

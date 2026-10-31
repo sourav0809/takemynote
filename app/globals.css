@@ -395,6 +395,37 @@ html:has(.landing) body {
   }
 }
 
+/* Calmer heading sizes than BlockNote's defaults (3em / 2em / 1.3em). */
+.note-editor [data-content-type="heading"] {
+  --level: 1.875em;
+}
+
+.note-editor [data-content-type="heading"][data-level="2"] {
+  --level: 1.5em;
+}
+
+.note-editor [data-content-type="heading"][data-level="3"] {
+  --level: 1.25em;
+}
+
+/* Tables fill the writing column (the table plugin sets a fixed inline width
+   from its default column sizes). On phones they keep their natural width and
+   scroll sideways instead of squashing. */
+@media (min-width: 640px) {
+  .note-editor .bn-editor [data-content-type="table"] table {
+    width: 100% !important;
+  }
+}
+
+.note-editor .bn-editor [data-content-type="table"] :is(th, td) {
+  border-color: var(--border);
+}
+
+.note-editor .bn-editor [data-content-type="table"] th {
+  background-color: var(--muted);
+  font-weight: 600;
+}
+
 /* Horizontal scrollers (the formatting toolbar on phones) without a visible bar. */
 @utility no-scrollbar {
   scrollbar-width: none;

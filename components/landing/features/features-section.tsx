@@ -28,7 +28,7 @@ export function FeaturesSection() {
         description="A focused editor and a few smart tools to keep your notes in order."
       />
 
-      <div className="reveal mt-8 grid grid-cols-1 gap-4 sm:mt-14 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+      <div className="reveal mt-8 grid grid-cols-1 gap-4 sm:mt-14 sm:grid-cols-2 lg:gap-5 xl:grid-cols-4">
         <BentoCard
           tone="sky"
           titleAccent="Type /"
@@ -36,7 +36,7 @@ export function FeaturesSection() {
           description="Headings, task lists, quotes and code blocks appear the moment you need them."
           className="sm:col-span-2"
         >
-          <SlashMenuPreview className="max-w-none shadow-card sm:max-w-72" />
+          <SlashMenuPreview compact className="max-w-none shadow-card sm:max-w-72" />
         </BentoCard>
         <BentoCard
           titleAccent="Private"
@@ -55,23 +55,23 @@ export function FeaturesSection() {
         </BentoCard>
         <BentoCard
           titleAccent="Find it"
-          title="as you type"
-          description="Search titles and text across every note instantly."
+          title="fast"
+          description="Search titles and text across every note as you type."
         >
           <SearchVisual />
         </BentoCard>
         <BentoCard
           tone="sky"
-          titleAccent="Scratchpad"
-          title="for quick bits"
-          description="One always-there page for numbers, links and half-ideas."
+          titleAccent="Quick"
+          title="scratchpad"
+          description="One always-open page for numbers, links and half-ideas."
         >
           <ScratchpadVisual />
         </BentoCard>
         <BentoCard
           titleAccent="Back up"
-          title="in one file"
-          description="Save everything to a single backup and restore it on any device. Export any note as Markdown."
+          title="and download"
+          description="Save everything to one backup file and restore it on any device, or download any note in the format you need."
           className="sm:col-span-2"
         >
           <BackupVisual />

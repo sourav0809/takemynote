@@ -1,9 +1,40 @@
 import type { ComponentType, ReactNode } from "react";
-import { ArchiveRestore, Download, Pin, PinOff, Star, StarOff, Trash2, X } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import {
+  ArchiveRestore,
+  Braces,
+  Download,
+  FileCode,
+  FileText,
+  FileType,
+  Globe,
+  Pin,
+  PinOff,
+  Printer,
+  Star,
+  StarOff,
+  Trash2,
+  X,
+} from "lucide-react";
 
 import { ContextMenuItem, ContextMenuSeparator } from "@/components/ui/context-menu";
-import { DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useNoteActions } from "@/hooks/use-note-actions";
+import { NOTE_EXPORT_FORMATS, type NoteExportFormat } from "@/lib/download-note";
+
+const FORMAT_ICONS: Record<NoteExportFormat, LucideIcon> = {
+  pdf: FileText,
+  markdown: FileCode,
+  text: FileType,
+  html: Globe,
+  json: Braces,
+};
 import type { Note } from "@/types/note";
 
 interface MenuItemProps {
@@ -16,12 +47,12 @@ interface NoteMenuItemsProps {
   note: Note;
   Item: ComponentType<MenuItemProps>;
   Separator: ComponentType;
-  /** The Page's ⋯ menu also offers export; the list's menus don't. */
-  showExport?: boolean;
+  /** Extra items placed before "Move to trash" (the Page's download menu). */
+  extraItems?: ReactNode;
 }
 
 /** The same note actions for the right-click menu and the ⋯ dropdown. */
-function NoteMenuItems({ note, Item, Separator, showExport }: NoteMenuItemsProps) {
+function NoteMenuItems({ note, Item, Separator, extraItems }: NoteMenuItemsProps) {
   const actions = useNoteActions();
 
   if (note.trashed) {
@@ -51,12 +82,7 @@ function NoteMenuItems({ note, Item, Separator, showExport }: NoteMenuItemsProps
           {note.pinned ? "Unpin" : "Pin to top"}
         </Item>
       )}
-      {showExport && (
-        <Item onClick={() => void actions.exportMarkdown(note)}>
-          <Download />
-          Export as Markdown
-        </Item>
-      )}
+      {extraItems}
       {!note.scratchpad && (
         <>
           <Separator />
@@ -74,13 +100,45 @@ export function NoteContextMenuItems({ note }: { note: Note }) {
   return <NoteMenuItems note={note} Item={ContextMenuItem} Separator={ContextMenuSeparator} />;
 }
 
+/** "Download as ›" with every export format, then a separate Print. */
+function DownloadItems({ note }: { note: Note }) {
+  const actions = useNoteActions();
+
+  return (
+    <>
+    <DropdownMenuSub>
+      <DropdownMenuSubTrigger>
+        <Download />
+        Download as
+      </DropdownMenuSubTrigger>
+      <DropdownMenuSubContent className="w-52">
+        {NOTE_EXPORT_FORMATS.map(({ format, label, hint }) => {
+          const Icon = FORMAT_ICONS[format];
+          return (
+            <DropdownMenuItem key={format} onClick={() => void actions.downloadAs(note, format)}>
+              <Icon />
+              <span className="flex-1">{label}</span>
+              <span className="text-xs font-normal text-muted-foreground">{hint}</span>
+            </DropdownMenuItem>
+          );
+        })}
+      </DropdownMenuSubContent>
+    </DropdownMenuSub>
+    <DropdownMenuItem onClick={() => void actions.print(note)}>
+      <Printer />
+      Print
+    </DropdownMenuItem>
+    </>
+  );
+}
+
 export function NoteDropdownMenuItems({ note, showExport }: { note: Note; showExport?: boolean }) {
   return (
     <NoteMenuItems
       note={note}
       Item={DropdownMenuItem}
       Separator={DropdownMenuSeparator}
-      showExport={showExport}
+      extraItems={showExport ? <DownloadItems note={note} /> : undefined}
     />
   );
 }

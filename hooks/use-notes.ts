@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { dataAdapter } from "@/lib/data";
+import type { NewNoteInitial } from "@/lib/data/data-adapter";
 import type { Note } from "@/types/note";
 
 const NOTES_QUERY_KEY = ["notes"] as const;
@@ -10,6 +11,24 @@ export function useNotes() {
     queryKey: NOTES_QUERY_KEY,
     queryFn: async () => dataAdapter.getNotes(),
     initialData: [] as Note[],
+  });
+}
+
+/** Creates a note that already has a title and body, in one write. */
+export function useCreateNoteWithContent() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      categoryId,
+      initial,
+    }: {
+      categoryId: string | null;
+      initial: NewNoteInitial;
+    }) => dataAdapter.createNote(categoryId, initial),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: NOTES_QUERY_KEY });
+    },
   });
 }
 

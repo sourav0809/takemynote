@@ -5,7 +5,8 @@ import { toast } from "sonner";
 
 import { useAppState } from "@/hooks/use-app-state";
 import { useDeleteNotePermanently, useUpdateNote } from "@/hooks/use-notes";
-import { downloadNoteAsMarkdown } from "@/lib/download-note";
+import { useCategories } from "@/hooks/use-categories";
+import { exportNote, printNote, type NoteExportFormat } from "@/lib/download-note";
 import type { Note } from "@/types/note";
 
 export interface NoteActions {
@@ -15,7 +16,8 @@ export interface NoteActions {
   restore: (note: Note) => void;
   deletePermanently: (note: Note) => void;
   moveToCategory: (note: Note, categoryId: string | null) => void;
-  exportMarkdown: (note: Note) => Promise<void>;
+  downloadAs: (note: Note, format: NoteExportFormat) => Promise<void>;
+  print: (note: Note) => Promise<void>;
 }
 
 /** Every per-note action, shared by the list rows, the right-click menu and the Page. */
@@ -23,6 +25,7 @@ export function useNoteActions(): NoteActions {
   const { selectedNoteId, setSelectedNoteId } = useAppState();
   const { mutate: updateNote } = useUpdateNote();
   const { mutate: deleteNote } = useDeleteNotePermanently();
+  const { data: categories } = useCategories();
 
   return useMemo<NoteActions>(
     () => ({
@@ -40,14 +43,22 @@ export function useNoteActions(): NoteActions {
         if (note.id === selectedNoteId) setSelectedNoteId(null);
       },
       moveToCategory: (note, categoryId) => updateNote({ id: note.id, changes: { categoryId } }),
-      exportMarkdown: async (note) => {
+      downloadAs: async (note, format) => {
+        const categoryName = categories.find((category) => category.id === note.categoryId)?.name;
         try {
-          await downloadNoteAsMarkdown(note);
+          await exportNote(note, format, categoryName);
         } catch {
-          toast.error("Could not export this note");
+          toast.error("Could not download this note");
+        }
+      },
+      print: async (note) => {
+        try {
+          await printNote(note);
+        } catch {
+          toast.error("Could not open printing");
         }
       },
     }),
-    [updateNote, deleteNote, selectedNoteId, setSelectedNoteId]
+    [updateNote, deleteNote, selectedNoteId, setSelectedNoteId, categories]
   );
 }

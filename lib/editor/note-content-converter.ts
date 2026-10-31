@@ -34,6 +34,16 @@ export function htmlToNoteContent(html: string): NoteContent {
   }
 }
 
+export function markdownToNoteContent(markdown: string): NoteContent {
+  if (!markdown.trim()) return [];
+  return getHeadlessEditor().tryParseMarkdownToBlocks(markdown) as NoteContent;
+}
+
+export function noteContentToHtml(content: NoteContent): string {
+  if (content.length === 0) return "";
+  return getHeadlessEditor().blocksToHTMLLossy(content);
+}
+
 export function noteContentToMarkdown(content: NoteContent): string {
   if (content.length === 0) return "";
   return getHeadlessEditor().blocksToMarkdownLossy(content);

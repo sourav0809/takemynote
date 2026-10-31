@@ -98,6 +98,11 @@ export const FAQ_ITEMS: FaqItem[] = [
       "Yes. Create a backup file on one device, then use Import Backup on the other. Notes, categories and preferences all come along.",
   },
   {
+    question: "Are there templates?",
+    answer:
+      "Yes, 21 and all free: daily and weekly planners, meeting notes, project plans, OKRs, a habit tracker, journal, trip planner, budget and more. Pick one when you start a note, or just write.",
+  },
+  {
     question: "Can I change how it looks?",
     answer:
       "Yes. Choose between two layouts, where your text sits (left, centered or full width), and light or dark mode, all from Settings.",

@@ -44,7 +44,12 @@ export interface NoteEditorProps {
  * The BlockNote-powered body editor: toolbar, "/" menu, AI suggestions and the
  * document. Client-only: load it through `DynamicNoteEditor`, keyed by note id.
  */
-export function NoteEditor({ initialContent, onContentChange, noteTitle, header }: NoteEditorProps) {
+export function NoteEditor({
+  initialContent,
+  onContentChange,
+  noteTitle,
+  header,
+}: NoteEditorProps) {
   const { resolvedTheme } = useTheme();
   const { textDirection, scrollPastEnd, writingPosition } = usePreferences();
   const editor = useNoteEditor(initialContent);

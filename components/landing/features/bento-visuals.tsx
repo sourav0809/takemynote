@@ -1,20 +1,29 @@
-import { FileJson, FileText, Hash, Lock, Pin, Search, Star } from "lucide-react";
+import { FileJson, Hash, Lock, Pin, Search, Sparkles, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ROW_CLASS = "flex items-center gap-3 rounded-2xl bg-surface p-3 shadow-card";
 const ICON_CLASS = "flex size-9 shrink-0 items-center justify-center rounded-xl";
 
+const PRIVACY_ROWS = [
+  { icon: Lock, title: "On this device only", meta: "No account, no server" },
+  { icon: Sparkles, title: "AI only when you ask", meta: "Nothing is sent otherwise" },
+];
+
 export function PrivacyVisual() {
   return (
-    <div aria-hidden className={ROW_CLASS}>
-      <span className={cn(ICON_CLASS, "bg-sky-tint text-sky-ink")}>
-        <Lock className="size-4" />
-      </span>
-      <div className="min-w-0">
-        <p className="truncate text-[13px] font-semibold text-ink">On this device only</p>
-        <p className="truncate text-[12px] text-muted">No account · No server</p>
-      </div>
-    </div>
+    <ul aria-hidden className="flex flex-col gap-2">
+      {PRIVACY_ROWS.map(({ icon: Icon, title, meta }) => (
+        <li key={title} className={ROW_CLASS}>
+          <span className={cn(ICON_CLASS, "bg-sky-tint text-sky-ink")}>
+            <Icon className="size-4" />
+          </span>
+          <div className="min-w-0">
+            <p className="truncate text-[13px] font-semibold text-ink">{title}</p>
+            <p className="truncate text-[12px] text-muted">{meta}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -27,17 +36,28 @@ const ORGANISE_CHIPS = [
 
 export function OrganiseVisual() {
   return (
-    <ul aria-hidden className="flex flex-wrap gap-2">
-      {ORGANISE_CHIPS.map(({ label, icon: Icon }) => (
-        <li
-          key={label}
-          className="inline-flex h-8 items-center gap-1.5 rounded-full border border-line bg-surface px-3 text-[12px] font-semibold text-ink-soft"
-        >
-          <Icon className="size-3.5 text-subtle" />
-          {label}
-        </li>
-      ))}
-    </ul>
+    <div aria-hidden className="flex flex-col gap-2.5">
+      <div className={ROW_CLASS}>
+        <span className={cn(ICON_CLASS, "bg-sky-tint text-sky-ink")}>
+          <Pin className="size-4" />
+        </span>
+        <div className="min-w-0">
+          <p className="truncate text-[13px] font-semibold text-ink">Weekend in Lisbon</p>
+          <p className="truncate text-[12px] text-muted">Pinned · Travel</p>
+        </div>
+      </div>
+      <ul className="flex flex-wrap gap-2">
+        {ORGANISE_CHIPS.map(({ label, icon: Icon }) => (
+          <li
+            key={label}
+            className="inline-flex h-8 items-center gap-1.5 rounded-full border border-line bg-surface px-3 text-[12px] font-semibold text-ink-soft"
+          >
+            <Icon className="size-3.5 text-subtle" />
+            {label}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
@@ -74,35 +94,31 @@ export function ScratchpadVisual() {
   );
 }
 
-const BACKUP_ROWS = [
-  {
-    icon: FileJson,
-    title: "takemynote-backup.json",
-    meta: "Notes, categories and preferences",
-    iconClass: "bg-sky-tint text-sky-ink",
-  },
-  {
-    icon: FileText,
-    title: "weekend-in-lisbon.md",
-    meta: "Single note as Markdown",
-    iconClass: "bg-sky-edge text-brand-deep",
-  },
-];
+const DOWNLOAD_FORMATS = ["PDF", "Markdown", "Plain text", "HTML", "JSON"];
 
 export function BackupVisual() {
   return (
-    <ul aria-hidden className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-      {BACKUP_ROWS.map(({ icon: Icon, title, meta, iconClass }) => (
-        <li key={title} className={cn(ROW_CLASS, "border border-line")}>
-          <span className={cn(ICON_CLASS, iconClass)}>
-            <Icon className="size-4" />
+    <div aria-hidden className="flex flex-col gap-2.5">
+      <div className={cn(ROW_CLASS, "border border-line")}>
+        <span className={cn(ICON_CLASS, "bg-sky-tint text-sky-ink")}>
+          <FileJson className="size-4" />
+        </span>
+        <div className="min-w-0">
+          <p className="truncate text-[13px] font-semibold text-ink">takemynote-backup.json</p>
+          <p className="truncate text-[12px] text-muted">Notes, categories and preferences</p>
+        </div>
+      </div>
+      <div className="flex flex-wrap items-center gap-1.5">
+        <span className="mr-1 text-[12px] font-medium text-muted">Download a note as</span>
+        {DOWNLOAD_FORMATS.map((format) => (
+          <span
+            key={format}
+            className="inline-flex h-7 items-center rounded-full border border-line bg-surface px-2.5 text-[11px] font-semibold text-ink-soft"
+          >
+            {format}
           </span>
-          <div className="min-w-0">
-            <p className="truncate text-[13px] font-semibold text-ink">{title}</p>
-            <p className="truncate text-[12px] text-muted">{meta}</p>
-          </div>
-        </li>
-      ))}
-    </ul>
+        ))}
+      </div>
+    </div>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { TemplateGalleryProvider } from "@/components/templates/template-gallery-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AppStateProvider } from "@/hooks/use-app-state";
 import { PreferencesProvider } from "@/hooks/use-preferences";
@@ -10,7 +11,9 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
     <QueryProvider>
       <AppStateProvider>
         <PreferencesProvider>
-          <TooltipProvider>{children}</TooltipProvider>
+          <TooltipProvider>
+            <TemplateGalleryProvider>{children}</TemplateGalleryProvider>
+          </TooltipProvider>
         </PreferencesProvider>
       </AppStateProvider>
     </QueryProvider>

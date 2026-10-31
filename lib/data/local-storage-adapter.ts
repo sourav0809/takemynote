@@ -96,14 +96,14 @@ export const localStorageAdapter: DataAdapter = {
 
   getCategories: async () => enqueue(getCategoriesSync),
 
-  createNote: async (categoryId) =>
+  createNote: async (categoryId, initial) =>
     enqueue(() => {
       const notes = getNotesSync();
       const now = new Date().toISOString();
       const note: Note = {
         id: generateId("note"),
-        title: "",
-        content: [],
+        title: initial?.title ?? "",
+        content: initial?.content ?? [],
         categoryId,
         favorited: false,
         pinned: false,
