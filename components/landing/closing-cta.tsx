@@ -7,8 +7,8 @@ const SKY_IMAGE_QUALITY = 86;
 
 export function ClosingCta() {
   return (
-    <section className="mx-auto max-w-6xl px-3 pb-24 sm:px-6 sm:pb-32 lg:px-8">
-      <div className="reveal relative isolate flex min-h-[460px] overflow-hidden rounded-[32px] border border-line shadow-card sm:min-h-[420px] lg:min-h-[460px]">
+    <section className="mx-auto max-w-6xl px-3 pb-16 sm:px-6 sm:pb-24 lg:px-8 lg:pb-32">
+      <div className="reveal relative isolate flex min-h-[380px] overflow-hidden rounded-[28px] sm:rounded-[32px] border border-line shadow-card sm:min-h-[420px] lg:min-h-[460px]">
         <Image
           src={closingSky}
           alt=""

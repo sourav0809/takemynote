@@ -16,7 +16,7 @@ export function FeaturesSection() {
   return (
     <section
       id={LANDING_SECTION_IDS.features}
-      className="mx-auto max-w-6xl scroll-mt-24 px-4 py-24 sm:px-6 sm:py-32 lg:px-8"
+      className="mx-auto max-w-6xl scroll-mt-24 px-4 py-16 sm:px-6 sm:py-24 lg:py-32 lg:px-8"
     >
       <SectionHeading
         command="features"
@@ -28,7 +28,7 @@ export function FeaturesSection() {
         description="A focused editor and a few smart tools to keep your notes in order."
       />
 
-      <div className="reveal mt-12 grid grid-cols-1 gap-4 sm:mt-14 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+      <div className="reveal mt-8 grid grid-cols-1 gap-4 sm:mt-14 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
         <BentoCard
           tone="sky"
           titleAccent="Type /"

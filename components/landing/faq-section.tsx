@@ -6,11 +6,11 @@ export function FaqSection() {
   return (
     <section
       id={LANDING_SECTION_IDS.faq}
-      className="mx-auto max-w-3xl scroll-mt-24 px-4 py-24 sm:px-6 sm:py-32"
+      className="mx-auto max-w-3xl scroll-mt-24 px-4 py-16 sm:px-6 sm:py-24 lg:py-32"
     >
       <SectionHeading command="faq" title="Questions, answered" />
 
-      <div className="reveal mt-12 divide-y divide-line rounded-[28px] border border-line bg-surface shadow-card sm:mt-14">
+      <div className="reveal mt-8 divide-y divide-line rounded-[28px] border border-line bg-surface shadow-card sm:mt-14">
         {FAQ_ITEMS.map(({ question, answer }) => (
           <details key={question} className="group px-5 sm:px-7">
             <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 py-4 text-left text-base font-semibold text-ink [&::-webkit-details-marker]:hidden">

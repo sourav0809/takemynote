@@ -206,6 +206,10 @@ html:has(.landing) body {
      its own; without support it simply stays flat. */
   @supports (animation-timeline: scroll()) {
     .stage-tilt {
+      /* Leaning back pushes the top edge down; the lift cancels that so the
+         gap under the button stays the same while tilted and once flat. */
+      --stage-tilt-angle: 22deg;
+      --stage-lift: -130px;
       transform-origin: 50% 100%;
       animation: stage-settle linear both;
       animation-timeline: scroll(root);
@@ -213,9 +217,16 @@ html:has(.landing) body {
       will-change: transform;
     }
 
+    @media (max-width: 1023px) {
+      .stage-tilt {
+        --stage-lift: -92px;
+      }
+    }
+
     @media (max-width: 767px) {
       .stage-tilt {
         --stage-tilt-angle: 12deg;
+        --stage-lift: -58px;
         animation-range: 0px 360px;
       }
     }
@@ -224,10 +235,10 @@ html:has(.landing) body {
 
 @keyframes stage-settle {
   from {
-    transform: rotateX(var(--stage-tilt-angle, 22deg)) scale(0.96);
+    transform: translateY(var(--stage-lift, 0px)) rotateX(var(--stage-tilt-angle, 22deg)) scale(0.96);
   }
   to {
-    transform: rotateX(0deg) scale(1);
+    transform: translateY(0) rotateX(0deg) scale(1);
   }
 }
 

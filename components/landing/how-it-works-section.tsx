@@ -6,7 +6,7 @@ export function HowItWorksSection() {
   return (
     <section
       id={LANDING_SECTION_IDS.howItWorks}
-      className="mx-auto max-w-6xl scroll-mt-24 px-4 py-24 sm:px-6 sm:py-32 lg:px-8"
+      className="mx-auto max-w-6xl scroll-mt-24 px-4 py-16 sm:px-6 sm:py-24 lg:py-32 lg:px-8"
     >
       <SectionHeading
         command="how it works"
@@ -14,7 +14,7 @@ export function HowItWorksSection() {
         description="Four small steps. Most people are writing within seconds."
       />
 
-      <ol className="reveal mt-12 grid grid-cols-1 gap-4 sm:mt-14 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+      <ol className="reveal mt-8 grid grid-cols-1 gap-4 sm:mt-14 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
         {STEPS.map(({ icon: Icon, title, description }, index) => (
           <li
             key={title}
@@ -40,7 +40,7 @@ export function HowItWorksSection() {
         ))}
       </ol>
 
-      <dl className="reveal mt-12 grid grid-cols-2 border-y border-line sm:mt-16 lg:grid-cols-4">
+      <dl className="reveal mt-10 grid grid-cols-2 border-y border-line sm:mt-16 lg:grid-cols-4">
         {FACTS.map(({ value, label }, index) => (
           <div
             key={label}

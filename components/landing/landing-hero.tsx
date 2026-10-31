@@ -31,14 +31,14 @@ export function LandingHero() {
           Keep it <span className="marker">private.</span>
         </h1>
         <p className="mt-5 max-w-2xl animate-rise text-lg leading-relaxed text-pretty text-muted sm:mt-6 sm:text-xl">
-          A calm notebook with AI on tap. No sign-up, nothing to install.
+          A calm notebook with AI on tap. No sign‑up, nothing to install.
         </p>
         <CtaLink href={ROUTES.notes} size="lg" withArrow className="mt-8 animate-rise sm:mt-9">
           Start writing
         </CtaLink>
       </div>
 
-      <div className="mx-auto mt-28 max-w-6xl animate-rise px-3 [perspective:1400px] [animation-delay:150ms] sm:px-6 lg:px-8">
+      <div className="mx-auto mt-12 max-w-6xl animate-rise px-3 [perspective:1400px] [animation-delay:150ms] sm:mt-14 sm:px-6 lg:mt-16 lg:px-8">
         <div className="stage-tilt">
           <ProductStage />
         </div>
