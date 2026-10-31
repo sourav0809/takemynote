@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { LogoMark } from "@/components/brand/logo-mark";
+import { BrandLockup } from "@/components/brand/brand-lockup";
 import { CtaLink } from "@/components/landing/cta-link";
 import { NAV_LINKS } from "@/components/landing/landing-content";
-import { APP_NAME, ROUTES } from "@/lib/constants";
+import { ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 const SCROLLED_OFFSET_PX = 8;
@@ -52,10 +52,7 @@ export function LandingNav() {
           href={ROUTES.home}
           className="flex items-center gap-2 rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-edge"
         >
-          <LogoMark className="size-7" />
-          <span className="text-[15px] leading-none font-semibold tracking-tight text-ink italic">
-            {APP_NAME}
-          </span>
+          <BrandLockup tone="light" className="h-7" priority />
         </Link>
 
         <ul className="hidden items-center gap-1 lg:flex">

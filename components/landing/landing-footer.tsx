@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LogoMark } from "@/components/brand/logo-mark";
+import { BrandLockup } from "@/components/brand/brand-lockup";
 import { NAV_LINKS } from "@/components/landing/landing-content";
 import { APP_NAME, ROUTES } from "@/lib/constants";
 
@@ -14,10 +14,7 @@ export function LandingFooter() {
         <div className="flex flex-col gap-10 sm:flex-row sm:justify-between">
           <div className="max-w-xs">
             <Link href={ROUTES.home} className="flex items-center gap-2">
-              <LogoMark className="size-7" />
-              <span className="text-[15px] leading-none font-semibold tracking-tight text-ink italic">
-                {APP_NAME}
-              </span>
+              <BrandLockup tone="light" className="h-7" />
             </Link>
             <p className="mt-4 text-[14px] leading-relaxed text-muted">
               A calm, private notebook that lives in your browser.

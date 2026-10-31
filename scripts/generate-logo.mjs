@@ -14,26 +14,12 @@ The wordmark must read exactly "TakeMyNote" — capital T, M and N, no other let
 Colours: brand blue #0069a8 for the mark, a lighter sky blue #38bdf8 as a small accent, and deep navy #0b1b2b for the wordmark.
 Flat vector style, crisp clean edges, no gradients except a very subtle one inside the mark, no shadows, no 3D, no mockup, no background shapes, no watermark. Premium, modern, friendly, simple enough to work as a 16px favicon.`;
 
+/** The chosen logo concept (others were tried and dropped). */
 const CONCEPTS = {
-  fold: {
-    provider: "openai",
-    prompt: `${SHARED}
-Mark: a rounded-square app tile in brand blue containing a white note page whose top-right corner is folded over; the fold and two short text lines subtly form a capital "T". Wordmark: clean geometric sans-serif, "Take" in medium weight and "MyNote" in semibold, tight but readable letter spacing.`,
-  },
-  quill: {
-    provider: "openai",
-    prompt: `${SHARED}
-Mark: a soft circular badge in brand blue with a single flowing white stroke that starts as a pen nib and ends as a checkmark, suggesting "write it down, done". Wordmark: friendly rounded sans-serif in semibold, with the dot-free, smooth letterforms; "Note" slightly bolder than "TakeMy".`,
-  },
   bookmark: {
     provider: "gemini",
     prompt: `${SHARED}
 Mark: a minimal stack of two offset note cards (back card sky blue, front card brand blue) with a small white bookmark ribbon notch at the top of the front card. Wordmark: modern humanist sans-serif in semibold, single colour navy, excellent kerning.`,
-  },
-  monogram: {
-    provider: "gemini",
-    prompt: `${SHARED}
-Mark: an elegant monogram built from the letters "t" and "n" sharing one continuous stroke, drawn in brand blue inside a squircle outline, with one sky-blue dot like an ink drop. Wordmark: crisp geometric sans-serif, "Take" regular weight and "MyNote" bold, all navy.`,
   },
 };
 

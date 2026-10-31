@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 
-import { LogoMark } from "@/components/brand/logo-mark";
+import { BrandLockup } from "@/components/brand/brand-lockup";
 import { CategoryManagerDialog } from "@/components/library/category-manager-dialog";
 import { FOLDER_ICONS, FOLDER_ORDER } from "@/components/library/folder-icons";
 import { LibraryFooter } from "@/components/library/library-footer";
@@ -11,7 +11,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAppState } from "@/hooks/use-app-state";
 import { useCategories } from "@/hooks/use-categories";
 import { useFolderNavigation } from "@/hooks/use-folder-navigation";
-import { APP_NAME, FOLDER_LABELS } from "@/lib/constants";
+import { FOLDER_LABELS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEM_CLASS =
@@ -37,10 +37,7 @@ export function ClassicSidebar({ onNavigate }: ClassicSidebarProps) {
   return (
     <aside className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
       <div className="flex h-14 shrink-0 items-center gap-2 px-4">
-        <LogoMark className="size-6" />
-        <span className="text-[15px] leading-none font-semibold tracking-tight italic">
-          {APP_NAME}
-        </span>
+        <BrandLockup className="h-8" />
       </div>
 
       <div className="px-3 pb-3" onClickCapture={onNavigate}>

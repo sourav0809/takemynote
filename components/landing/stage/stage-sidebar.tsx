@@ -1,14 +1,12 @@
-import { LogoMark } from "@/components/brand/logo-mark";
+import { BrandLockup } from "@/components/brand/brand-lockup";
 import { STAGE_CATEGORIES, STAGE_FOLDERS } from "@/components/landing/stage/stage-mock-data";
-import { APP_NAME } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 export function StageSidebar() {
   return (
     <div className="hidden flex-col gap-5 border-r border-line bg-canvas p-3 lg:flex">
       <div className="flex items-center gap-2 px-1.5 pt-1">
-        <LogoMark className="size-5" />
-        <span className="text-[13px] font-semibold text-ink italic">{APP_NAME}</span>
+        <BrandLockup tone="light" className="h-5" />
       </div>
 
       <ul className="flex flex-col gap-0.5">

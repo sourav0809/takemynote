@@ -1,4 +1,4 @@
-import { LogoMark } from "@/components/brand/logo-mark";
+import { BrandLockup } from "@/components/brand/brand-lockup";
 import { FolderSwitcher } from "@/components/library/folder-switcher";
 import { LibraryFooter } from "@/components/library/library-footer";
 import { NewNoteButton } from "@/components/library/new-note-button";
@@ -7,7 +7,6 @@ import { NoteListControls } from "@/components/library/note-list-controls";
 import { NoteListViewToggle } from "@/components/note-list/note-list-view-toggle";
 import { NoteSearchBar } from "@/components/note-list/note-search-bar";
 import { useAppState } from "@/hooks/use-app-state";
-import { APP_NAME } from "@/lib/constants";
 
 /** Library layout's left column: folder switcher, search, filters and notes. */
 export function LibraryPane() {
@@ -18,10 +17,7 @@ export function LibraryPane() {
     <aside className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
       <div className="flex h-14 shrink-0 items-center justify-between gap-2 pr-3 pl-4">
         <div className="flex items-center gap-2">
-          <LogoMark className="size-6" />
-          <span className="text-[15px] leading-none font-semibold tracking-tight italic">
-            {APP_NAME}
-          </span>
+          <BrandLockup className="h-8" />
         </div>
         <NewNoteButton />
       </div>
