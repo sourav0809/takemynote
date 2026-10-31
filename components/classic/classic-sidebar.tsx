@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 
-import { BrandLockup } from "@/components/brand/brand-lockup";
+import { BrandHomeLink } from "@/components/brand/brand-home-link";
 import { CategoryManagerDialog } from "@/components/library/category-manager-dialog";
 import { FOLDER_ICONS, FOLDER_ORDER } from "@/components/library/folder-icons";
 import { LibraryFooter } from "@/components/library/library-footer";
@@ -37,7 +37,7 @@ export function ClassicSidebar({ onNavigate }: ClassicSidebarProps) {
   return (
     <aside className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
       <div className="flex h-14 shrink-0 items-center gap-2 px-4">
-        <BrandLockup className="h-8" />
+        <BrandHomeLink />
       </div>
 
       <div className="px-3 pb-3" onClickCapture={onNavigate}>

@@ -10,7 +10,7 @@ export function LandingHero() {
   return (
     <section className="relative isolate overflow-hidden">
       {/* Height grows with width so the dunes stay level just under the button. */}
-      <div className="absolute inset-x-0 top-0 -z-10 h-[500px] sm:h-[575px] lg:h-[calc(427px_+_14vw)]">
+      <div className="absolute inset-x-0 top-0 -z-10 h-[500px] sm:h-[575px] lg:h-[calc(469px_+_14vw)]">
         <Image
           src={heroDunes}
           alt=""
@@ -24,20 +24,24 @@ export function LandingHero() {
         <div className="absolute inset-x-0 bottom-0 h-1/6 bg-linear-to-b from-transparent to-canvas sm:h-1/4" />
       </div>
 
-      <div className="mx-auto flex max-w-6xl flex-col items-center px-4 pt-32 text-center sm:px-6 sm:pt-40 lg:px-8 lg:pt-44">
+      <div className="mx-auto flex max-w-6xl flex-col items-center px-4 pt-32 text-center sm:px-6 sm:pt-40 lg:px-8 lg:pt-36">
         <h1 className="animate-rise text-[44px] leading-[0.98] font-normal tracking-[-0.035em] text-balance text-ink sm:text-6xl lg:text-[76px]">
-          Write freely. Keep it <span className="marker">private.</span>
+          Write freely.
+          <br />
+          Keep it <span className="marker">private.</span>
         </h1>
         <p className="mt-5 max-w-2xl animate-rise text-lg leading-relaxed text-pretty text-muted sm:mt-6 sm:text-xl">
-          A calm notebook in your browser. No sign-up, nothing to install.
+          A calm notebook with AI on tap. No sign-up, nothing to install.
         </p>
         <CtaLink href={ROUTES.notes} size="lg" withArrow className="mt-8 animate-rise sm:mt-9">
           Start writing
         </CtaLink>
       </div>
 
-      <div className="mx-auto mt-28 max-w-6xl animate-rise px-3 [animation-delay:150ms] sm:px-6 lg:px-8">
-        <ProductStage />
+      <div className="mx-auto mt-28 max-w-6xl animate-rise px-3 [perspective:1400px] [animation-delay:150ms] sm:px-6 lg:px-8">
+        <div className="stage-tilt">
+          <ProductStage />
+        </div>
       </div>
     </section>
   );

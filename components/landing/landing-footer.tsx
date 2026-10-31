@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { BrandLockup } from "@/components/brand/brand-lockup";
+import { GithubIcon } from "@/components/brand/github-icon";
 import { NAV_LINKS } from "@/components/landing/landing-content";
-import { APP_NAME, ROUTES } from "@/lib/constants";
+import { APP_NAME, GITHUB_URL, ROUTES } from "@/lib/constants";
 
 const LINK_CLASS = "text-[14px] text-muted transition-colors hover:text-ink";
 
@@ -14,7 +15,7 @@ export function LandingFooter() {
         <div className="flex flex-col gap-10 sm:flex-row sm:justify-between">
           <div className="max-w-xs">
             <Link href={ROUTES.home} className="flex items-center gap-2">
-              <BrandLockup tone="light" className="h-7" />
+              <BrandLockup tone="light" className="h-10" />
             </Link>
             <p className="mt-4 text-[14px] leading-relaxed text-muted">
               A calm, private notebook that lives in your browser.
@@ -41,6 +42,17 @@ export function LandingFooter() {
                   <Link href={ROUTES.notes} className={LINK_CLASS}>
                     Open notes
                   </Link>
+                </li>
+                <li>
+                  <a
+                    href={GITHUB_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={`${LINK_CLASS} inline-flex items-center gap-1.5`}
+                  >
+                    <GithubIcon className="size-3.5" />
+                    GitHub
+                  </a>
                 </li>
               </ul>
             </div>

@@ -6,6 +6,8 @@ import {
   ScratchpadVisual,
   SearchVisual,
 } from "@/components/landing/features/bento-visuals";
+import { AiVisual } from "@/components/landing/features/ai-visual";
+import { MakeItYoursVisual } from "@/components/landing/features/make-it-yours-visual";
 import { LANDING_SECTION_IDS } from "@/components/landing/landing-content";
 import { SectionHeading } from "@/components/landing/section-heading";
 import { SlashMenuPreview } from "@/components/landing/slash-menu-preview";
@@ -73,6 +75,23 @@ export function FeaturesSection() {
           className="sm:col-span-2"
         >
           <BackupVisual />
+        </BentoCard>
+        <BentoCard
+          tone="sky"
+          titleAccent="Ask AI"
+          title="only when you want"
+          description="Summarize a note, turn it into a checklist, fix spelling or keep writing. You decide what gets added."
+          className="sm:col-span-2"
+        >
+          <AiVisual />
+        </BentoCard>
+        <BentoCard
+          titleAccent="Make it"
+          title="yours"
+          description="Pick a layout, choose where your text sits, go light or dark, and fly through it with keyboard shortcuts."
+          className="sm:col-span-2"
+        >
+          <MakeItYoursVisual />
         </BentoCard>
       </div>
     </section>

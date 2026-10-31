@@ -16,9 +16,12 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
+import { GithubIcon } from "@/components/brand/github-icon";
+import { buttonVariants } from "@/components/ui/button";
 import { useAppState } from "@/hooks/use-app-state";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { APP_NAME } from "@/lib/constants";
+import { APP_NAME, GITHUB_URL } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 
 /** Tabs sit beside the content from this width, and in a row above it on phones. */
 const SIDE_TABS_MEDIA_QUERY = "(min-width: 768px)";
@@ -37,10 +40,20 @@ export function SettingsDialog() {
   return (
     <Dialog open={isSettingsOpen} onOpenChange={setSettingsOpen}>
       <DialogContent className="flex h-[88dvh] w-full max-w-3xl flex-col gap-0 overflow-hidden p-0 sm:max-w-4xl md:h-[42rem] md:max-h-[85vh] lg:max-w-5xl">
-        <DialogHeader className="space-y-0 border-b border-border px-5 py-4 pr-14 md:px-8 md:py-6">
+        <DialogHeader className="space-y-0 border-b border-border px-5 py-4 pr-24 md:px-8 md:py-6">
           <DialogTitle>Settings</DialogTitle>
           <p className="text-sm text-muted-foreground">Preferences and your data.</p>
         </DialogHeader>
+        <a
+          href={GITHUB_URL}
+          target="_blank"
+          rel="noreferrer"
+          aria-label="View source on GitHub"
+          title="View source on GitHub"
+          className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "absolute top-4 right-14 text-muted-foreground")}
+        >
+          <GithubIcon />
+        </a>
 
         <Tabs
           defaultValue="preferences"

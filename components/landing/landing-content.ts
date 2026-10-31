@@ -18,7 +18,7 @@ export const NAV_LINKS: NavLink[] = [
   { id: LANDING_SECTION_IDS.faq, label: "FAQ" },
 ];
 
-/** Block types offered by the editor's "/" menu (see lib/slash-command-items.ts). */
+/** A few of the blocks offered by the editor's "/" menu (components/editor/slash-menu). */
 export const SLASH_PREVIEW_ITEMS = [
   { label: "Heading 1", hint: "Big section title" },
   { label: "Task list", hint: "Track things to do" },
@@ -62,7 +62,7 @@ export interface Fact {
 
 export const FACTS: Fact[] = [
   { value: "0", label: "sign-ups needed" },
-  { value: "9", label: "block types via /" },
+  { value: "14", label: "block types via /" },
   { value: ".md", label: "export per note" },
   { value: ".json", label: "one-file backup" },
 ];
@@ -96,6 +96,15 @@ export const FAQ_ITEMS: FaqItem[] = [
     question: "Can I move my notes to another device?",
     answer:
       "Yes. Create a backup file on one device, then use Import Backup on the other. Notes, categories and preferences all come along.",
+  },
+  {
+    question: "Can I change how it looks?",
+    answer:
+      "Yes. Choose between two layouts, where your text sits (left, centered or full width), and light or dark mode, all from Settings.",
+  },
+  {
+    question: "Is TakeMyNote open source?",
+    answer: "Yes. The full source code is on GitHub, linked at the bottom of this page.",
   },
   {
     question: "Can I export my notes?",

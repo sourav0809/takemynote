@@ -200,6 +200,35 @@ html:has(.landing) body {
       animation-range: entry 0% entry 40%;
     }
   }
+
+  /* Hero product mock: starts leaning back like a laptop screen and settles
+     flat as the page scrolls. Tied to scroll position, so it never plays on
+     its own; without support it simply stays flat. */
+  @supports (animation-timeline: scroll()) {
+    .stage-tilt {
+      transform-origin: 50% 100%;
+      animation: stage-settle linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0px 520px;
+      will-change: transform;
+    }
+
+    @media (max-width: 767px) {
+      .stage-tilt {
+        --stage-tilt-angle: 12deg;
+        animation-range: 0px 360px;
+      }
+    }
+  }
+}
+
+@keyframes stage-settle {
+  from {
+    transform: rotateX(var(--stage-tilt-angle, 22deg)) scale(0.96);
+  }
+  to {
+    transform: rotateX(0deg) scale(1);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

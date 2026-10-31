@@ -1,25 +1,32 @@
 import { ExternalLink } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { APP_NAME } from "@/lib/constants";
+import { GithubIcon } from "@/components/brand/github-icon";
+import { buttonVariants } from "@/components/ui/button";
+import { APP_NAME, GITHUB_URL } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 
 export function AboutTab() {
   return (
     <div className="flex flex-col gap-4 text-sm text-muted-foreground">
       <p>
-        {APP_NAME} is a modern, markdown-first note-taking app built for
-        focus: write quickly, organize with categories, and find what you
-        need without friction.
+        {APP_NAME} is a calm, private notebook. Write with a rich editor and the / menu, keep
+        things tidy with categories, pins and favourites, and ask AI for help only when you want
+        it.
       </p>
       <p>
-        Your notes stay yours. {APP_NAME} is designed with privacy in mind
-        and gives you full control over your data through export and backup
-        tools.
+        Your notes stay yours. They live in this browser, and you can back them up or export them
+        as Markdown anytime from Data management.
       </p>
-      <Button variant="outline" className="w-fit gap-2">
-        <ExternalLink />
-        View source
-      </Button>
+      <a
+        href={GITHUB_URL}
+        target="_blank"
+        rel="noreferrer"
+        className={cn(buttonVariants({ variant: "outline" }), "w-fit gap-2")}
+      >
+        <GithubIcon />
+        View source on GitHub
+        <ExternalLink className="size-3.5 text-muted-foreground" />
+      </a>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { BrandLockup } from "@/components/brand/brand-lockup";
+import { BrandHomeLink } from "@/components/brand/brand-home-link";
 import { FolderSwitcher } from "@/components/library/folder-switcher";
 import { LibraryFooter } from "@/components/library/library-footer";
 import { NewNoteButton } from "@/components/library/new-note-button";
@@ -16,9 +16,7 @@ export function LibraryPane() {
   return (
     <aside className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
       <div className="flex h-14 shrink-0 items-center justify-between gap-2 pr-3 pl-4">
-        <div className="flex items-center gap-2">
-          <BrandLockup className="h-8" />
-        </div>
+        <BrandHomeLink />
         <NewNoteButton />
       </div>
 
