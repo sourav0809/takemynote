@@ -5,6 +5,8 @@ import { createContext, useContext, useMemo, useState } from "react";
 import type { NoteListFilter, NoteListView } from "@/lib/constants";
 import type { FolderId } from "@/types/note";
 
+export type SettingsTab = "preferences" | "ai" | "shortcuts" | "data" | "about";
+
 interface AppState {
   activeFolder: FolderId;
   activeCategoryId: string | null;
@@ -13,6 +15,7 @@ interface AppState {
   listView: NoteListView;
   listFilter: NoteListFilter;
   isSettingsOpen: boolean;
+  settingsTab: SettingsTab;
   /** Phone/tablet layout only: whether the Page is showing instead of the Library. */
   isNoteOpen: boolean;
   setActiveFolder: (folder: FolderId) => void;
@@ -22,6 +25,9 @@ interface AppState {
   setListView: (view: NoteListView) => void;
   setListFilter: (filter: NoteListFilter) => void;
   setSettingsOpen: (open: boolean) => void;
+  setSettingsTab: (tab: SettingsTab) => void;
+  /** Opens Settings, optionally on a given tab. */
+  openSettings: (tab?: SettingsTab) => void;
   /** Selects a note and, on small screens, opens it full screen. */
   openNote: (noteId: string) => void;
   closeNote: () => void;
@@ -37,6 +43,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const [listView, setListView] = useState<NoteListView>("list");
   const [listFilter, setListFilter] = useState<NoteListFilter>("all");
   const [isSettingsOpen, setSettingsOpen] = useState(false);
+  const [settingsTab, setSettingsTab] = useState<SettingsTab>("preferences");
   const [isNoteOpen, setNoteOpen] = useState(false);
 
   const value = useMemo<AppState>(
@@ -48,6 +55,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       listView,
       listFilter,
       isSettingsOpen,
+      settingsTab,
       isNoteOpen,
       setActiveFolder: (folder) => {
         setActiveFolderState(folder);
@@ -66,6 +74,11 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       setListView,
       setListFilter,
       setSettingsOpen,
+      setSettingsTab,
+      openSettings: (tab) => {
+        if (tab) setSettingsTab(tab);
+        setSettingsOpen(true);
+      },
       openNote: (noteId) => {
         setSelectedNoteId(noteId);
         setNoteOpen(true);
@@ -80,6 +93,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       listView,
       listFilter,
       isSettingsOpen,
+      settingsTab,
       isNoteOpen,
     ]
   );

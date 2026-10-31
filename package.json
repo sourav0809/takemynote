@@ -9,6 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^4.0.94",
+    "@ai-sdk/google": "^4.0.109",
+    "@ai-sdk/openai": "^4.0.106",
     "@base-ui/react": "^1.7.0",
     "@blocknote/code-block": "^0.57.0",
     "@blocknote/core": "^0.57.0",
@@ -16,6 +19,7 @@
     "@blocknote/shadcn": "^0.57.0",
     "@floating-ui/react": "^0.27.20",
     "@tanstack/react-query": "^5.102.8",
+    "ai": "^7.0.159",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "jspdf": "^4.2.1",
@@ -28,6 +32,7 @@
     "react-dom": "19.2.8",
     "react-markdown": "^10.1.0",
     "react-resizable-panels": "^4.12.3",
+    "remark-gfm": "^4.0.1",
     "shadcn": "^4.19.1",
     "sonner": "^2.0.8",
     "tailwind-merge": "^3.6.0",

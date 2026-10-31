@@ -80,12 +80,12 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     question: "Where are my notes stored?",
     answer:
-      "In your own browser, on your device. Notes are never uploaded or synced. The only exception is when you ask AI for help: that one note is sent to OpenAI to write the suggestion.",
+      "In your own browser, on your device. Notes are never uploaded or synced. The only exception is when you ask AI for help: the text you choose goes straight to the AI provider you picked, using your own key.",
   },
   {
     question: "Does it have AI?",
     answer:
-      "Yes, only when you ask. Summarize a note, turn it into a checklist, fix spelling or keep writing, then choose whether to add the result.",
+      "Yes, only when you ask, with your own OpenAI, Google or Anthropic key. Select a few lines and type what you want (“add a few bullets and fix grammar”), or summarize, make a checklist and keep writing. Your key is encrypted and never leaves your browser except to go to that provider.",
   },
   {
     question: "What if I clear my browser data?",

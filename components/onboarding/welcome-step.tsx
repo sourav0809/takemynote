@@ -18,7 +18,7 @@ const HIGHLIGHTS: { icon: LucideIcon; title: string; text: string }[] = [
   {
     icon: Sparkles,
     title: "AI when you ask",
-    text: "Summarize, make a checklist or fix spelling with one click.",
+    text: "Select text and tell AI what to change, with your own key.",
   },
 ];
 

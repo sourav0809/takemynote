@@ -1,30 +1,31 @@
-import { RotateCcw, Sparkles, X } from "lucide-react";
+import { KeyRound, RotateCcw, Sparkles, Square, X } from "lucide-react";
 
+import { useAi } from "@/components/ai/ai-provider";
 import { AI_ACTION_ICONS } from "@/components/editor/ai/ai-action-icons";
+import { AiMarkdownPreview } from "@/components/editor/ai/ai-markdown-preview";
 import { Button } from "@/components/ui/button";
-import type { AiAssistState } from "@/hooks/use-ai-assist";
+import { useAiSettings } from "@/hooks/use-ai-settings";
+import type { AiStreamState } from "@/hooks/use-ai-stream";
 import { AI_ACTION_CONFIG, AI_ACTIONS, type AiAction } from "@/lib/ai/ai-actions";
+import { AI_PROVIDERS } from "@/lib/ai/providers";
 
 interface AiSuggestionPanelProps {
-  state: AiAssistState;
+  action: AiAction | null;
+  state: AiStreamState;
   onApply: () => void;
   onRun: (action: AiAction) => void;
+  onStop: () => void;
   onDismiss: () => void;
 }
 
-/** Turns Markdown list markers into readable glyphs for the preview only. */
-function toPreviewText(markdown: string): string {
-  return markdown
-    .replace(/^(\s*)- \[ \] /gm, "$1☐ ")
-    .replace(/^(\s*)- \[x\] /gim, "$1☑ ")
-    .replace(/^(\s*)[-*] /gm, "$1• ")
-    .replace(/\*\*(.+?)\*\*/g, "$1");
-}
+/** The card that streams a whole-note AI suggestion and lets the user apply, retry or dismiss it. */
+export function AiSuggestionPanel({ action, state, onApply, onRun, onStop, onDismiss }: AiSuggestionPanelProps) {
+  const { openAiSetup } = useAi();
+  const { provider } = useAiSettings();
+  if (!action) return null;
 
-/** The card that shows an AI suggestion and lets the user apply, retry or dismiss it. */
-export function AiSuggestionPanel({ state, onApply, onRun, onDismiss }: AiSuggestionPanelProps) {
-  if (!state.action) return null;
-  const config = AI_ACTION_CONFIG[state.action];
+  const config = AI_ACTION_CONFIG[action];
+  const isStreaming = state.status === "streaming";
 
   return (
     <section
@@ -43,54 +44,66 @@ export function AiSuggestionPanel({ state, onApply, onRun, onDismiss }: AiSugges
       </header>
 
       <div className="mt-3 min-h-0 overflow-y-auto">
-        {state.status === "loading" && (
+        {isStreaming && !state.text && (
           <div className="flex flex-col gap-2 py-1" aria-label="Writing…">
             <span className="h-3 w-11/12 animate-pulse rounded-full bg-muted" />
             <span className="h-3 w-9/12 animate-pulse rounded-full bg-muted" />
             <span className="h-3 w-10/12 animate-pulse rounded-full bg-muted" />
           </div>
         )}
-        {state.status === "error" && <p className="text-sm text-destructive">{state.error}</p>}
-        {state.status === "done" && (
-          <p className="text-sm leading-relaxed whitespace-pre-wrap">{toPreviewText(state.text)}</p>
+        {state.status === "error" && state.error && (
+          <p className="text-sm text-destructive">{state.error.message}</p>
         )}
+        {state.text && <AiMarkdownPreview markdown={state.text} isStreaming={isStreaming} />}
       </div>
 
-      {state.status !== "loading" && (
-        <div className="mt-4 flex flex-wrap items-center gap-2">
-          {state.status === "done" && (
-            <Button size="sm" onClick={onApply}>
-              {config.applyLabel}
-            </Button>
-          )}
-          <Button variant="outline" size="sm" className="gap-1.5" onClick={() => onRun(state.action!)}>
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        {isStreaming && (
+          <Button variant="outline" size="sm" className="gap-1.5" onClick={onStop}>
+            <Square className="size-3 fill-current" />
+            Stop
+          </Button>
+        )}
+        {state.status === "done" && (
+          <Button size="sm" onClick={onApply}>
+            {config.applyLabel}
+          </Button>
+        )}
+        {state.status === "error" && state.error?.needsSetup && (
+          <Button size="sm" className="gap-1.5" onClick={openAiSetup}>
+            <KeyRound />
+            Set up AI key
+          </Button>
+        )}
+        {!isStreaming && (
+          <Button variant="outline" size="sm" className="gap-1.5" onClick={() => onRun(action)}>
             <RotateCcw />
             Try again
           </Button>
-        </div>
-      )}
+        )}
+      </div>
 
       <div className="mt-3 flex flex-wrap gap-1.5 border-t border-border pt-3">
-        {AI_ACTIONS.filter((action) => action !== state.action).map((action) => {
-          const Icon = AI_ACTION_ICONS[action];
+        {AI_ACTIONS.filter((other) => other !== action).map((other) => {
+          const Icon = AI_ACTION_ICONS[other];
           return (
             <Button
-              key={action}
+              key={other}
               variant="ghost"
               size="xs"
               className="gap-1 text-muted-foreground"
-              disabled={state.status === "loading"}
-              onClick={() => onRun(action)}
+              disabled={isStreaming}
+              onClick={() => onRun(other)}
             >
               <Icon className="text-primary" />
-              {AI_ACTION_CONFIG[action].label}
+              {AI_ACTION_CONFIG[other].label}
             </Button>
           );
         })}
       </div>
 
       <p className="mt-2 text-[11px] text-muted-foreground">
-        Sends this note to OpenAI to write the suggestion.
+        Sends this note to {AI_PROVIDERS[provider].name} with your key.
       </p>
     </section>
   );

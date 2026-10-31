@@ -1,6 +1,7 @@
-import { Archive, Command, Settings, User } from "lucide-react";
+import { Archive, Command, Settings, Sparkles, User } from "lucide-react";
 
 import { AboutTab } from "@/components/settings/about-tab";
+import { AiTab } from "@/components/settings/ai-tab";
 import { DataManagementTab } from "@/components/settings/data-management-tab";
 import { PreferencesTab } from "@/components/settings/preferences-tab";
 import { ShortcutsTab } from "@/components/settings/shortcuts-tab";
@@ -18,7 +19,7 @@ import {
 } from "@/components/ui/tabs";
 import { GithubIcon } from "@/components/brand/github-icon";
 import { buttonVariants } from "@/components/ui/button";
-import { useAppState } from "@/hooks/use-app-state";
+import { useAppState, type SettingsTab } from "@/hooks/use-app-state";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { APP_NAME, GITHUB_URL } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -34,7 +35,7 @@ const TAB_TRIGGER_CLASS = [
 ].join(" ");
 
 export function SettingsDialog() {
-  const { isSettingsOpen, setSettingsOpen } = useAppState();
+  const { isSettingsOpen, setSettingsOpen, settingsTab, setSettingsTab } = useAppState();
   const hasSideTabs = useMediaQuery(SIDE_TABS_MEDIA_QUERY) ?? true;
 
   return (
@@ -42,7 +43,7 @@ export function SettingsDialog() {
       <DialogContent className="flex h-[88dvh] w-full max-w-3xl flex-col gap-0 overflow-hidden p-0 sm:max-w-4xl md:h-[42rem] md:max-h-[85vh] lg:max-w-5xl">
         <DialogHeader className="space-y-0 border-b border-border px-5 py-4 pr-24 md:px-8 md:py-6">
           <DialogTitle>Settings</DialogTitle>
-          <p className="text-sm text-muted-foreground">Preferences and your data.</p>
+          <p className="text-sm text-muted-foreground">Preferences, AI and your data.</p>
         </DialogHeader>
         <a
           href={GITHUB_URL}
@@ -56,7 +57,8 @@ export function SettingsDialog() {
         </a>
 
         <Tabs
-          defaultValue="preferences"
+          value={settingsTab}
+          onValueChange={(tab) => setSettingsTab(tab as SettingsTab)}
           orientation={hasSideTabs ? "vertical" : "horizontal"}
           className="min-h-0 flex-1 gap-0 md:flex-row"
         >
@@ -64,6 +66,10 @@ export function SettingsDialog() {
             <TabsTrigger value="preferences" className={TAB_TRIGGER_CLASS}>
               <Settings />
               Preferences
+            </TabsTrigger>
+            <TabsTrigger value="ai" className={TAB_TRIGGER_CLASS}>
+              <Sparkles />
+              AI
             </TabsTrigger>
             <TabsTrigger value="shortcuts" className={TAB_TRIGGER_CLASS}>
               <Command />
@@ -82,6 +88,9 @@ export function SettingsDialog() {
           <div className="min-h-0 flex-1 overflow-y-auto px-5 py-5 md:border-l md:border-border md:px-8 md:py-6">
             <TabsContent value="preferences">
               <PreferencesTab />
+            </TabsContent>
+            <TabsContent value="ai">
+              <AiTab />
             </TabsContent>
             <TabsContent value="shortcuts">
               <ShortcutsTab />

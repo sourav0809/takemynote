@@ -147,7 +147,7 @@ Defined once in `lib/shortcuts.ts` and used by both the handler and the Settings
 
 ## First-run welcome
 
-`components/onboarding/onboarding-dialog.tsx` appears once per browser, the first time someone opens /notes. It has three steps: **Welcome** (logo, one line, three facts: private, "/" to format, AI when you ask) → **Pick a layout** (the same cards as Settings, applied live) → **Light or dark?** (Light / Dark / Match system, applied live) → "Start writing". "Skip" on step 1, or closing the dialog, keeps the defaults (Classic, system theme). Completion is stored as `preferences.onboardingCompleted`, which is included in backups, so restoring on a new device skips it. It renders only after hydration, so returning users never see a flash.
+`components/onboarding/onboarding-dialog.tsx` appears once per browser, the first time someone opens /notes. Steps: **Welcome** (logo, one line, three facts: private, "/" to format, AI when you ask) → **Pick a layout** (the same cards as Settings, applied live) → **Where should your text sit?** → **Add AI (optional)** (provider, model, key; "Skip for now") → **Light or dark?** (Light / Dark / Match system, applied live) → "Start writing". "Skip" on step 1, or closing the dialog, keeps the defaults (Classic, system theme). Completion is stored as `preferences.onboardingCompleted`, which is included in backups, so restoring on a new device skips it. It renders only after hydration, so returning users never see a flash.
 
 ## Templates
 
@@ -156,13 +156,17 @@ Defined once in `lib/shortcuts.ts` and used by both the handler and the Settings
 - **Content** lives in `lib/templates/library/*.ts` as Markdown: real structure (tables, trackers, task lists, dividers), short italic prompts, and example rows. Placeholders `{{date}} {{weekday}} {{month}} {{weekRange}} {{mon}}…{{sun}}` are filled when the template is used. Convert with `templateMarkdownToBlocks`, which keeps empty list items as real empty blocks.
 - The owner rejected thin outline templates ("people won't use these"). New templates must be genuinely useful: structure, examples and dates, not just headings.
 
-## AI (real, opt-in)
+## AI (bring your own key)
 
-- Four actions in `lib/ai/ai-actions.ts`: Summarize (adds bullets at the top), Make a checklist (appends tasks), Fix spelling (replaces the note), Continue writing (appends).
-- Entry points: "✦ AI" at the right end of the toolbar, and an "Ask AI" group in the "/" menu. Both open the same suggestion card (`ai-suggestion-panel.tsx`): result, apply button, "Try again", chips for the other actions, and the line "Sends this note to OpenAI to write the suggestion."
-- Server: `app/api/ai/route.ts` → OpenAI Responses API, model `gpt-5.4-mini`, key `OPEN_AI_API_KEY` (server only). Only the four actions are accepted; input is capped at `AI_MAX_INPUT_CHARS`.
-- Nothing is applied without the user pressing the apply button. The landing FAQ states the privacy exception.
-- The endpoint is public; add rate limiting before a public launch.
+Plan and decisions: `docs/ai-plan.md`.
+
+- **No server.** Requests go from the browser straight to the user's provider (OpenAI, Google or Anthropic) with the Vercel AI SDK. There is no `/api/ai` and no TakeMyNote key. Models (light ones only) are listed in `lib/ai/providers.ts`; the first per provider is the default.
+- **Key safety** (`lib/ai/key-vault.ts`): AES-GCM with a non-extractable WebCrypto key in IndexedDB; only ciphertext + last 4 characters in localStorage (`takemynote:ai:secret`). Decrypted per request, never in React state, logs, backups or exports. The key is tied to its provider, so it can't be sent to another one. The CSP in `next.config.ts` limits `connect-src` to our origin plus the three provider APIs.
+- **Prompts** (`lib/ai/prompts.ts`): a locked `SYSTEM_PROMPT`, then the user's "Additional instructions" (Settings → AI, pre-filled with `DEFAULT_INSTRUCTIONS`) inside `<user_preferences>`. Note text is wrapped in `<note>/<context>/<selection>` tags and treated as content, not instructions.
+- **Agent** (`lib/ai/writing-agent.ts`): one `ToolLoopAgent` per request, no tools yet, streamed. Errors are mapped to plain messages in `lib/ai/ai-errors.ts`.
+- **Setup:** an optional "Add AI" step in the welcome flow ("Skip for now"), Settings → AI, and `requireAi(action)` from `components/ai/ai-provider.tsx`, which opens a small setup dialog and then carries on with what the user started. All three use `AiSetupForm`, which checks the key with one tiny request before saving.
+- **Ask AI** (`hooks/use-inline-ai.ts` + `components/editor/ai/inline-ai-panel.tsx`): "Ask AI" in the selection toolbar, ⌘J / Ctrl+J, "/" → "Ask AI to write…", or the toolbar ✦ AI menu. With a selection it edits only that range (`getSelectionCutBlocks` → restore the range → `pasteMarkdown`, one undo); without one it writes at the cursor. Free-text instruction plus quick actions (Improve, Fix grammar, Shorter, Longer, Simplify, List, Tone ▸, Translate ▸). The result streams into a preview; Replace selection / Insert below / Try again / Discard; typing again refines the result. The selection stays marked with a CSS Custom Highlight. Bottom sheet on phones.
+- **Whole-note actions** (Summarize, Make a checklist, Fix spelling, Continue writing) stream into `ai-suggestion-panel.tsx` with Stop. Nothing changes in a note until the user accepts.
 
 ## "/" menu
 

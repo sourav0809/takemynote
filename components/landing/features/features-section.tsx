@@ -58,7 +58,7 @@ export function FeaturesSection() {
           tone="sky"
           titleAccent="Ask AI"
           title="when you want"
-          description="Summarize, make a checklist, fix spelling or keep writing. You choose what gets added."
+          description="Select a few lines and say what to change. Bring your own OpenAI, Google or Anthropic key."
         >
           <AiVisual />
         </BentoCard>

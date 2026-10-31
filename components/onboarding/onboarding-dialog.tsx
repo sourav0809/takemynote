@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { ArrowLeft, ArrowRight, Settings } from "lucide-react";
 
+import { AiSetupForm } from "@/components/ai/ai-setup-form";
 import { ThemeOptionCards } from "@/components/onboarding/theme-option-cards";
 import { WelcomeStep } from "@/components/onboarding/welcome-step";
 import { LayoutOptionCards } from "@/components/settings/layout-picker";
 import { WritingPositionCards } from "@/components/settings/writing-position-picker";
 import { Button } from "@/components/ui/button";
+import { useAiSettings } from "@/hooks/use-ai-settings";
 import { useIsHydrated } from "@/hooks/use-is-hydrated";
 import { usePreferences } from "@/hooks/use-preferences";
 import { cn } from "@/lib/utils";
@@ -15,6 +17,10 @@ interface ChoiceStep {
   title: string;
   description: string;
   content: React.ReactNode;
+  /** Where to change it later. */
+  settingsPath: string;
+  /** Optional steps offer "Skip for now" until they're done. */
+  isOptional?: boolean;
 }
 
 /** Steps after the welcome. Each choice applies live and can be changed later. */
@@ -23,16 +29,26 @@ const CHOICE_STEPS: ChoiceStep[] = [
     title: "Pick a layout",
     description: "How should the app be arranged?",
     content: <LayoutOptionCards />,
+    settingsPath: "Settings → Preferences",
   },
   {
     title: "Where should your text sit?",
     description: "Choose the writing area that feels right. The toolbar always stays centred.",
     content: <WritingPositionCards />,
+    settingsPath: "Settings → Preferences",
+  },
+  {
+    title: "Add AI (optional)",
+    description: "Use your own OpenAI, Google or Anthropic key to edit and write with AI. It’s encrypted and stays in this browser.",
+    content: <AiSetupForm />,
+    settingsPath: "Settings → AI",
+    isOptional: true,
   },
   {
     title: "Light or dark?",
     description: "Pick what’s easiest on your eyes.",
     content: <ThemeOptionCards />,
+    settingsPath: "Settings → Preferences",
   },
 ];
 
@@ -45,10 +61,11 @@ const EASE_OUT = "ease-[cubic-bezier(0.2,0.7,0.2,1)]";
 
 type Direction = "forward" | "back";
 
-/** First-run welcome: intro, then layout, then light/dark. Shown once per browser. */
+/** First-run welcome: intro, layout, writing area, AI (optional), light/dark. Shown once per browser. */
 export function OnboardingDialog() {
   const isHydrated = useIsHydrated();
   const { onboardingCompleted, setPreference } = usePreferences();
+  const { isReady: isAiReady } = useAiSettings();
   const [isReady, setReady] = useState(false);
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState<Direction>("forward");
@@ -62,6 +79,8 @@ export function OnboardingDialog() {
   }, [isHydrated, onboardingCompleted]);
 
   const isOpen = isReady && !onboardingCompleted;
+  const currentChoice = step > 0 ? CHOICE_STEPS[step - 1] : null;
+  const canSkipStep = currentChoice?.isOptional && !isAiReady;
   const finish = () => setPreference("onboardingCompleted", true);
   const goTo = (nextStep: number) => {
     setDirection(nextStep > step ? "forward" : "back");
@@ -119,7 +138,7 @@ export function OnboardingDialog() {
                   <div className="mt-6">{CHOICE_STEPS[step - 1].content}</div>
                   <p className="mt-5 flex items-center gap-1.5 text-xs text-muted-foreground">
                     <Settings className="size-3.5 shrink-0" />
-                    You can change this anytime in Settings → Preferences.
+                    You can change this anytime in {CHOICE_STEPS[step - 1].settingsPath}.
                   </p>
                 </>
               )}
@@ -151,8 +170,12 @@ export function OnboardingDialog() {
                 </Button>
               )}
               {step < LAST_STEP ? (
-                <Button className="h-10 gap-1.5 px-4" onClick={() => goTo(step + 1)}>
-                  {step === 0 ? "Get started" : "Continue"}
+                <Button
+                  variant={canSkipStep ? "outline" : "default"}
+                  className="h-10 gap-1.5 px-4"
+                  onClick={() => goTo(step + 1)}
+                >
+                  {step === 0 ? "Get started" : canSkipStep ? "Skip for now" : "Continue"}
                   <ArrowRight />
                 </Button>
               ) : (

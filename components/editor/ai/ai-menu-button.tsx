@@ -1,4 +1,4 @@
-import { Sparkles } from "lucide-react";
+import { PenSquare, Settings2, Sparkles } from "lucide-react";
 
 import { AI_ACTION_ICONS } from "@/components/editor/ai/ai-action-icons";
 import { Button } from "@/components/ui/button";
@@ -8,17 +8,26 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAppState } from "@/hooks/use-app-state";
+import { usePlatformModifierKeys } from "@/hooks/use-platform-modifier-key";
 import { AI_ACTION_CONFIG, AI_ACTIONS, type AiAction } from "@/lib/ai/ai-actions";
 
 interface AiMenuButtonProps {
   isBusy: boolean;
   onRun: (action: AiAction) => void;
+  /** Opens the inline "Ask AI" panel at the cursor or selection. */
+  onAskAi: () => void;
 }
 
-/** "✦ AI" in the toolbar: runs one of the AI actions on the open note. */
-export function AiMenuButton({ isBusy, onRun }: AiMenuButtonProps) {
+/** "✦ AI" in the toolbar: whole-note actions, Ask AI at the cursor, and AI settings. */
+export function AiMenuButton({ isBusy, onRun, onAskAi }: AiMenuButtonProps) {
+  const { openSettings } = useAppState();
+  const { mod } = usePlatformModifierKeys();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -36,7 +45,18 @@ export function AiMenuButton({ isBusy, onRun }: AiMenuButtonProps) {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-64">
         <DropdownMenuGroup>
-          <DropdownMenuLabel>Ask AI about this note</DropdownMenuLabel>
+          <DropdownMenuItem onClick={onAskAi}>
+            <PenSquare className="text-primary" />
+            <span className="flex flex-col">
+              <span>Ask AI to write…</span>
+              <span className="text-xs font-normal text-muted-foreground">Or select text to edit it</span>
+            </span>
+            <DropdownMenuShortcut>{mod}J</DropdownMenuShortcut>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>This note</DropdownMenuLabel>
           {AI_ACTIONS.map((action) => {
             const Icon = AI_ACTION_ICONS[action];
             return (
@@ -51,6 +71,13 @@ export function AiMenuButton({ isBusy, onRun }: AiMenuButtonProps) {
               </DropdownMenuItem>
             );
           })}
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem onClick={() => openSettings("ai")}>
+            <Settings2 />
+            AI settings
+          </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

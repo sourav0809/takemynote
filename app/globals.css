@@ -426,6 +426,20 @@ html:has(.landing) body {
   font-weight: 600;
 }
 
+/* The text being edited by Ask AI stays marked while focus is in the AI panel
+   (CSS Custom Highlight, set in hooks/use-inline-ai.ts). */
+::highlight(ai-selection) {
+  background-color: color-mix(in oklch, var(--primary) 20%, transparent);
+}
+
+/* "Ask AI" in the selection toolbar: the app's blue, with a quiet divider. */
+.bn-formatting-toolbar .ask-ai-button {
+  color: var(--primary);
+  font-weight: 500;
+  gap: 0.375rem;
+  margin-inline-end: 0.25rem;
+}
+
 /* Horizontal scrollers (the formatting toolbar on phones) without a visible bar. */
 @utility no-scrollbar {
   scrollbar-width: none;

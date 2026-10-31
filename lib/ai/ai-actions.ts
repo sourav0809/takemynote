@@ -1,4 +1,4 @@
-/** The AI actions TakeMyNote offers. Shared by the client UI and the /api/ai route. */
+/** The whole-note AI actions in the toolbar menu and the "/" menu. */
 export const AI_ACTIONS = ["summarize", "checklist", "fix", "continue"] as const;
 
 export type AiAction = (typeof AI_ACTIONS)[number];
@@ -41,21 +41,3 @@ export const AI_ACTION_CONFIG: Record<AiAction, AiActionConfig> = {
     applyMode: "append",
   },
 };
-
-/** Longest note (in characters of Markdown) sent to the model. */
-export const AI_MAX_INPUT_CHARS = 24_000;
-
-export interface AiRequestBody {
-  action: AiAction;
-  title: string;
-  markdown: string;
-}
-
-export interface AiResponseBody {
-  text?: string;
-  error?: string;
-}
-
-export function isAiAction(value: unknown): value is AiAction {
-  return typeof value === "string" && (AI_ACTIONS as readonly string[]).includes(value);
-}

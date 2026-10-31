@@ -1,5 +1,5 @@
 import type { DefaultSuggestionItem } from "@blocknote/core/extensions";
-import { getDefaultSlashMenuItems } from "@blocknote/core";
+import { filterSuggestionItems, getDefaultSlashMenuItems } from "@blocknote/core";
 import type { DefaultReactSuggestionItem } from "@blocknote/react";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -12,6 +12,7 @@ import {
   ListOrdered,
   ListTodo,
   Minus,
+  PenSquare,
   Quote,
   Smile,
   SquareCode,
@@ -64,11 +65,27 @@ export interface SlashMenuItem extends DefaultReactSuggestionItem {
   isAi?: boolean;
 }
 
+interface SlashMenuAiHandlers {
+  /** Opens the inline "Ask AI" panel at the cursor. */
+  onAskAi: () => void;
+  onAiAction: (action: AiAction) => void;
+}
+
 export function getSlashMenuItems(
   editor: NoteBlockEditor,
-  onAiAction: (action: AiAction) => void
+  { onAskAi, onAiAction }: SlashMenuAiHandlers
 ): SlashMenuItem[] {
-  const aiItems: SlashMenuItem[] = AI_ACTIONS.map((action) => ({
+  const askAiItem: SlashMenuItem = {
+    title: "Ask AI to write…",
+    subtext: "Draft anything at the cursor",
+    group: AI_GROUP,
+    aliases: ["ai", "ask", "write", "generate"],
+    lucideIcon: PenSquare,
+    isAi: true,
+    onItemClick: onAskAi,
+  };
+
+  const actionItems: SlashMenuItem[] = AI_ACTIONS.map((action) => ({
     title: AI_ACTION_CONFIG[action].label,
     subtext: AI_ACTION_CONFIG[action].hint,
     group: AI_GROUP,
@@ -94,5 +111,27 @@ export function getSlashMenuItems(
       };
     });
 
-  return [...blockItems, ...aiItems];
+  return [...blockItems, askAiItem, ...actionItems];
+}
+
+/** True when the title or an alias has a word starting with the query ("ask" → "Ask AI", not "Task list"). */
+function matchesWordStart(item: SlashMenuItem, query: string): boolean {
+  const words = [item.title, ...(item.aliases ?? [])].flatMap((text) => text.toLowerCase().split(/\s+/));
+  return words.some((word) => word.startsWith(query));
+}
+
+/**
+ * BlockNote's substring filter, then groups with a word-start match move to
+ * the top (groups stay together), so Enter picks what the user meant.
+ */
+export function filterSlashMenuItems(items: SlashMenuItem[], query: string): SlashMenuItem[] {
+  const filtered = filterSuggestionItems(items, query);
+  const normalized = query.trim().toLowerCase();
+  if (!normalized) return filtered;
+
+  const preferredGroups = new Set(
+    filtered.filter((item) => matchesWordStart(item, normalized)).map((item) => item.group)
+  );
+  const rank = (item: SlashMenuItem) => (preferredGroups.has(item.group) ? 0 : 1);
+  return [...filtered].sort((a, b) => rank(a) - rank(b));
 }
