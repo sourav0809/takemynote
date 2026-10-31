@@ -3,7 +3,6 @@ import { usePlatformModifierKeys } from "@/hooks/use-platform-modifier-key";
 const SHORTCUTS = [
   { label: "New note", key: "N" },
   { label: "Search notes", key: "F" },
-  { label: "Toggle preview", key: "P" },
   { label: "Toggle favorite", key: "S" },
   { label: "Move to trash", key: "D" },
   { label: "Toggle dark mode", key: "L" },

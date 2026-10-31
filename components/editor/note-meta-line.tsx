@@ -1,10 +1,10 @@
 import { Badge } from "@/components/ui/badge";
 import { formatFullDate, getReadingTimeMinutes, getWordCount } from "@/lib/note-utils";
-import type { Category } from "@/types/note";
+import type { Category, NoteContent } from "@/types/note";
 
 interface NoteMetaLineProps {
   updatedAt: string;
-  content: string;
+  content: NoteContent;
   category: Category | undefined;
 }
 

@@ -2,7 +2,11 @@ import type { DataAdapter } from "@/lib/data/data-adapter";
 import { runMigrations } from "@/lib/data/migrations";
 import { writePreferences, type StoredPreferences } from "@/lib/data/preferences-storage";
 import { createWelcomeNote } from "@/lib/data/seed";
-import { CURRENT_SCHEMA_VERSION, STORAGE_KEYS } from "@/lib/data/storage-keys";
+import {
+  CURRENT_SCHEMA_VERSION,
+  LEGACY_SCHEMA_VERSION,
+  STORAGE_KEYS,
+} from "@/lib/data/storage-keys";
 import type { Category, Note } from "@/types/note";
 
 function generateId(prefix: string): string {
@@ -25,28 +29,18 @@ function writeJson<T>(key: string, value: T): void {
   window.localStorage.setItem(key, JSON.stringify(value));
 }
 
-// Serializes all reads/writes so two rapid mutations (e.g. fast typing
-// triggering back-to-back updateNote calls) can't interleave a
-// read-modify-write cycle and silently drop one of the changes.
-let writeQueue: Promise<unknown> = Promise.resolve();
+let initialization: Promise<void> | null = null;
 
-function enqueue<T>(task: () => T): Promise<T> {
-  const result = writeQueue.then(task);
-  writeQueue = result.catch(() => undefined);
-  return result;
-}
-
-let hasEnsuredInitialization = false;
-
-function ensureInitialized(): void {
-  if (typeof window === "undefined" || hasEnsuredInitialization) return;
-  hasEnsuredInitialization = true;
-
+async function migrateStoredNotes(): Promise<void> {
   const storedVersion = readJson<number | null>(STORAGE_KEYS.schemaVersion, null);
-  if (storedVersion !== null && storedVersion < CURRENT_SCHEMA_VERSION) {
-    const migratedNotes = runMigrations(
-      readJson<Note[]>(STORAGE_KEYS.notes, []),
-      storedVersion,
+  const hasStoredNotes = window.localStorage.getItem(STORAGE_KEYS.notes) !== null;
+  // Data written before schemaVersion was tracked is treated as the legacy format.
+  const fromVersion = storedVersion ?? LEGACY_SCHEMA_VERSION;
+
+  if (hasStoredNotes && fromVersion < CURRENT_SCHEMA_VERSION) {
+    const migratedNotes = await runMigrations(
+      readJson<unknown>(STORAGE_KEYS.notes, []),
+      fromVersion,
       CURRENT_SCHEMA_VERSION
     );
     writeJson(STORAGE_KEYS.notes, migratedNotes);
@@ -54,7 +48,9 @@ function ensureInitialized(): void {
   if (storedVersion !== CURRENT_SCHEMA_VERSION) {
     writeJson(STORAGE_KEYS.schemaVersion, CURRENT_SCHEMA_VERSION);
   }
+}
 
+function seedIfFirstRun(): void {
   const alreadyInitialized = window.localStorage.getItem(STORAGE_KEYS.initialized);
   if (alreadyInitialized) return;
 
@@ -63,13 +59,35 @@ function ensureInitialized(): void {
   window.localStorage.setItem(STORAGE_KEYS.initialized, "true");
 }
 
+function ensureInitialized(): Promise<void> {
+  if (typeof window === "undefined") return Promise.resolve();
+  initialization ??= (async () => {
+    await migrateStoredNotes();
+    seedIfFirstRun();
+  })();
+  return initialization;
+}
+
+// Serializes all reads/writes so two rapid mutations (e.g. fast typing
+// triggering back-to-back updateNote calls) can't interleave a
+// read-modify-write cycle and silently drop one of the changes. Every task
+// waits for the one-time migration/seed step before touching storage.
+let writeQueue: Promise<unknown> = Promise.resolve();
+
+function enqueue<T>(task: () => T | Promise<T>): Promise<T> {
+  const result = writeQueue.then(async () => {
+    await ensureInitialized();
+    return task();
+  });
+  writeQueue = result.catch(() => undefined);
+  return result;
+}
+
 function getNotesSync(): Note[] {
-  ensureInitialized();
   return readJson<Note[]>(STORAGE_KEYS.notes, []);
 }
 
 function getCategoriesSync(): Category[] {
-  ensureInitialized();
   return readJson<Category[]>(STORAGE_KEYS.categories, []);
 }
 
@@ -85,7 +103,7 @@ export const localStorageAdapter: DataAdapter = {
       const note: Note = {
         id: generateId("note"),
         title: "",
-        content: "",
+        content: [],
         categoryId,
         favorited: false,
         pinned: false,
@@ -170,7 +188,7 @@ export const localStorageAdapter: DataAdapter = {
       const scratchpadNote: Note = {
         id: generateId("note"),
         title: "Scratchpad",
-        content: "",
+        content: [],
         categoryId: null,
         favorited: false,
         pinned: false,
@@ -184,13 +202,18 @@ export const localStorageAdapter: DataAdapter = {
     }),
 };
 
-export function restoreFromBackup(payload: {
+export async function restoreFromBackup(payload: {
   notes: Note[];
   categories: Category[];
   preferences: StoredPreferences;
 }): Promise<void> {
+  // Backups made before the BlockNote migration hold HTML note bodies;
+  // convert them so restored notes are always in the current format.
+  const { normalizeNotesContent } = await import("@/lib/editor/note-content-converter");
+  const notes = normalizeNotesContent(payload.notes);
+
   return enqueue(() => {
-    writeJson(STORAGE_KEYS.notes, payload.notes);
+    writeJson(STORAGE_KEYS.notes, notes);
     writeJson(STORAGE_KEYS.categories, payload.categories);
     writePreferences(payload.preferences);
     writeJson(STORAGE_KEYS.schemaVersion, CURRENT_SCHEMA_VERSION);

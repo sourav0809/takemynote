@@ -1,15 +1,11 @@
-import { EditorContent } from "@tiptap/react";
 import { toast } from "sonner";
 
+import { DynamicNoteEditor } from "@/components/editor/dynamic-note-editor";
 import { EditorBottomBar } from "@/components/editor/editor-bottom-bar";
 import { EditorEmptyState } from "@/components/editor/editor-empty-state";
 import { EditorHeader } from "@/components/editor/editor-header";
-import { RichTextToolbar } from "@/components/editor/rich-text-toolbar";
-import { SelectionBubbleMenu } from "@/components/editor/selection-bubble-menu";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAppState } from "@/hooks/use-app-state";
 import { useCategories } from "@/hooks/use-categories";
-import { useNoteEditor } from "@/hooks/use-note-editor";
 import { useNotes, useUpdateNote } from "@/hooks/use-notes";
 import { downloadNoteAsMarkdown } from "@/lib/download-note";
 
@@ -21,23 +17,21 @@ export function EditorPane() {
 
   const activeNote = notes.find((note) => note.id === selectedNoteId);
 
-  const editor = useNoteEditor({
-    noteId: activeNote?.id ?? "empty",
-    content: activeNote?.content ?? "",
-    onUpdateContent: (content) => {
-      if (activeNote) {
-        updateNote.mutate({ id: activeNote.id, changes: { content } });
-      }
-    },
-  });
-
-  if (!activeNote || !editor) {
+  if (!activeNote) {
     return <EditorEmptyState />;
   }
 
   const category = activeNote.categoryId
     ? categories.find((item) => item.id === activeNote.categoryId)
     : undefined;
+
+  const handleDownload = async () => {
+    try {
+      await downloadNoteAsMarkdown(activeNote);
+    } catch {
+      toast.error("Could not export this note");
+    }
+  };
 
   return (
     <div className="flex h-full flex-col">
@@ -48,14 +42,16 @@ export function EditorPane() {
           updateNote.mutate({ id: activeNote.id, changes: { title } })
         }
       />
-      <RichTextToolbar editor={editor} />
 
-      <ScrollArea className="flex-1">
-        <div className="px-4 pt-4 pb-24 sm:px-6">
-          <SelectionBubbleMenu editor={editor} />
-          <EditorContent editor={editor} />
-        </div>
-      </ScrollArea>
+      {/* Keyed by note id: switching notes mounts a fresh editor, while typing
+          in the current note never resets cursor position or undo history. */}
+      <DynamicNoteEditor
+        key={activeNote.id}
+        initialContent={activeNote.content}
+        onContentChange={(content) =>
+          updateNote.mutate({ id: activeNote.id, changes: { content } })
+        }
+      />
 
       <EditorBottomBar
         note={activeNote}
@@ -70,7 +66,7 @@ export function EditorPane() {
           setSelectedNoteId(null);
           toast.success("Note moved to trash");
         }}
-        onDownload={() => downloadNoteAsMarkdown(activeNote)}
+        onDownload={() => void handleDownload()}
       />
     </div>
   );

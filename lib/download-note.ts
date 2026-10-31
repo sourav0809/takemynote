@@ -1,11 +1,16 @@
-import { getNoteDisplayTitle, getNotePlainText } from "@/lib/note-utils";
+import { getNoteDisplayTitle } from "@/lib/note-utils";
 import type { Note } from "@/types/note";
 
-export function downloadNoteAsMarkdown(note: Note): void {
+const FALLBACK_FILE_NAME = "note";
+
+export async function downloadNoteAsMarkdown(note: Note): Promise<void> {
+  // The converter pulls in the BlockNote engine, so load it only on demand.
+  const { noteContentToMarkdown } = await import("@/lib/editor/note-content-converter");
+
   const title = getNoteDisplayTitle(note.title);
-  const safeFileName = title.replace(/[^a-z0-9-_ ]/gi, "").trim() || "note";
-  const body = getNotePlainText(note.content);
-  const fileContent = `# ${title}\n\n${body}`;
+  const safeFileName = title.replace(/[^a-z0-9-_ ]/gi, "").trim() || FALLBACK_FILE_NAME;
+  const body = noteContentToMarkdown(note.content).trim();
+  const fileContent = body ? `# ${title}\n\n${body}\n` : `# ${title}\n`;
 
   const blob = new Blob([fileContent], { type: "text/markdown" });
   const url = URL.createObjectURL(blob);

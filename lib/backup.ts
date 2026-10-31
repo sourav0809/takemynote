@@ -10,9 +10,9 @@ export interface BackupPayload {
   preferences: StoredPreferences;
 }
 
-export function downloadAllNotesAsMarkdown(notes: Note[]): void {
+export async function downloadAllNotesAsMarkdown(notes: Note[]): Promise<void> {
   for (const note of notes) {
-    downloadNoteAsMarkdown(note);
+    await downloadNoteAsMarkdown(note);
   }
 }
 

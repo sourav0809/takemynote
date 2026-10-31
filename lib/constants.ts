@@ -1,5 +1,12 @@
 export const APP_NAME = "TakeMyNote";
 
+export const APP_TAGLINE = "A calm, private notebook";
+
+export const ROUTES = {
+  home: "/",
+  notes: "/notes",
+} as const;
+
 export const SIDEBAR_MIN_SIZE = "15%";
 export const SIDEBAR_MAX_SIZE = "30%";
 export const SIDEBAR_DEFAULT_SIZE = "15%";
@@ -19,3 +26,7 @@ export type NoteListView = "list" | "grid";
 export type NoteListFilter = "all" | "recent" | "pinned";
 
 export const RECENT_NOTE_WINDOW_DAYS = 3;
+
+export const NOTE_EXCERPT_LENGTH = 140;
+
+export const EDITOR_PLACEHOLDER = "Start writing...";

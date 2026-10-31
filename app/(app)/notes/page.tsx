@@ -2,8 +2,11 @@
 
 import { AppShell } from "@/components/app-shell/app-shell";
 import { SettingsDialog } from "@/components/settings/settings-dialog";
+import { useGlobalShortcuts } from "@/hooks/use-global-shortcuts";
 
-export default function Home() {
+export default function NotesPage() {
+  useGlobalShortcuts();
+
   return (
     <div className="h-screen w-full overflow-hidden">
       <AppShell />

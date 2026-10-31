@@ -30,6 +30,14 @@ export function DataManagementTab() {
     }
   };
 
+  const handleDownloadAll = async () => {
+    try {
+      await downloadAllNotesAsMarkdown(notes);
+    } catch {
+      toast.error("Could not export your notes");
+    }
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between gap-4 border-b border-border pb-6">
@@ -39,7 +47,7 @@ export function DataManagementTab() {
         <Button
           variant="secondary"
           className="shrink-0 gap-2"
-          onClick={() => downloadAllNotesAsMarkdown(notes)}
+          onClick={() => void handleDownloadAll()}
         >
           <Download />
           Download All Notes

@@ -1,5 +1,4 @@
-import type { Editor } from "@tiptap/react";
-import { useEditorState } from "@tiptap/react";
+import { useEditorState } from "@blocknote/react";
 import {
   Bold,
   Code,
@@ -14,113 +13,103 @@ import {
   Strikethrough,
   Underline,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import { Fragment } from "react";
 
 import { LinkPopoverButton } from "@/components/editor/link-popover-button";
 import { ToolbarIconButton } from "@/components/editor/toolbar-icon-button";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import {
+  type BlockTypeTarget,
+  isBlockTypeActive,
+  toggleBlockType,
+} from "@/lib/editor/block-type-actions";
+import type { NoteBlockEditor } from "@/lib/editor/note-editor-schema";
+
+type TextStyle = "bold" | "italic" | "underline" | "strike";
+
+interface ToolbarAction {
+  icon: LucideIcon;
+  label: string;
+}
+
+const TEXT_STYLE_ACTIONS: (ToolbarAction & { style: TextStyle })[] = [
+  { icon: Bold, label: "Bold", style: "bold" },
+  { icon: Italic, label: "Italic", style: "italic" },
+  { icon: Underline, label: "Underline", style: "underline" },
+  { icon: Strikethrough, label: "Strikethrough", style: "strike" },
+];
+
+// Block-type buttons, grouped as separator-delimited sections of the toolbar.
+const BLOCK_TYPE_GROUPS: (ToolbarAction & { target: BlockTypeTarget })[][] = [
+  [
+    { icon: Heading1, label: "Heading 1", target: { type: "heading", level: 1 } },
+    { icon: Heading2, label: "Heading 2", target: { type: "heading", level: 2 } },
+  ],
+  [
+    { icon: List, label: "Bullet list", target: { type: "bulletListItem" } },
+    { icon: ListOrdered, label: "Numbered list", target: { type: "numberedListItem" } },
+    { icon: ListChecks, label: "Task list", target: { type: "checkListItem" } },
+  ],
+  [
+    { icon: Code, label: "Code block", target: { type: "codeBlock" } },
+    { icon: Quote, label: "Quote", target: { type: "quote" } },
+  ],
+];
 
 interface RichTextToolbarProps {
-  editor: Editor;
+  editor: NoteBlockEditor;
 }
 
 export function RichTextToolbar({ editor }: RichTextToolbarProps) {
   const state = useEditorState({
     editor,
     selector: ({ editor: currentEditor }) => ({
-      isBold: currentEditor.isActive("bold"),
-      isItalic: currentEditor.isActive("italic"),
-      isUnderline: currentEditor.isActive("underline"),
-      isStrike: currentEditor.isActive("strike"),
-      isHeading1: currentEditor.isActive("heading", { level: 1 }),
-      isHeading2: currentEditor.isActive("heading", { level: 2 }),
-      isBulletList: currentEditor.isActive("bulletList"),
-      isOrderedList: currentEditor.isActive("orderedList"),
-      isTaskList: currentEditor.isActive("taskList"),
-      isCodeBlock: currentEditor.isActive("codeBlock"),
-      isBlockquote: currentEditor.isActive("blockquote"),
+      styles: currentEditor.getActiveStyles(),
+      activeBlockTypes: Object.fromEntries(
+        BLOCK_TYPE_GROUPS.flat().map(({ label, target }) => [
+          label,
+          isBlockTypeActive(currentEditor, target),
+        ])
+      ),
+      isLink: currentEditor.getSelectedLinkUrl() !== undefined,
     }),
   });
+
+  const handleToggleStyle = (style: TextStyle) => {
+    editor.focus();
+    editor.toggleStyles({ [style]: true });
+  };
 
   return (
     <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-1.5 sm:px-6">
       <div className="flex items-center gap-0.5 overflow-x-auto">
-        <ToolbarIconButton
-          icon={Bold}
-          label="Bold"
-          isActive={state.isBold}
-          onClick={() => editor.chain().focus().toggleBold().run()}
-        />
-        <ToolbarIconButton
-          icon={Italic}
-          label="Italic"
-          isActive={state.isItalic}
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-        />
-        <ToolbarIconButton
-          icon={Underline}
-          label="Underline"
-          isActive={state.isUnderline}
-          onClick={() => editor.chain().focus().toggleUnderline().run()}
-        />
-        <ToolbarIconButton
-          icon={Strikethrough}
-          label="Strikethrough"
-          isActive={state.isStrike}
-          onClick={() => editor.chain().focus().toggleStrike().run()}
-        />
+        {TEXT_STYLE_ACTIONS.map(({ icon, label, style }) => (
+          <ToolbarIconButton
+            key={style}
+            icon={icon}
+            label={label}
+            isActive={Boolean(state.styles[style])}
+            onClick={() => handleToggleStyle(style)}
+          />
+        ))}
 
-        <Separator orientation="vertical" className="mx-1 h-5" />
-
-        <ToolbarIconButton
-          icon={Heading1}
-          label="Heading 1"
-          isActive={state.isHeading1}
-          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-        />
-        <ToolbarIconButton
-          icon={Heading2}
-          label="Heading 2"
-          isActive={state.isHeading2}
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-        />
-
-        <Separator orientation="vertical" className="mx-1 h-5" />
-
-        <ToolbarIconButton
-          icon={List}
-          label="Bullet list"
-          isActive={state.isBulletList}
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-        />
-        <ToolbarIconButton
-          icon={ListOrdered}
-          label="Numbered list"
-          isActive={state.isOrderedList}
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-        />
-        <ToolbarIconButton
-          icon={ListChecks}
-          label="Task list"
-          isActive={state.isTaskList}
-          onClick={() => editor.chain().focus().toggleTaskList().run()}
-        />
-
-        <Separator orientation="vertical" className="mx-1 h-5" />
-
-        <ToolbarIconButton
-          icon={Code}
-          label="Code block"
-          isActive={state.isCodeBlock}
-          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-        />
-        <ToolbarIconButton
-          icon={Quote}
-          label="Quote"
-          isActive={state.isBlockquote}
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-        />
-        <LinkPopoverButton editor={editor} />
+        {BLOCK_TYPE_GROUPS.map((group, groupIndex) => (
+          <Fragment key={groupIndex}>
+            <Separator orientation="vertical" className="mx-1 h-5" />
+            {group.map(({ icon, label, target }) => (
+              <ToolbarIconButton
+                key={label}
+                icon={icon}
+                label={label}
+                isActive={state.activeBlockTypes[label]}
+                onClick={() => toggleBlockType(editor, target)}
+              />
+            ))}
+          </Fragment>
+        ))}
+        <LinkPopoverButton editor={editor} isActive={state.isLink} />
       </div>
 
       <Button size="sm" className="shrink-0 gap-1.5">

@@ -1,9 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { AppProviders } from "@/providers/app-providers";
-import { Toaster } from "@/components/ui/sonner";
+import { APP_NAME, APP_TAGLINE } from "@/lib/constants";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -13,8 +12,25 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TakeMyNote",
-  description: "A modern, markdown-first note-taking app.",
+  title: {
+    default: `${APP_NAME} — ${APP_TAGLINE}`,
+    template: `%s · ${APP_NAME}`,
+  },
+  description:
+    "A calm, private notebook in your browser. Write with slash commands, organise with categories, and back up anytime. No sign-up needed.",
+  applicationName: APP_NAME,
+  openGraph: {
+    type: "website",
+    siteName: APP_NAME,
+    title: `${APP_NAME} — ${APP_TAGLINE}`,
+    description: "A calm, private notebook in your browser. No sign-up, nothing to install.",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#fafaf9",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -24,12 +40,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={cn("h-full", "antialiased", geistMono.variable, "font-sans", inter.variable)}
       suppressHydrationWarning
     >
-      <body className="flex h-full flex-col overflow-hidden">
-        <AppProviders>
-          {children}
-          <Toaster />
-        </AppProviders>
-      </body>
+      <body className="min-h-full">{children}</body>
     </html>
   );
 }

@@ -1,29 +1,70 @@
-import { UNTITLED_NOTE_TITLE, WORDS_PER_MINUTE } from "@/lib/constants";
-import type { Note } from "@/types/note";
+import { NOTE_EXCERPT_LENGTH, UNTITLED_NOTE_TITLE, WORDS_PER_MINUTE } from "@/lib/constants";
+import type { Note, NoteContent } from "@/types/note";
 
 export function getNoteDisplayTitle(title: string): string {
   return title.trim() || UNTITLED_NOTE_TITLE;
 }
 
-export function getNotePlainText(html: string): string {
-  return html
-    .replace(/<[^>]*>/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+interface InlineNode {
+  type?: string;
+  text?: string;
+  content?: unknown;
+  rows?: { cells?: unknown[] }[];
 }
 
-export function getNoteExcerpt(html: string): string {
-  const text = getNotePlainText(html);
-  return text.length > 140 ? `${text.slice(0, 140).trimEnd()}…` : text;
+function isInlineNode(value: unknown): value is InlineNode {
+  return typeof value === "object" && value !== null;
 }
 
-export function getWordCount(html: string): number {
-  const text = getNotePlainText(html);
+// Walks BlockNote inline content (styled text, links, table rows/cells) and
+// collects its text. Adjacent styled fragments are joined without spaces so
+// "**bo**ld" still counts as one word; table cells are space-separated.
+function collectInlineText(content: unknown, parts: string[]): void {
+  if (Array.isArray(content)) {
+    content.forEach((item) => collectInlineText(item, parts));
+    return;
+  }
+  if (!isInlineNode(content)) return;
+
+  if (typeof content.text === "string") parts.push(content.text);
+  if (content.content !== undefined) collectInlineText(content.content, parts);
+  content.rows?.forEach((row) =>
+    row.cells?.forEach((cell) => {
+      collectInlineText(cell, parts);
+      parts.push(" ");
+    })
+  );
+}
+
+function collectBlockText(blocks: NoteContent, blockTexts: string[]): void {
+  for (const block of blocks) {
+    const inlineParts: string[] = [];
+    collectInlineText(block.content, inlineParts);
+    blockTexts.push(inlineParts.join(""));
+    collectBlockText(block.children, blockTexts);
+  }
+}
+
+export function getNotePlainText(content: NoteContent): string {
+  const blockTexts: string[] = [];
+  collectBlockText(content, blockTexts);
+  return blockTexts.join(" ").replace(/\s+/g, " ").trim();
+}
+
+export function getNoteExcerpt(content: NoteContent): string {
+  const text = getNotePlainText(content);
+  return text.length > NOTE_EXCERPT_LENGTH
+    ? `${text.slice(0, NOTE_EXCERPT_LENGTH).trimEnd()}…`
+    : text;
+}
+
+export function getWordCount(content: NoteContent): number {
+  const text = getNotePlainText(content);
   return text.length === 0 ? 0 : text.split(" ").filter(Boolean).length;
 }
 
-export function getReadingTimeMinutes(html: string): number {
-  return Math.max(1, Math.round(getWordCount(html) / WORDS_PER_MINUTE));
+export function getReadingTimeMinutes(content: NoteContent): number {
+  return Math.max(1, Math.round(getWordCount(content) / WORDS_PER_MINUTE));
 }
 
 export function formatRelativeDate(isoDate: string): string {
