@@ -5,6 +5,12 @@ export const APP_NAME = "TakeMyNote";
 /** Public source code. */
 export const GITHUB_URL = "https://github.com/sourav0809/takemynote";
 
+/** The Product Hunt launch page, and its "Featured" badge (both from Product Hunt's embed code). */
+export const PRODUCT_HUNT_URL =
+  "https://www.producthunt.com/products/takemynote?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-takemynote";
+export const PRODUCT_HUNT_BADGE_URL =
+  "https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1300554&theme=light&t=1793548234546";
+
 /** Support the project (same link as .github/FUNDING.yml). */
 export const BUY_ME_A_COFFEE_URL = "https://buymeacoffee.com/sourav0809";
 
