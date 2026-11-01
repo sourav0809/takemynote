@@ -10,7 +10,7 @@
 A private, focused notebook with a rich editor, 21 free templates and AI that uses your own key.<br>
 No account. No server. Your notes never leave your device.
 
-[**Open the app**](https://www.takemynote.online/notes) · [Website](https://www.takemynote.online) · [Report a bug](https://github.com/sourav0809/takemynote/issues/new?template=bug_report.yml) · [Request a feature](https://github.com/sourav0809/takemynote/issues/new?template=feature_request.yml)
+[**Open the app**](https://www.takemynote.online) · [Website](https://www.takemynote.online) · [Report a bug](https://github.com/sourav0809/takemynote/issues/new?template=bug_report.yml) · [Request a feature](https://github.com/sourav0809/takemynote/issues/new?template=feature_request.yml)
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-1d6fb8.svg)](LICENSE)
 [![CI](https://github.com/sourav0809/takemynote/actions/workflows/ci.yml/badge.svg)](https://github.com/sourav0809/takemynote/actions/workflows/ci.yml)
@@ -34,25 +34,30 @@ Most note apps want an account, a subscription and your data on their servers. T
 ## Features
 
 **Writing**
+
 - Rich editor with headings, lists, task lists, quotes, tables, code blocks and images
 - Type `/` for any block, or select text for formatting
 - Word count and reading time, with your choice of writing area: left, centered or full width
 
 **AI, with your own key** ([details below](#ai-with-your-own-key))
-- Select a few lines and say what you want: *"add a few bullets and fix the grammar"*. Only that part changes.
+
+- Select a few lines and say what you want: _"add a few bullets and fix the grammar"_. Only that part changes.
 - Quick actions: improve, fix spelling and grammar, shorter, longer, simplify, change tone, translate
 - Write at the cursor, summarize a note, turn it into a checklist or keep writing
 - Works with OpenAI, Google Gemini or Anthropic Claude
 
 **Organize**
+
 - Instant search across every note
 - Favorites, pins, categories, trash and a scratchpad
 - Two layouts (Classic three-column, or Library + Page) and collapsible sidebars
 
 **Templates**
+
 - 21 free templates: daily and weekly planners, meeting notes, trip planner, budget, habit tracker, book notes and more
 
 **Yours to keep**
+
 - Download any note as PDF, Markdown, text, HTML or JSON, or print it
 - One-file backup of everything, and restore anywhere
 - Light and dark mode, keyboard shortcuts for everything you do often
@@ -78,16 +83,16 @@ Our own instructions to the model are fixed; yours (tone, language, style) are a
 
 ## Keyboard shortcuts
 
-| Action | Mac | Windows / Linux |
-| --- | --- | --- |
-| New note | `⌘` `⌥` `N` | `Ctrl` `Alt` `N` |
-| Search notes | `⌘` `⌥` `F` | `Ctrl` `Alt` `F` |
-| Add to favorites | `⌘` `⌥` `S` | `Ctrl` `Alt` `S` |
-| Move to trash | `⌘` `⌥` `⌫` | `Ctrl` `Alt` `Backspace` |
-| Light / dark | `⌘` `⌥` `T` | `Ctrl` `Alt` `T` |
-| Collapse / expand sidebars | `⌘` `⌥` `\` | `Ctrl` `Alt` `\` |
-| Ask AI (inside a note) | `⌘` `J` | `Ctrl` `J` |
-| Insert a block | `/` | `/` |
+| Action                     | Mac         | Windows / Linux          |
+| -------------------------- | ----------- | ------------------------ |
+| New note                   | `⌘` `⌥` `N` | `Ctrl` `Alt` `N`         |
+| Search notes               | `⌘` `⌥` `F` | `Ctrl` `Alt` `F`         |
+| Add to favorites           | `⌘` `⌥` `S` | `Ctrl` `Alt` `S`         |
+| Move to trash              | `⌘` `⌥` `⌫` | `Ctrl` `Alt` `Backspace` |
+| Light / dark               | `⌘` `⌥` `T` | `Ctrl` `Alt` `T`         |
+| Collapse / expand sidebars | `⌘` `⌥` `\` | `Ctrl` `Alt` `\`         |
+| Ask AI (inside a note)     | `⌘` `J`     | `Ctrl` `J`               |
+| Insert a block             | `/`         | `/`                      |
 
 ## Run it locally
 
@@ -102,13 +107,13 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000). No environment variables are needed to run the app.
 
-| Script | What it does |
-| --- | --- |
-| `npm run dev` | Start the development server |
-| `npm run build` | Production build |
-| `npm start` | Serve the production build |
-| `npm run lint` | ESLint |
-| `npm run typecheck` | TypeScript, no output |
+| Script              | What it does                 |
+| ------------------- | ---------------------------- |
+| `npm run dev`       | Start the development server |
+| `npm run build`     | Production build             |
+| `npm start`         | Serve the production build   |
+| `npm run lint`      | ESLint                       |
+| `npm run typecheck` | TypeScript, no output        |
 
 The scripts in `scripts/` that regenerate the brand images use OpenAI and Gemini keys from a `.env` file (see [`.env.example`](.env.example)). You only need them if you're changing the artwork.
 
@@ -120,14 +125,14 @@ If you deploy to your own domain, set `NEXT_PUBLIC_SITE_URL` so canonical URLs, 
 
 ## How it's built
 
-| | |
-| --- | --- |
-| Framework | [Next.js 16](https://nextjs.org) (App Router), [React 19](https://react.dev), TypeScript |
-| Editor | [BlockNote](https://www.blocknotejs.org) |
-| AI | [Vercel AI SDK](https://ai-sdk.dev) with the OpenAI, Google and Anthropic providers |
-| UI | [Tailwind CSS 4](https://tailwindcss.com), [shadcn/ui](https://ui.shadcn.com) on [Base UI](https://base-ui.com), [Lucide](https://lucide.dev) icons |
-| Data | Browser `localStorage` through [TanStack Query](https://tanstack.com/query) |
-| Export | [jsPDF](https://github.com/parallax/jsPDF) for PDFs |
+|           |                                                                                                                                                     |
+| --------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Framework | [Next.js 16](https://nextjs.org) (App Router), [React 19](https://react.dev), TypeScript                                                            |
+| Editor    | [BlockNote](https://www.blocknotejs.org)                                                                                                            |
+| AI        | [Vercel AI SDK](https://ai-sdk.dev) with the OpenAI, Google and Anthropic providers                                                                 |
+| UI        | [Tailwind CSS 4](https://tailwindcss.com), [shadcn/ui](https://ui.shadcn.com) on [Base UI](https://base-ui.com), [Lucide](https://lucide.dev) icons |
+| Data      | Browser `localStorage` through [TanStack Query](https://tanstack.com/query)                                                                         |
+| Export    | [jsPDF](https://github.com/parallax/jsPDF) for PDFs                                                                                                 |
 
 ```
 app/
