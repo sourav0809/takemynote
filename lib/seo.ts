@@ -10,6 +10,12 @@ import { APP_NAME, GITHUB_URL } from "@/lib/constants";
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.takemynote.online").replace(/\/$/, "");
 
 /** ~55 characters: fits Google's title width. */
+/**
+ * Google Search Console token for www.takemynote.online. Forks on another
+ * domain set NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION to their own.
+ */
+export const GOOGLE_SITE_VERIFICATION = "C_Mg5ddSCXSUO9ei_lbXhKLk8H9zkx0_jbJxVJxkFVY";
+
 export const SITE_TITLE = `${APP_NAME}: Free, Private Notes App with AI`;
 
 /** ~155 characters: fits Google's snippet. */

@@ -138,7 +138,7 @@ It's a standard Next.js app, so it deploys anywhere Next.js runs. On [Vercel](ht
 
 To turn on accounts, sync and sharing, add `MONGODB_URI`, `BETTER_AUTH_SECRET` and `BETTER_AUTH_URL` (your site's address, e.g. `https://www.takemynote.online`). That enables email and password accounts. For "Continue with Google", also add `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`, with `<your address>/api/auth/callback/google` as a redirect URI in the Google OAuth client. For profile photo uploads, connect a public [Vercel Blob](https://vercel.com/docs/vercel-blob) store to the project (this adds `BLOB_READ_WRITE_TOKEN`). Redeploy after changing them.
 
-If you deploy to your own domain, set `NEXT_PUBLIC_SITE_URL` so canonical URLs, the sitemap and link previews point to it. `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` and `NEXT_PUBLIC_BING_SITE_VERIFICATION` are optional, for Search Console and Bing Webmaster Tools.
+If you deploy to your own domain, set `NEXT_PUBLIC_SITE_URL` so canonical URLs, the sitemap and link previews point to it. `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` (defaults to the token for www.takemynote.online in `lib/seo.ts`) and `NEXT_PUBLIC_BING_SITE_VERIFICATION` are optional, for Search Console and Bing Webmaster Tools.
 
 ## How it's built
 

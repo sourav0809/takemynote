@@ -3,7 +3,15 @@ import { Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { APP_NAME } from "@/lib/constants";
-import { AUTHOR, SHARE_DESCRIPTION, SITE_DESCRIPTION, SITE_KEYWORDS, SITE_TITLE, SITE_URL } from "@/lib/seo";
+import {
+  AUTHOR,
+  GOOGLE_SITE_VERIFICATION,
+  SHARE_DESCRIPTION,
+  SITE_DESCRIPTION,
+  SITE_KEYWORDS,
+  SITE_TITLE,
+  SITE_URL,
+} from "@/lib/seo";
 import { ThemeProvider } from "@/providers/theme-provider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
@@ -57,9 +65,10 @@ export const metadata: Metadata = {
   },
   appleWebApp: { capable: true, title: APP_NAME, statusBarStyle: "default" },
   formatDetection: { telephone: false, email: false, address: false },
-  // Optional: set these to verify the site in Google Search Console / Bing Webmaster Tools.
+  // Proves ownership in Google Search Console (needed for Google sign-in branding) and Bing
+  // Webmaster Tools. These tokens are public by design: they're printed in every page's HTML.
   verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || GOOGLE_SITE_VERIFICATION,
     other: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
       ? { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION }
       : undefined,
