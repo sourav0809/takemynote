@@ -18,7 +18,7 @@ export function EditorHeader({ note, onTitleChange }: EditorHeaderProps) {
   return (
     <div className={`${NOTE_GUTTER_CLASS} pt-4 pb-1 lg:pt-8`}>
       <NoteTitleInput title={note.title} onChange={onTitleChange} />
-      <NoteMetaLine updatedAt={note.updatedAt} content={note.content} />
+      <NoteMetaLine noteId={note.id} updatedAt={note.updatedAt} content={note.content} />
     </div>
   );
 }

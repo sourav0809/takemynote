@@ -14,8 +14,6 @@ interface Preferences extends StoredPreferences {
     key: K,
     value: StoredPreferences[K]
   ) => void;
-  /** Changes several preferences at once (separate setPreference calls would overwrite each other). */
-  setPreferences: (changes: Partial<StoredPreferences>) => void;
 }
 
 const PreferencesContext = createContext<Preferences | null>(null);
@@ -45,6 +43,16 @@ function commitPreferences(next: StoredPreferences): void {
   listeners.forEach((listener) => listener());
 }
 
+/** For sync: change preferences from outside React (e.g. settings from another device). */
+export function updateStoredPreferences(changes: Partial<StoredPreferences>): void {
+  commitPreferences({ ...getSnapshot(), ...changes });
+}
+
+/** For sync: notified whenever preferences change. */
+export function subscribeToPreferences(listener: () => void): () => void {
+  return subscribe(listener);
+}
+
 export function PreferencesProvider({ children }: { children: React.ReactNode }) {
   const values = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
@@ -52,7 +60,6 @@ export function PreferencesProvider({ children }: { children: React.ReactNode })
     () => ({
       ...values,
       setPreference: (key, val) => commitPreferences({ ...values, [key]: val }),
-      setPreferences: (changes) => commitPreferences({ ...values, ...changes }),
     }),
     [values]
   );

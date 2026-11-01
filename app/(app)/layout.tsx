@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { APP_NAME } from "@/lib/constants";
+import { hasGoogleSignIn, hasImageUploads, isAccountsEnabled } from "@/lib/server/env";
 import { SHARE_IMAGE } from "@/lib/seo";
 import { AppProviders } from "@/providers/app-providers";
 import { PageTransition } from "@/components/common/page-transition";
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
 
 export default function AppLayout({ children }: LayoutProps<"/">) {
   return (
-    <AppProviders>
+    <AppProviders accounts={{ enabled: isAccountsEnabled(), google: hasGoogleSignIn, imageUploads: hasImageUploads() }}>
       <PageTransition>
         <div className="flex h-dvh flex-col overflow-hidden">{children}</div>
       </PageTransition>

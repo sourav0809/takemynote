@@ -52,7 +52,7 @@ const CURATED_ITEMS: Partial<Record<SlashKey, CuratedItem>> = {
   quote: { icon: Quote, title: "Quote", subtext: "Call out a line", group: "Blocks" },
   code_block: { icon: SquareCode, title: "Code", subtext: "Snippet with highlighting", group: "Blocks" },
   table: { icon: Table2, title: "Table", subtext: "Rows and columns", group: "Blocks" },
-  image: { icon: ImageIcon, title: "Image", subtext: "Embed from a link", group: "Blocks" },
+  image: { icon: ImageIcon, title: "Image", subtext: "Add an image", group: "Blocks" },
   divider: { icon: Minus, title: "Divider", subtext: "Separate sections", group: "Blocks" },
   emoji: { icon: Smile, title: "Emoji", subtext: "Search and insert", group: "Blocks" },
 };

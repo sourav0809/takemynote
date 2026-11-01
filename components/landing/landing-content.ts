@@ -75,12 +75,13 @@ export interface FaqItem {
 export const FAQ_ITEMS: FaqItem[] = [
   {
     question: "Do I need an account?",
-    answer: "No. Open the app and start writing. There is no sign-up, email or password.",
+    answer:
+      "No. Open the app and start writing, no sign-up needed. If you want your notes on more than one device, you can sign in with Google to sync them. It’s optional.",
   },
   {
     question: "Where are my notes stored?",
     answer:
-      "In your own browser, on your device. Notes are never uploaded or synced. The only exception is when you ask AI for help: the text you choose goes straight to the AI provider you picked, using your own key.",
+      "In your own browser, on your device. If you sign in, they’re also saved to your account so they sync across your devices. When you ask AI for help, the text you choose goes straight to the AI provider you picked, using your own key.",
   },
   {
     question: "Does it have AI?",
@@ -90,12 +91,17 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     question: "What if I clear my browser data?",
     answer:
-      "Clearing site data removes your notes too. Make a backup from Settings → Data first, and you can restore it anytime.",
+      "Without an account, clearing site data removes your notes too, so make a backup from Settings → Data first. If you’re signed in, your notes are safe in your account and come back when you sign in again.",
   },
   {
-    question: "Can I move my notes to another device?",
+    question: "Can I use it on more than one device?",
     answer:
-      "Yes. Create a backup file on one device, then use Import Backup on the other. Notes, categories and preferences all come along.",
+      "Yes. Sign in with Google on each device and your notes, categories and settings stay in sync. Edits save on your device first, so it keeps working offline and catches up when you’re back. Prefer no account? Move notes with a backup file instead.",
+  },
+  {
+    question: "Can I share a note?",
+    answer:
+      "Yes, no account needed. Open a note, choose Share and turn on the link. Anyone with it can read the note (not edit it), it updates as you write, and you can turn the link off any time.",
   },
   {
     question: "Are there templates?",

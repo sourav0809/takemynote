@@ -8,6 +8,7 @@ import {
   FileText,
   FileType,
   Globe,
+  Link2,
   Pin,
   PinOff,
   Printer,
@@ -17,6 +18,7 @@ import {
   X,
 } from "lucide-react";
 
+import { useAccount } from "@/components/account/account-provider";
 import { ContextMenuItem, ContextMenuSeparator } from "@/components/ui/context-menu";
 import {
   DropdownMenuItem,
@@ -54,6 +56,7 @@ interface NoteMenuItemsProps {
 /** The same note actions for the right-click menu and the ⋯ dropdown. */
 function NoteMenuItems({ note, Item, Separator, extraItems }: NoteMenuItemsProps) {
   const actions = useNoteActions();
+  const { enabled: canShare, openShare } = useAccount();
 
   if (note.trashed) {
     return (
@@ -80,6 +83,12 @@ function NoteMenuItems({ note, Item, Separator, extraItems }: NoteMenuItemsProps
         <Item onClick={() => actions.togglePinned(note)}>
           {note.pinned ? <PinOff /> : <Pin />}
           {note.pinned ? "Unpin" : "Pin to top"}
+        </Item>
+      )}
+      {canShare && (
+        <Item onClick={() => openShare(note.id)}>
+          <Link2 />
+          Share…
         </Item>
       )}
       {extraItems}

@@ -43,7 +43,7 @@ export function FeaturesSection() {
         <BentoCard
           titleAccent="Private"
           title="by default"
-          description="Notes live in your browser. No account, no server, and AI only when you ask."
+          description="Notes live in your browser, no account needed. Sign in only if you want sync, and AI only when you ask."
           media={
             <Image
               src={privateNotebook}

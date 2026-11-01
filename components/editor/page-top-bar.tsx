@@ -1,6 +1,6 @@
-import { ChevronLeft, MoreHorizontal, Star } from "lucide-react";
+import { ChevronLeft, Link2, MoreHorizontal, Star } from "lucide-react";
 
-import { SidePanesToggle } from "@/components/app-shell/pane-toggle-button";
+import { useAccount } from "@/components/account/account-provider";
 import { NoteCategoryMenu } from "@/components/editor/note-category-menu";
 import { NoteDropdownMenuItems } from "@/components/note-list/note-context-menu-items";
 import { Button } from "@/components/ui/button";
@@ -23,6 +23,7 @@ interface PageTopBarProps {
 
 export function PageTopBar({ note, onBack, backLabel }: PageTopBarProps) {
   const actions = useNoteActions();
+  const { enabled: canShare, openShare } = useAccount();
   const folderLabel = note.trashed
     ? FOLDER_LABELS.trash
     : note.scratchpad
@@ -42,10 +43,7 @@ export function PageTopBar({ note, onBack, backLabel }: PageTopBarProps) {
           {backLabel}
         </Button>
       ) : (
-        <>
-          <SidePanesToggle className="mr-0.5" />
-          <span className="px-1.5 text-sm text-muted-foreground">{folderLabel}</span>
-        </>
+        <span className="px-2 text-sm text-muted-foreground">{folderLabel}</span>
       )}
 
       {canChangeCategory && (
@@ -58,6 +56,17 @@ export function PageTopBar({ note, onBack, backLabel }: PageTopBarProps) {
       )}
 
       <div className="ml-auto flex shrink-0 items-center gap-0.5">
+        {canShare && !note.trashed && (
+          <Button
+            variant="ghost"
+            className="h-10 gap-1.5 px-3 text-muted-foreground lg:h-9"
+            aria-label="Share"
+            onClick={() => openShare(note.id)}
+          >
+            <Link2 />
+            <span className="hidden sm:inline">Share</span>
+          </Button>
+        )}
         {!note.trashed && (
           <Button
             variant="ghost"

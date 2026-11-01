@@ -9,8 +9,9 @@ import {
 } from "@/lib/data/storage-keys";
 import type { Category, Note } from "@/types/note";
 
+/** UUIDs: notes made on different devices must never share an id once they sync. */
 function generateId(prefix: string): string {
-  return `${prefix}-${Math.random().toString(36).slice(2, 10)}`;
+  return `${prefix}-${crypto.randomUUID()}`;
 }
 
 function readJson<T>(key: string, fallback: T): T {
@@ -222,3 +223,59 @@ export async function restoreFromBackup(payload: {
     }
   });
 }
+
+/** Server changes to apply on this device (from sync). */
+export interface RemoteChanges {
+  upsertNotes: Note[];
+  removeNoteIds: string[];
+  upsertCategories: Category[];
+  removeCategoryIds: string[];
+}
+
+/**
+ * Low-level access for the sync engine. Unlike the adapter, these keep the
+ * server's timestamps and never feed the outbox.
+ */
+export const localStore = {
+  readNotes: (): Promise<Note[]> => enqueue(getNotesSync),
+  /** Synchronous read, for the last moment before the page closes. */
+  readNotesNow: (): Note[] => getNotesSync(),
+  readCategories: (): Promise<Category[]> => enqueue(getCategoriesSync),
+
+  applyRemoteChanges: ({ upsertNotes, removeNoteIds, upsertCategories, removeCategoryIds }: RemoteChanges) =>
+    enqueue(() => {
+      if (upsertCategories.length > 0 || removeCategoryIds.length > 0) {
+        const removed = new Set(removeCategoryIds);
+        const incoming = new Map(upsertCategories.map((category) => [category.id, category]));
+        const kept = getCategoriesSync()
+          .filter((category) => !removed.has(category.id))
+          .map((category) => incoming.get(category.id) ?? category);
+        const added = upsertCategories.filter((category) => !kept.some((existing) => existing.id === category.id));
+        writeJson(STORAGE_KEYS.categories, [...kept, ...added]);
+      }
+      if (upsertNotes.length > 0 || removeNoteIds.length > 0) {
+        const removed = new Set(removeNoteIds);
+        const incoming = new Map(upsertNotes.map((note) => [note.id, note]));
+        const kept = getNotesSync()
+          .filter((note) => !removed.has(note.id))
+          .map((note) => incoming.get(note.id) ?? note);
+        const added = upsertNotes.filter((note) => !kept.some((existing) => existing.id === note.id));
+        writeJson(STORAGE_KEYS.notes, [...added, ...kept]);
+      }
+    }),
+
+  /** Adds a note as-is (used for conflict copies). */
+  insertNote: (note: Note) =>
+    enqueue(() => {
+      writeJson(STORAGE_KEYS.notes, [note, ...getNotesSync()]);
+    }),
+
+  /** Empties notes and categories, then shows the welcome note again (after sign-out). */
+  resetToFreshDevice: () =>
+    enqueue(() => {
+      writeJson<Note[]>(STORAGE_KEYS.notes, [createWelcomeNote()]);
+      writeJson<Category[]>(STORAGE_KEYS.categories, []);
+    }),
+
+  newNoteId: () => generateId("note"),
+};

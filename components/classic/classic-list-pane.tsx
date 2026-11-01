@@ -1,4 +1,3 @@
-import { PaneToggleButton } from "@/components/app-shell/pane-toggle-button";
 import { NoteListBody } from "@/components/library/note-list-body";
 import { NoteListControls } from "@/components/library/note-list-controls";
 import { NoteListViewToggle } from "@/components/note-list/note-list-view-toggle";
@@ -11,15 +10,12 @@ interface ClassicListPaneProps {
   /** Phone only: a header row with the menu and new-note buttons around the title. */
   leadingAction?: React.ReactNode;
   trailingAction?: React.ReactNode;
-  /** Desktop: hides this column. */
-  onCollapse?: () => void;
 }
 
 /** Classic layout's middle column: search, filters and the notes. */
 export function ClassicListPane({
   leadingAction,
   trailingAction,
-  onCollapse,
 }: ClassicListPaneProps) {
   const { activeFolder, searchQuery, setSearchQuery, listView, setListView } = useAppState();
   const { activeLabel } = useFolderNavigation();
@@ -44,9 +40,6 @@ export function ClassicListPane({
         <div className="flex items-center gap-2">
           <NoteSearchBar value={searchQuery} onChange={setSearchQuery} />
           {!isScratchpad && <NoteListViewToggle value={listView} onValueChange={setListView} />}
-          {onCollapse && (
-            <PaneToggleButton action="hide" label="Hide note list" onClick={onCollapse} className="-ml-1" />
-          )}
         </div>
         {!isScratchpad && <NoteListControls />}
       </div>

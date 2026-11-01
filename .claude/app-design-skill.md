@@ -145,12 +145,24 @@ Settings → Preferences → Writing area: **Left** (default; the note column st
 
 Defined once in `lib/shortcuts.ts` and used by both the handler and the Settings list. ⌘⌥ / Ctrl+Alt plus N (new), F (search), S (favorite), ⌫ (trash), T (theme). Match on `event.code`, never `event.key`: on a Mac, Option changes the character (⌥N → "˜"). Avoid OS and browser combos: ⌘⌥D toggles the macOS Dock and ⌘⌥L opens Chrome's downloads; D and L remain as hidden aliases. Ignore auto-repeat.
 
-## Collapsible sidebars (desktop)
+## Accounts, sync and sharing (optional)
 
-- The sidebar (Classic's folders, or the Library) **collapses to a 60px icon rail** (`components/app-shell/sidebar-rail.tsx`), never to nothing: the owner asked for "a less width small sidebar". The rail has the logo mark, New note, folder icons (active in the brand blue), and theme, Settings and expand at the bottom, all with tooltips on the right. In Library the rail adds Search, and folders/search expand the sidebar (the notes live there).
-- Classic's note list can be hidden on its own (button at the end of its search row).
-- The page top bar starts with a toggle: "Collapse sidebars" (rail + hide list, for focused writing) or "Expand sidebars" (if anything is collapsed). Also ⌘⌥\. The same toggle sits in the empty state.
-- Stored as `preferences.sidebarCollapsed` / `noteListCollapsed` (in backups). Phones ignore them. Logic in `hooks/use-side-panes.ts`.
+Full design: `.claude/accounts-sync-sharing-plan.md`.
+
+- **Off unless configured.** Without `MONGODB_URI`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL` and Google credentials, no account UI renders and `/api/v1/*`, `/api/auth/*`, `/s/*` return 404. Guests are unaffected.
+- **Local-first.** The data adapter (`lib/sync/syncing-data-adapter.ts`) saves to localStorage first, then queues the change (`takemynote:outbox:<kind>:<id>`). The engine (`lib/sync/sync-engine.ts`) pushes 1.5 s after the last edit (≤ 10 s), pulls on start/focus/every 60 s, one tab at a time (Web Locks), retries with backoff.
+- **Conflicts never lose text** (`lib/sync/merge.ts`): flags merge; different text → newest wins and the other becomes "Title (copy from another device)"; edit beats delete.
+- **Sign in / create account:** one dialog (`components/account/auth-dialog.tsx`): painted picture left (`components/account/assets/auth-panel.webp`, made with `scripts/generate-image.mjs auth`), form right; a bottom sheet with the picture as a banner on phones. Email + password always; "Continue with Google" when configured.
+- **Profile chip** replaces the Settings button in the sidebar footer (`components/account/account-menu.tsx`): avatar + first name, or a neutral avatar + "Guest". Its menu: Settings and Sign out (signed in) or Sign in, Create account and Settings (guest). Avatar-only in the collapsed rail.
+- **UI:** Settings → Account (sync status, Sync now, sign out, delete account); sync status in the note meta line; Share button in the note top bar and note menu; share dialog with a switch and copy link (guests too: their link shows a copy of the note that the browser keeps up to date, and moves into the account on sign-in); public page `/s/<token>` (server-rendered, sanitized, noindex, own link preview).
+- **Profile photo:** Settings → Account, click the avatar (camera badge) → Upload new photo / Remove photo. Shrunk in the browser (≤ 512px), re-encoded on the server to a 256×256 WebP with sharp, stored in Vercel Blob (`lib/server/repositories/avatars.ts`); hidden unless `BLOB_READ_WRITE_TOKEN` is set.
+- **Never synced:** the AI key, collapsed-sidebar state, star-prompt state.
+
+## Resizing and closing sidebars (desktop)
+
+- No collapse buttons, rail or shortcut (the owner wanted it simple). Drag a side column's edge to resize it; drag it past the minimum width and it closes; drag the edge back out to reopen. `collapsible` panels in `components/app-shell/desktop-shells.tsx`.
+- Layouts (sizes and closed columns) are remembered per arrangement with `useDefaultLayout` (`classic-layout`, `library-layout`).
+- The drag line highlights in the brand blue on hover/drag; the grab area is 12px (28px for touch).
 
 ## GitHub star
 
@@ -159,7 +171,7 @@ Defined once in `lib/shortcuts.ts` and used by both the handler and the Settings
 
 ## First-run welcome
 
-`components/onboarding/onboarding-dialog.tsx` appears once per browser, the first time someone opens /notes. Steps: **Welcome** (logo, one line, three facts: private, "/" to format, AI when you ask) → **Pick a layout** (the same cards as Settings, applied live) → **Where should your text sit?** → **Add AI (optional)** (provider, model, key; "Skip for now") → **Light or dark?** (Light / Dark / Match system, applied live) → "Start writing". "Skip" on step 1, or closing the dialog, keeps the defaults (Classic, system theme). Completion is stored as `preferences.onboardingCompleted`, which is included in backups, so restoring on a new device skips it. It renders only after hydration, so returning users never see a flash. **Sound:** each Continue / Back / Start writing plays a heartbeat, "dhuk-dhuk" (`public/sounds/onboarding-heartbeat.mp3`: a felt-drum thump generated with Google's Lyria, muffled below ~350 Hz and cut to ~120 ms so it reads as a pulse, doubled into a lub-dub with a small stereo room; `components/onboarding/use-onboarding-sound.ts`). Every beat is identical (pitch changes made it sound like a dholak); Back is quieter; Start writing is two beats. "Skip" and closing are silent. **This is the only sound in the app; the owner asked for no sounds anywhere else.**
+`components/onboarding/onboarding-dialog.tsx` appears once per browser, the first time someone opens /notes. Steps: **Welcome** (logo, one line, three facts: private, "/" to format, AI when you ask) → **Pick a layout** (the same cards as Settings, applied live) → **Where should your text sit?** → **Add AI (optional)** (provider, model, key; "Skip for now") → **Light or dark?** (Light / Dark / Match system, applied live) → "Start writing". "Skip" on step 1, or closing the dialog, keeps the defaults (Classic, system theme). Completion is stored as `preferences.onboardingCompleted`, which is included in backups, so restoring on a new device skips it. It renders only after hydration, so returning users never see a flash. **Sound:** each Continue / Back / Start writing plays a heartbeat, "dhuk-dhuk" (`public/sounds/onboarding-heartbeat.mp3`: a felt-drum thump generated with Google's Lyria, muffled below ~350 Hz and cut to ~120 ms so it reads as a pulse, doubled into a lub-dub with a small stereo room; `components/onboarding/use-onboarding-sound.ts`). Every beat is identical (pitch changes made it sound like a dholak); Back is quieter; Start writing is two beats. "Skip" and closing are silent. **The only other sound is a soft two-note chime when the user switches the theme (rising into light, falling into dark), synthesized with Web Audio in `lib/sound/theme-switch-sound.ts`. The owner asked for no sounds anywhere else.**
 
 ## Templates
 

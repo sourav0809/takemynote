@@ -5,6 +5,9 @@ export const APP_NAME = "TakeMyNote";
 /** Public source code. */
 export const GITHUB_URL = "https://github.com/sourav0809/takemynote";
 
+/** Support the project (same link as .github/FUNDING.yml). */
+export const BUY_ME_A_COFFEE_URL = "https://buymeacoffee.com/sourav0809";
+
 export const ROUTES = {
   home: "/",
   notes: "/notes",

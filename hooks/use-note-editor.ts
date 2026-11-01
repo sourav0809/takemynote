@@ -20,7 +20,11 @@ const NOTE_EDITOR_DICTIONARY = {
  * mount, so callers key the editor component by note id: switching notes
  * builds a fresh editor while typing never resets cursor or undo history.
  */
-export function useNoteEditor(initialContent: NoteContent): NoteBlockEditor {
+export function useNoteEditor(
+  initialContent: NoteContent,
+  /** Enables uploading images (Upload tab, paste and drop). Without it, images come from links. */
+  uploadFile?: (file: File) => Promise<string>
+): NoteBlockEditor {
   return useCreateBlockNote({
     schema: noteEditorSchema,
     // BlockNote rejects an empty array; `undefined` gives one empty paragraph.
@@ -28,5 +32,6 @@ export function useNoteEditor(initialContent: NoteContent): NoteBlockEditor {
       initialContent.length > 0 ? (initialContent as PartialBlock[]) : undefined,
     extensions: [syntaxHighlighter, typographyExtension],
     dictionary: NOTE_EDITOR_DICTIONARY,
+    uploadFile,
   });
 }

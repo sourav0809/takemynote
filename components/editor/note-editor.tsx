@@ -17,6 +17,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAiAssist } from "@/hooks/use-ai-assist";
 import { useInlineAi } from "@/hooks/use-inline-ai";
 import { useNoteEditor } from "@/hooks/use-note-editor";
+import { useNoteImageUpload } from "@/hooks/use-note-image-upload";
 import { usePreferences } from "@/hooks/use-preferences";
 import type { WritingPosition } from "@/lib/data/preferences-storage";
 import { cn } from "@/lib/utils";
@@ -58,7 +59,8 @@ export function NoteEditor({
 }: NoteEditorProps) {
   const { resolvedTheme } = useTheme();
   const { textDirection, scrollPastEnd, writingPosition } = usePreferences();
-  const editor = useNoteEditor(initialContent);
+  const uploadImage = useNoteImageUpload();
+  const editor = useNoteEditor(initialContent, uploadImage);
   const ai = useAiAssist(editor, noteTitle);
   const inlineAi = useInlineAi(editor, noteTitle);
   const [scrollViewport, setScrollViewport] = useState<HTMLElement | null>(null);

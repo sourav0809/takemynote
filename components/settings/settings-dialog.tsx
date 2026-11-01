@@ -1,6 +1,8 @@
-import { Archive, Command, Settings, Sparkles, User } from "lucide-react";
+import { Archive, Command, Settings, Sparkles, User, UserRound } from "lucide-react";
 
+import { useAccount } from "@/components/account/account-provider";
 import { AboutTab } from "@/components/settings/about-tab";
+import { AccountTab } from "@/components/settings/account-tab";
 import { AiTab } from "@/components/settings/ai-tab";
 import { DataManagementTab } from "@/components/settings/data-management-tab";
 import { PreferencesTab } from "@/components/settings/preferences-tab";
@@ -37,13 +39,14 @@ const TAB_TRIGGER_CLASS = [
 export function SettingsDialog() {
   const { isSettingsOpen, setSettingsOpen, settingsTab, setSettingsTab } = useAppState();
   const hasSideTabs = useMediaQuery(SIDE_TABS_MEDIA_QUERY) ?? true;
+  const { enabled: hasAccounts } = useAccount();
 
   return (
     <Dialog open={isSettingsOpen} onOpenChange={setSettingsOpen}>
       <DialogContent className="flex h-[88dvh] w-full max-w-3xl flex-col gap-0 overflow-hidden p-0 sm:max-w-4xl md:h-[42rem] md:max-h-[85vh] lg:max-w-5xl">
         <DialogHeader className="space-y-0 border-b border-border px-5 py-4 pr-24 md:px-8 md:py-6">
           <DialogTitle>Settings</DialogTitle>
-          <p className="text-sm text-muted-foreground">Preferences, AI and your data.</p>
+          <p className="text-sm text-muted-foreground">Preferences, account, AI and your data.</p>
         </DialogHeader>
         <a
           href={GITHUB_URL}
@@ -67,6 +70,12 @@ export function SettingsDialog() {
               <Settings />
               Preferences
             </TabsTrigger>
+            {hasAccounts && (
+              <TabsTrigger value="account" className={TAB_TRIGGER_CLASS}>
+                <UserRound />
+                Account
+              </TabsTrigger>
+            )}
             <TabsTrigger value="ai" className={TAB_TRIGGER_CLASS}>
               <Sparkles />
               AI
@@ -89,6 +98,11 @@ export function SettingsDialog() {
             <TabsContent value="preferences">
               <PreferencesTab />
             </TabsContent>
+            {hasAccounts && (
+              <TabsContent value="account">
+                <AccountTab />
+              </TabsContent>
+            )}
             <TabsContent value="ai">
               <AiTab />
             </TabsContent>

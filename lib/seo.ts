@@ -7,7 +7,7 @@ import { APP_NAME, GITHUB_URL } from "@/lib/constants";
  */
 
 /** Canonical origin. Override with NEXT_PUBLIC_SITE_URL when the domain changes. */
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://takemynote.vercel.app").replace(/\/$/, "");
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.takemynote.online").replace(/\/$/, "");
 
 /** ~55 characters: fits Google's title width. */
 export const SITE_TITLE = `${APP_NAME}: Free, Private Notes App with AI`;

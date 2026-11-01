@@ -10,6 +10,8 @@ import { usePreferences } from "@/hooks/use-preferences";
 import { useNotes } from "@/hooks/use-notes";
 import { downloadAllNotesAsMarkdown, downloadBackupJson, parseBackupJson } from "@/lib/backup";
 import { restoreFromBackup } from "@/lib/data";
+import { mergeBackupIntoAccount } from "@/lib/sync/backup-merge";
+import { syncEngine } from "@/lib/sync/sync-engine";
 import { CURRENT_SCHEMA_VERSION } from "@/lib/data/storage-keys";
 
 export function DataManagementTab() {
@@ -22,8 +24,10 @@ export function DataManagementTab() {
     try {
       const text = await file.text();
       const payload = parseBackupJson(text);
-      await restoreFromBackup(payload);
-      toast.success("Backup imported successfully. Reloading...");
+      // Signed in: add the backup to the account rather than replacing it.
+      if (syncEngine.isActive()) await mergeBackupIntoAccount(payload);
+      else await restoreFromBackup(payload);
+      toast.success(syncEngine.isActive() ? "Backup added to your account. Reloading…" : "Backup imported successfully. Reloading...");
       window.setTimeout(() => window.location.reload(), 600);
     } catch {
       toast.error("Could not import this backup file");
@@ -74,8 +78,6 @@ export function DataManagementTab() {
                 scrollPastEnd: preferences.scrollPastEnd,
                 sortBy: preferences.sortBy,
                 textDirection: preferences.textDirection,
-                sidebarCollapsed: preferences.sidebarCollapsed,
-                noteListCollapsed: preferences.noteListCollapsed,
               },
             })
           }

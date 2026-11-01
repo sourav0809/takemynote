@@ -30,6 +30,9 @@ const CONTENT_SECURITY_POLICY = [
 ].join("; ");
 
 const nextConfig: NextConfig = {
+  // Rendered on the server for shared notes; loaded from node_modules rather
+  // than bundled (BlockNote's server renderer brings its own jsdom).
+  serverExternalPackages: ["@blocknote/server-util", "jsdom"],
   images: {
     // 86 keeps the pale skies in the landing images free of banding.
     qualities: [75, 86],

@@ -19,7 +19,9 @@ npm install
 npm run dev
 ```
 
-The app runs at [http://localhost:3000](http://localhost:3000). It needs no environment variables or accounts. To try the AI features, add your own OpenAI, Google or Anthropic key in **Settings → AI** inside the app.
+The app runs at [http://localhost:3000](http://localhost:3000). It needs no environment variables: without them it runs in guest mode. To try the AI features, add your own OpenAI, Google or Anthropic key in **Settings → AI** inside the app.
+
+Working on accounts, sync or sharing? Run `npm run db:dev` for a throwaway local MongoDB and follow **README → Accounts and sync locally**. With just `MONGODB_URI` and `BETTER_AUTH_SECRET` set you can create an account with email and password; Google sign-in also needs its OAuth client.
 
 ## Making a change
 
@@ -37,8 +39,10 @@ The app runs at [http://localhost:3000](http://localhost:3000). It needs no envi
 ## Guidelines
 
 - **Simplicity first.** TakeMyNote should feel calm. Prefer fewer, clearer controls over more options.
-- **Privacy is a feature.** Notes stay in the browser. Don't add analytics, tracking, or anything that sends note content anywhere, except the AI request the user explicitly asks for.
+- **Privacy is a feature.** Notes stay in the browser unless the user signs in to sync. Don't add analytics, tracking, or anything else that sends note content anywhere, beyond sync to their own account and the AI request they explicitly ask for.
 - **Never handle keys carelessly.** AI keys go only through `lib/ai/key-vault.ts`. Never log them, store them in React state, or include them in exports.
+- **Server data access** lives in `lib/server/repositories/`. Every query must filter by the user id from `getCurrentUser()`, never by an id from the request. Validate request bodies with the Zod schemas in `lib/sync/schemas.ts`.
+- **Sync** changes go through the data adapter (`lib/data`), which saves locally first and queues the change. Don't call the sync API from components directly.
 - **Match the code around you.** TypeScript, functional React components, Tailwind classes, and the existing naming and comment style.
 - **Mobile matters.** Check that layouts work on small screens.
 - **Templates** live in `lib/templates/library/` as Markdown. Make them genuinely useful: real structure, examples and dates, not just headings.

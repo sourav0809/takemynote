@@ -8,7 +8,7 @@
 ### Calm notes that stay in your browser.
 
 A private, focused notebook with a rich editor, 21 free templates and AI that uses your own key.<br>
-No account. No server. Your notes never leave your device.
+No sign-up needed: notes stay in your browser, and you can share one with a link without an account. Sign in only if you want sync.
 
 [**Open the app**](https://www.takemynote.online) · [Website](https://www.takemynote.online) · [Report a bug](https://github.com/sourav0809/takemynote/issues/new?template=bug_report.yml) · [Request a feature](https://github.com/sourav0809/takemynote/issues/new?template=feature_request.yml)
 
@@ -29,7 +29,7 @@ No account. No server. Your notes never leave your device.
 
 ## Why TakeMyNote
 
-Most note apps want an account, a subscription and your data on their servers. TakeMyNote is the opposite: open it and start writing. Everything is saved in your browser, and nothing is uploaded unless you choose to use AI.
+Most note apps want an account, a subscription and your data on their servers before you can write a word. TakeMyNote is the opposite: open it and start writing. Everything is saved in your browser. Share any note with a link, no account needed. If you want your notes on every device, sign in. That part is optional.
 
 ## Features
 
@@ -50,7 +50,14 @@ Most note apps want an account, a subscription and your data on their servers. T
 
 - Instant search across every note
 - Favorites, pins, categories, trash and a scratchpad
-- Two layouts (Classic three-column, or Library + Page) and collapsible sidebars
+- Two layouts (Classic three-column, or Library + Page); drag a sidebar's edge to resize or close it
+
+**Sync and sharing (optional)**
+
+- Create an account (email and password, or Google) to sync notes, categories and settings across devices
+- Edits save on the device first, so it's instant and works offline; changes catch up in the background
+- Two devices editing the same note never lose text: the other version is kept as a copy
+- Share any note with a read-only public link, and turn it off any time
 
 **Templates**
 
@@ -70,7 +77,7 @@ AI is optional. Add a key from OpenAI, Google or Anthropic during setup, in **Se
 
 How your key is protected:
 
-- **No middleman.** Requests go straight from your browser to the provider you chose, through the [Vercel AI SDK](https://ai-sdk.dev). TakeMyNote has no server that could see your key or your text.
+- **No middleman.** Requests go straight from your browser to the provider you chose, through the [Vercel AI SDK](https://ai-sdk.dev). They never pass through TakeMyNote's servers, so we can't see your key or your text.
 - **Encrypted on your device.** The key is encrypted with AES-GCM using a WebCrypto key that can't be read back, even by the app's own code. Only the ciphertext is kept in local storage.
 - **Never shared.** It's left out of backups and exports, never shown again after saving (only the last 4 characters), and can only be sent to the provider it belongs to.
 - **Locked-down page.** A Content-Security-Policy only lets the app talk to itself and the three provider APIs.
@@ -90,7 +97,6 @@ Our own instructions to the model are fixed; yours (tone, language, style) are a
 | Add to favorites           | `⌘` `⌥` `S` | `Ctrl` `Alt` `S`         |
 | Move to trash              | `⌘` `⌥` `⌫` | `Ctrl` `Alt` `Backspace` |
 | Light / dark               | `⌘` `⌥` `T` | `Ctrl` `Alt` `T`         |
-| Collapse / expand sidebars | `⌘` `⌥` `\` | `Ctrl` `Alt` `\`         |
 | Ask AI (inside a note)     | `⌘` `J`     | `Ctrl` `J`               |
 | Insert a block             | `/`         | `/`                      |
 
@@ -105,7 +111,15 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). No environment variables are needed to run the app.
+Open [http://localhost:3000](http://localhost:3000). No environment variables are needed: without them the app runs in guest mode (everything in the browser) and sign-in, sync and sharing are hidden.
+
+#### Accounts and sync locally (optional)
+
+1. Start a throwaway MongoDB: `npm run db:dev` (prints a `MONGODB_URI`), or use a free [MongoDB Atlas](https://www.mongodb.com/atlas) cluster.
+2. Create a Google OAuth client (Google Cloud Console → APIs & Services → Credentials → OAuth client ID → Web) with the redirect URI `http://localhost:3000/api/auth/callback/google`.
+3. Copy [`.env.example`](.env.example) to `.env` and fill in `MONGODB_URI`, `BETTER_AUTH_SECRET` (`openssl rand -base64 32`), `BETTER_AUTH_URL=http://localhost:3000`, `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`.
+
+Collections, validators and indexes are created automatically on first connection.
 
 | Script              | What it does                 |
 | ------------------- | ---------------------------- |
@@ -114,12 +128,15 @@ Open [http://localhost:3000](http://localhost:3000). No environment variables ar
 | `npm start`         | Serve the production build   |
 | `npm run lint`      | ESLint                       |
 | `npm run typecheck` | TypeScript, no output        |
+| `npm run db:dev`    | Throwaway local MongoDB      |
 
 The scripts in `scripts/` that regenerate the brand images use OpenAI and Gemini keys from a `.env` file (see [`.env.example`](.env.example)). You only need them if you're changing the artwork.
 
 ### Deploy
 
-It's a standard Next.js app with no backend or database, so it deploys anywhere Next.js runs. On [Vercel](https://vercel.com/new), import the repository and deploy; no settings are needed.
+It's a standard Next.js app, so it deploys anywhere Next.js runs. On [Vercel](https://vercel.com/new), import the repository and deploy: with no settings it runs in guest mode.
+
+To turn on accounts, sync and sharing, add `MONGODB_URI`, `BETTER_AUTH_SECRET` and `BETTER_AUTH_URL` (your site's address, e.g. `https://www.takemynote.online`). That enables email and password accounts. For "Continue with Google", also add `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`, with `<your address>/api/auth/callback/google` as a redirect URI in the Google OAuth client. For profile photo uploads, connect a public [Vercel Blob](https://vercel.com/docs/vercel-blob) store to the project (this adds `BLOB_READ_WRITE_TOKEN`). Redeploy after changing them.
 
 If you deploy to your own domain, set `NEXT_PUBLIC_SITE_URL` so canonical URLs, the sitemap and link previews point to it. `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` and `NEXT_PUBLIC_BING_SITE_VERIFICATION` are optional, for Search Console and Bing Webmaster Tools.
 
@@ -131,7 +148,8 @@ If you deploy to your own domain, set `NEXT_PUBLIC_SITE_URL` so canonical URLs, 
 | Editor    | [BlockNote](https://www.blocknotejs.org)                                                                                                            |
 | AI        | [Vercel AI SDK](https://ai-sdk.dev) with the OpenAI, Google and Anthropic providers                                                                 |
 | UI        | [Tailwind CSS 4](https://tailwindcss.com), [shadcn/ui](https://ui.shadcn.com) on [Base UI](https://base-ui.com), [Lucide](https://lucide.dev) icons |
-| Data      | Browser `localStorage` through [TanStack Query](https://tanstack.com/query)                                                                         |
+| Data      | Browser `localStorage` through [TanStack Query](https://tanstack.com/query); optional sync to [MongoDB](https://www.mongodb.com)                  |
+| Accounts  | [Better Auth](https://www.better-auth.com) with Google sign-in                                                                                     |
 | Export    | [jsPDF](https://github.com/parallax/jsPDF) for PDFs                                                                                                 |
 
 ```
@@ -143,6 +161,8 @@ hooks/              React hooks (notes, preferences, AI streaming, …)
 lib/
   ai/               Providers, prompts, writing agent, encrypted key vault
   data/             Local storage, migrations, preferences
+  sync/             Sync engine (outbox, debounce, conflicts), API client, schemas
+  server/           Server only: MongoDB, auth, repositories, rate limits
   editor/           Note conversion (Markdown, HTML) and editor helpers
   export/           PDF export
   templates/        The template library
@@ -151,9 +171,11 @@ docs/               Design notes and plans
 
 ## Privacy
 
-- Notes, categories and settings are stored in your browser's local storage. Clearing site data removes them, so make a backup from **Settings → Data management** first.
-- There's no account, analytics or tracking.
-- If you use AI, the text you choose is sent to the provider you picked, using your key. Nothing else ever leaves your device.
+- Without an account, notes, categories and settings are stored only in your browser's local storage. Clearing site data removes them, so make a backup from **Settings → Data management** first.
+- If you sign in, they're also stored in your account (MongoDB) so they sync. They're encrypted at rest by the database host but not end-to-end encrypted. Delete your account any time from **Settings → Account**; that deletes everything stored in it.
+- Shared notes are readable by anyone with the link and are never listed in search engines.
+- Your AI key is never synced or uploaded. If you use AI, the text you choose goes straight to the provider you picked.
+- No analytics or tracking.
 
 ## Contributing
 

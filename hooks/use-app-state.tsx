@@ -5,7 +5,7 @@ import { createContext, useContext, useMemo, useState } from "react";
 import type { NoteListFilter, NoteListView } from "@/lib/constants";
 import type { FolderId } from "@/types/note";
 
-export type SettingsTab = "preferences" | "ai" | "shortcuts" | "data" | "about";
+export type SettingsTab = "preferences" | "account" | "ai" | "shortcuts" | "data" | "about";
 
 interface AppState {
   activeFolder: FolderId;

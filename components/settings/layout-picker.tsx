@@ -5,8 +5,7 @@ import { LayoutPreview } from "@/components/settings/layout-preview";
 import { usePreferences } from "@/hooks/use-preferences";
 import type { AppLayout } from "@/lib/data/preferences-storage";
 import { cn } from "@/lib/utils";
-
-const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+import { runViewTransition } from "@/lib/view-transition";
 
 const LAYOUT_OPTIONS: { value: AppLayout; label: string; description: string }[] = [
   {
@@ -27,15 +26,8 @@ export function LayoutOptionCards({ className }: { className?: string }) {
 
   const handleSelect = (value: AppLayout) => {
     if (value === layout) return;
-    const canAnimate =
-      typeof document.startViewTransition === "function" &&
-      !window.matchMedia(REDUCED_MOTION_QUERY).matches;
-    if (!canAnimate) {
-      setPreference("layout", value);
-      return;
-    }
     // Cross-fade from the old layout to the new one.
-    document.startViewTransition(() => flushSync(() => setPreference("layout", value)));
+    runViewTransition(() => flushSync(() => setPreference("layout", value)));
   };
 
   return (
