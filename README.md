@@ -10,7 +10,7 @@
 A private, focused notebook with a rich editor, 21 free templates and AI that uses your own key.<br>
 No account. No server. Your notes never leave your device.
 
-[**Open the app**](https://takemynote.vercel.app/notes) · [Website](https://takemynote.vercel.app) · [Report a bug](https://github.com/sourav0809/takemynote/issues/new?template=bug_report.yml) · [Request a feature](https://github.com/sourav0809/takemynote/issues/new?template=feature_request.yml)
+[**Open the app**](https://www.takemynote.online/notes) · [Website](https://www.takemynote.online) · [Report a bug](https://github.com/sourav0809/takemynote/issues/new?template=bug_report.yml) · [Request a feature](https://github.com/sourav0809/takemynote/issues/new?template=feature_request.yml)
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-1d6fb8.svg)](LICENSE)
 [![CI](https://github.com/sourav0809/takemynote/actions/workflows/ci.yml/badge.svg)](https://github.com/sourav0809/takemynote/actions/workflows/ci.yml)

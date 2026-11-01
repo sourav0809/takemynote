@@ -8,7 +8,7 @@ Report them privately through [GitHub security advisories](https://github.com/so
 
 ## Supported versions
 
-Only the latest version (the `production` branch, deployed at [takemynote.vercel.app](https://takemynote.vercel.app)) receives security fixes.
+Only the latest version (the `production` branch, deployed at [www.takemynote.online](https://www.takemynote.online)) receives security fixes.
 
 ## How TakeMyNote handles data
 
