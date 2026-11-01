@@ -50,7 +50,7 @@ Most note apps want an account, a subscription and your data on their servers be
 
 - Instant search across every note
 - Favorites, pins, categories, trash and a scratchpad
-- Two layouts (Classic three-column, or Library + Page); drag a sidebar's edge to resize or close it
+- Two layouts (Classic three-column, or Library + Page); drag a sidebar's edge to resize it, or shrink it to a slim icon bar
 
 **Sync and sharing (optional)**
 

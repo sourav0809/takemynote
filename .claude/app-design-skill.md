@@ -160,7 +160,7 @@ Full design: `.claude/accounts-sync-sharing-plan.md`.
 
 ## Resizing and closing sidebars (desktop)
 
-- No collapse buttons, rail or shortcut (the owner wanted it simple). Drag a side column's edge to resize it; drag it past the minimum width and it closes; drag the edge back out to reopen. `collapsible` panels in `components/app-shell/desktop-shells.tsx`.
+- No collapse buttons or shortcut (the owner wanted it simple). Drag a side column's edge to resize it. Dragging the sidebar (Classic's folders, or the Library) past its minimum width shrinks it to a 60px icon rail (`components/app-shell/sidebar-rail.tsx`: logo, New note, Search in Library, folders, theme, profile chip); it never disappears completely. In Library, choosing a folder or Search on the rail opens the Library again. Classic's note list closes completely. Drag the edge back out to reopen. `collapsible` panels with `collapsedSize` in `components/app-shell/desktop-shells.tsx`.
 - Layouts (sizes and closed columns) are remembered per arrangement with `useDefaultLayout` (`classic-layout`, `library-layout`).
 - The drag line highlights in the brand blue on hover/drag; the grab area is 12px (28px for touch).
 

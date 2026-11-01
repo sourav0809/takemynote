@@ -78,8 +78,14 @@ export function SidebarRail({ onExpand }: SidebarRailProps) {
 
   const openSearch = () => {
     onExpand?.();
-    // The search field mounts with the expanded sidebar.
-    window.requestAnimationFrame(() => document.getElementById(NOTE_SEARCH_INPUT_ID)?.focus());
+    // The search field mounts once the sidebar has opened, a frame or two later.
+    let framesLeft = 10;
+    const focusSearch = () => {
+      const input = document.getElementById(NOTE_SEARCH_INPUT_ID);
+      if (input) input.focus();
+      else if (framesLeft-- > 0) window.requestAnimationFrame(focusSearch);
+    };
+    window.requestAnimationFrame(focusSearch);
   };
 
   return (
