@@ -16,6 +16,7 @@ No account. No server. Your notes never leave your device.
 [![CI](https://github.com/sourav0809/takemynote/actions/workflows/ci.yml/badge.svg)](https://github.com/sourav0809/takemynote/actions/workflows/ci.yml)
 [![Next.js](https://img.shields.io/badge/Next.js-16-000?logo=nextdotjs)](https://nextjs.org)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-1d6fb8.svg)](CONTRIBUTING.md)
+[![Sponsor](https://img.shields.io/badge/sponsor-%E2%9D%A4-db61a2?logo=githubsponsors&logoColor=white)](https://github.com/sponsors/sourav0809)
 
 <br>
 
@@ -156,6 +157,13 @@ Contributions are welcome, from typo fixes to new templates and features. Read [
 Found a security issue? Please report it privately as described in [SECURITY.md](SECURITY.md).
 
 If TakeMyNote is useful to you, a ⭐ on GitHub helps other people find it.
+
+## Support the project
+
+TakeMyNote is free, open source and has no ads or paid plan. If it saves you time, you can help keep it going:
+
+<a href="https://github.com/sponsors/sourav0809"><img src="https://img.shields.io/badge/Sponsor_on_GitHub-%E2%9D%A4-db61a2?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="Sponsor on GitHub" height="36"></a>
+<a href="https://buymeacoffee.com/sourav0809"><img src="https://img.shields.io/badge/Buy_me_a_coffee-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=black" alt="Buy me a coffee" height="36"></a>
 
 ## License
 
