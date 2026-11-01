@@ -14,25 +14,39 @@ export function HowItWorksSection() {
         description="Four small steps. Most people are writing within seconds."
       />
 
-      <ol className="reveal mt-8 grid grid-cols-1 gap-4 sm:mt-14 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+      {/* Phones: a compact numbered timeline. sm and up: one card per step. */}
+      <ol className="reveal mt-8 grid grid-cols-1 sm:mt-14 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4 lg:gap-5">
         {STEPS.map(({ icon: Icon, title, description }, index) => (
           <li
             key={title}
-            className="flex gap-4 rounded-[28px] border border-line bg-surface p-2 shadow-card sm:flex-col sm:gap-0"
+            className={cn(
+              "relative flex gap-4 pb-7 last:pb-0",
+              "sm:flex-col sm:gap-0 sm:rounded-[28px] sm:border sm:border-line sm:bg-surface sm:p-2 sm:pb-2 sm:shadow-card sm:last:pb-2"
+            )}
           >
-            <div className="flex w-20 shrink-0 items-center justify-center rounded-[20px] bg-sunken sm:h-28 sm:w-auto">
+            {/* Timeline marker and the line down to the next step (phones). */}
+            <span className="relative flex shrink-0 flex-col items-center sm:hidden">
+              <span className="flex size-10 items-center justify-center rounded-full border border-line bg-surface shadow-card">
+                <Icon aria-hidden className="size-[18px] text-ink-soft" />
+              </span>
+              {index < STEPS.length - 1 && (
+                <span aria-hidden className="absolute top-12 -bottom-5 w-px bg-line" />
+              )}
+            </span>
+
+            <div className="hidden h-28 items-center justify-center rounded-[20px] bg-sunken sm:flex">
               <span className="flex size-11 items-center justify-center rounded-2xl border border-line bg-surface shadow-card">
                 <Icon aria-hidden className="size-5 text-ink-soft" />
               </span>
             </div>
-            <div className="py-3 pr-3 sm:px-4 sm:pt-5 sm:pb-4">
+            <div className="pt-1 sm:px-4 sm:pt-5 sm:pb-4">
               <span className="font-mono text-[13px] text-accent-edge">
                 {String(index + 1).padStart(2, "0")}
               </span>
-              <h3 className="mt-1 text-lg leading-snug font-medium tracking-[-0.02em] text-ink sm:text-xl">
+              <h3 className="mt-0.5 text-lg leading-snug font-medium tracking-[-0.02em] text-ink sm:mt-1 sm:text-xl">
                 {title}
               </h3>
-              <p className="mt-1.5 text-[15px] leading-relaxed text-pretty text-muted">
+              <p className="mt-1 text-[15px] leading-relaxed text-pretty text-muted sm:mt-1.5">
                 {description}
               </p>
             </div>

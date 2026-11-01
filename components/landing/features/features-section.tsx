@@ -2,6 +2,7 @@ import Image from "next/image";
 
 import { AiVisual } from "@/components/landing/features/ai-visual";
 import { BentoCard } from "@/components/landing/features/bento-card";
+import { FeatureCarousel } from "@/components/landing/features/feature-carousel";
 import {
   DownloadVisual,
   OrganiseVisual,
@@ -17,7 +18,8 @@ const PHOTO_QUALITY = 86;
 
 /**
  * Feature grid. Desktop rows: Write (wide) + Private · AI, Templates, Find
- * · Make it yours (wide) + Download. Tablet pairs the single cards; phones stack.
+ * · Make it yours (wide) + Download. Tablet pairs the single cards; phones swipe
+ * through them one at a time.
  */
 export function FeaturesSection() {
   return (
@@ -35,7 +37,7 @@ export function FeaturesSection() {
         description="A focused editor, ready-made templates and a few smart tools. Nothing to learn."
       />
 
-      <div className="reveal mt-8 grid grid-cols-1 gap-4 sm:mt-14 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+      <FeatureCarousel gridClassName="reveal mt-8 sm:mt-14 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 lg:gap-5">
         <WriteFeatureCard className="min-h-[420px] sm:col-span-2" />
 
         <BentoCard
@@ -98,7 +100,7 @@ export function FeaturesSection() {
         >
           <DownloadVisual />
         </BentoCard>
-      </div>
+      </FeatureCarousel>
     </section>
   );
 }

@@ -451,6 +451,12 @@ html:has(.landing) body {
   opacity: 0.6;
 }
 
+/* "Swipe to see more" arrow on the phone feature carousel. */
+@keyframes nudge-x {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 4px 0; }
+}
+
 /* The star in the GitHub star prompt pops in once. */
 @keyframes star-pop {
   0% { opacity: 0; scale: 0.3; rotate: -90deg; }

@@ -96,9 +96,10 @@ export function TemplatesVisual() {
 }
 
 const DOWNLOAD_FORMATS: { icon: LucideIcon; label: string }[] = [
+  // File extensions: short enough for the narrow phone card.
   { icon: FileText, label: "PDF" },
-  { icon: FileCode, label: "Markdown" },
-  { icon: FileType, label: "Text" },
+  { icon: FileCode, label: "MD" },
+  { icon: FileType, label: "TXT" },
   { icon: Globe, label: "HTML" },
   { icon: Braces, label: "JSON" },
 ];

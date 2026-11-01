@@ -85,14 +85,15 @@ export function MakeItYoursVisual() {
       </div>
       <div className="flex flex-col gap-2 rounded-2xl bg-surface p-3 shadow-card">
         {CHOICES.map(({ label, options, selected }) => (
-          <div key={label} className="flex items-center justify-between gap-3">
+          // Phones (narrow carousel card): label above full-width options.
+          <div key={label} className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
             <span className="shrink-0 text-[12px] font-medium text-muted">{label}</span>
             <span className="flex min-w-0 gap-0.5 rounded-full bg-sunken p-0.5">
               {options.map((option) => (
                 <span
                   key={option}
                   className={cn(
-                    "truncate rounded-full px-2.5 py-1 text-[11px] font-semibold",
+                    "flex-1 rounded-full px-2.5 py-1 text-center text-[11px] font-semibold whitespace-nowrap sm:flex-none",
                     option === selected ? "bg-surface text-ink shadow-card" : "text-muted"
                   )}
                 >
