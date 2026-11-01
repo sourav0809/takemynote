@@ -451,6 +451,13 @@ html:has(.landing) body {
   opacity: 0.6;
 }
 
+/* The star in the GitHub star prompt pops in once. */
+@keyframes star-pop {
+  0% { opacity: 0; scale: 0.3; rotate: -90deg; }
+  70% { opacity: 1; scale: 1.25; rotate: 10deg; }
+  100% { opacity: 1; scale: 1; rotate: 0deg; }
+}
+
 /* Horizontal scrollers (the formatting toolbar on phones) without a visible bar. */
 @utility no-scrollbar {
   scrollbar-width: none;

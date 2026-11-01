@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { BrandLockup } from "@/components/brand/brand-lockup";
 import { GithubIcon } from "@/components/brand/github-icon";
+import { GithubStarButton } from "@/components/landing/github-star-button";
 import { NAV_LINKS } from "@/components/landing/landing-content";
 import { APP_NAME, GITHUB_URL, ROUTES } from "@/lib/constants";
 
@@ -18,8 +19,9 @@ export function LandingFooter() {
               <BrandLockup tone="light" className="h-9" />
             </Link>
             <p className="mt-4 text-[14px] leading-relaxed text-muted">
-              A calm, private notebook that lives in your browser.
+              A calm, private notebook that lives in your browser. Free and open source.
             </p>
+            <GithubStarButton className="mt-5" />
           </div>
 
           <div className="grid grid-cols-2 gap-10 sm:gap-16">
