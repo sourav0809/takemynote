@@ -8,7 +8,7 @@ import { PageTransition } from "@/components/common/page-transition";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
-  title: "Your notes",
+  title: "Your Notes",
   description: "Write, organise and find your notes. Everything stays in this browser.",
   alternates: { canonical: "/notes" },
   // Shared links to the app get their own title (same preview image).

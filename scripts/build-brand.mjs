@@ -1,12 +1,12 @@
 // Turns a generated logo lockup (mark + wordmark on white) into brand assets:
 // transparent lockup (light + dark), the mark alone, and — with --icons — the
 // favicon, app icons and manifest icons.
-// Usage: node scripts/build-brand.mjs bookmark --icons
+// Usage: node scripts/build-brand.mjs page-tn --icons
 
 import { mkdir, writeFile } from "node:fs/promises";
 import sharp from "sharp";
 
-const CONCEPTS = ["bookmark"];
+const CONCEPTS = ["bookmark", "page-tn"];
 const SOURCE_DIR = ".generated/logos";
 const OUT_DIR = "components/brand/assets/logos";
 const WHITE_THRESHOLD = 236; // channels above this count as background white
