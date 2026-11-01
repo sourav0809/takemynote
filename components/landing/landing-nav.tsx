@@ -59,7 +59,7 @@ export function LandingNav() {
           {NAV_LINKS.map(({ id, label }) => (
             <li key={id}>
               <a
-                href={`#${id}`}
+                href={`${ROUTES.home}#${id}`}
                 aria-current={activeId === id ? "location" : undefined}
                 className={cn(
                   "inline-flex h-9 items-center rounded-full px-3.5 text-[13px] font-semibold transition-colors",

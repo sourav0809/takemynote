@@ -24,13 +24,13 @@ export function LandingFooter() {
             <GithubStarButton className="mt-5" />
           </div>
 
-          <div className="grid grid-cols-2 gap-10 sm:gap-16">
+          <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 sm:gap-16">
             <div>
               <p className="text-[13px] font-semibold text-ink">Product</p>
               <ul className="mt-3 flex flex-col gap-2.5">
                 {NAV_LINKS.map(({ id, label }) => (
                   <li key={id}>
-                    <a href={`#${id}`} className={LINK_CLASS}>
+                    <a href={`${ROUTES.home}#${id}`} className={LINK_CLASS}>
                       {label}
                     </a>
                   </li>
@@ -55,6 +55,21 @@ export function LandingFooter() {
                     <GithubIcon className="size-3.5" />
                     GitHub
                   </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <p className="text-[13px] font-semibold text-ink">Legal</p>
+              <ul className="mt-3 flex flex-col gap-2.5">
+                <li>
+                  <Link href={ROUTES.privacy} className={LINK_CLASS}>
+                    Privacy Policy
+                  </Link>
+                </li>
+                <li>
+                  <Link href={ROUTES.terms} className={LINK_CLASS}>
+                    Terms of Service
+                  </Link>
                 </li>
               </ul>
             </div>

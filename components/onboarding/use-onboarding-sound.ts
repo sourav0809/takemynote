@@ -6,7 +6,7 @@ import { useCallback, useEffect, useRef } from "react";
  * One heartbeat, "dhuk-dhuk": a felt-drum thump generated with Google's Lyria
  * model, muffled and shortened so it reads as a pulse rather than a drum, then
  * doubled into a lub-dub with a little room around it. Used only in the
- * welcome flow (the theme switch has its own click, lib/sound).
+ * welcome flow (the theme switch has its own chime, lib/sound).
  */
 const SOUND_URL = "/sounds/onboarding-heartbeat.mp3";
 const VOLUME = 0.7;

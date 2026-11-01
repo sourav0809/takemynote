@@ -4,8 +4,8 @@ import * as ResizablePrimitive from "react-resizable-panels"
 
 import { cn } from "@/lib/utils"
 
-// A comfortable grab area around the 1px line (it's the only way to reopen a
-// closed sidebar, which sits at the window edge).
+// A comfortable grab area around the 1px line (dragging it is how side
+// columns open, close and resize).
 const RESIZE_TARGET = { fine: 12, coarse: 28 }
 
 function ResizablePanelGroup({

@@ -9,6 +9,7 @@ import { GoogleIcon } from "@/components/brand/google-icon";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
+import { ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 export type AuthMode = "sign-in" | "sign-up";
@@ -32,6 +33,8 @@ interface AuthDialogProps {
 
 const MIN_PASSWORD = 8;
 const EASE_OUT = "ease-[cubic-bezier(0.2,0.7,0.2,1)]";
+
+const LEGAL_LINK_CLASS = "underline underline-offset-2 outline-none hover:text-foreground focus-visible:text-foreground";
 
 const COPY: Record<AuthMode, { title: string; subtitle: string; submit: string; switchPrompt: string; switchAction: string }> = {
   "sign-in": {
@@ -291,6 +294,18 @@ export function AuthDialog({
                 >
                   {copy.switchAction}
                 </button>
+              </p>
+              {/* New tab, so the dialog and what they were doing stay put. */}
+              <p className="mt-4 text-center text-xs leading-relaxed text-muted-foreground">
+                By continuing, you agree to the{" "}
+                <a href={ROUTES.terms} target="_blank" rel="noreferrer" className={LEGAL_LINK_CLASS}>
+                  Terms
+                </a>{" "}
+                and{" "}
+                <a href={ROUTES.privacy} target="_blank" rel="noreferrer" className={LEGAL_LINK_CLASS}>
+                  Privacy Policy
+                </a>
+                .
               </p>
             </div>
           </div>

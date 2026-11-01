@@ -11,7 +11,12 @@ export const BUY_ME_A_COFFEE_URL = "https://buymeacoffee.com/sourav0809";
 export const ROUTES = {
   home: "/",
   notes: "/notes",
+  privacy: "/privacy",
+  terms: "/terms",
 } as const;
+
+/** Privacy requests, abuse reports and anything that shouldn't be a public GitHub issue. */
+export const CONTACT_EMAIL = "souravpathakatwork@gmail.com";
 
 /** Library column (folders, search, notes) on desktop. */
 export const LIBRARY_MIN_SIZE = "280px";
