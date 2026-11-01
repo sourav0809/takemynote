@@ -1,11 +1,15 @@
 import type { MetadataRoute } from "next";
-import { APP_NAME, APP_TAGLINE, ROUTES } from "@/lib/constants";
+import { APP_NAME, ROUTES } from "@/lib/constants";
+import { SHARE_DESCRIPTION } from "@/lib/seo";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
+    id: ROUTES.notes,
     name: APP_NAME,
     short_name: APP_NAME,
-    description: APP_TAGLINE,
+    description: SHARE_DESCRIPTION,
+    lang: "en",
+    categories: ["productivity", "utilities"],
     start_url: ROUTES.notes,
     display: "standalone",
     background_color: "#fafafa",

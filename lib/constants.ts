@@ -2,8 +2,6 @@ import type { FolderId } from "@/types/note";
 
 export const APP_NAME = "TakeMyNote";
 
-export const APP_TAGLINE = "A calm, private notebook";
-
 /** Public source code. */
 export const GITHUB_URL = "https://github.com/sourav0809/takemynote";
 

@@ -109,11 +109,12 @@ export const FAQ_ITEMS: FaqItem[] = [
   },
   {
     question: "Is TakeMyNote open source?",
-    answer: "Yes. The full source code is on GitHub, linked at the bottom of this page.",
+    answer:
+      "Yes. TakeMyNote is free and open source under the MIT license. The full source code is on GitHub, linked at the bottom of this page.",
   },
   {
     question: "Can I export my notes?",
     answer:
-      "Every note can be downloaded as a Markdown (.md) file, and the full backup is plain JSON you can keep anywhere.",
+      "Yes. Download any note as PDF, Markdown, plain text, HTML or JSON, or print it. A full backup of everything is one JSON file you can restore anywhere.",
   },
 ];
