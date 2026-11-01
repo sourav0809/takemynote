@@ -99,12 +99,10 @@ function InlineAiPanelContent({ ai }: InlineAiPanelProps) {
     ],
   });
 
+  const { getAnchorRect, getEditorElement } = ai;
   useLayoutEffect(() => {
-    setPositionReference({
-      getBoundingClientRect: ai.getAnchorRect,
-      contextElement: ai.getEditorElement(),
-    });
-  }, [setPositionReference, ai.getAnchorRect, ai.getEditorElement]);
+    setPositionReference({ getBoundingClientRect: getAnchorRect, contextElement: getEditorElement() });
+  }, [setPositionReference, getAnchorRect, getEditorElement]);
 
   // A click elsewhere closes the panel, unless there's a result to keep.
   const { close } = ai;
@@ -227,8 +225,12 @@ function InlineAiPanelContent({ ai }: InlineAiPanelProps) {
   const placeholder = hasResult
     ? "Tell AI what to change…"
     : mode === "selection"
-      ? "Ask AI to edit… e.g. add a few bullets and fix grammar"
-      : "Ask AI to write… e.g. a short intro for this note";
+      ? isDesktop
+        ? "Ask AI to edit… e.g. add a few bullets and fix grammar"
+        : "Ask AI to edit…"
+      : isDesktop
+        ? "Ask AI to write… e.g. a short intro for this note"
+        : "Ask AI to write…";
 
   return (
     <div
@@ -241,7 +243,8 @@ function InlineAiPanelContent({ ai }: InlineAiPanelProps) {
         "z-40 flex flex-col overflow-hidden rounded-2xl border border-border bg-popover text-popover-foreground shadow-xl ring-1 ring-foreground/5 duration-150 animate-in fade-in-0 dark:ring-foreground/10",
         isDesktop
           ? "slide-in-from-top-1"
-          : "fixed inset-x-2 bottom-[max(0.5rem,env(safe-area-inset-bottom))] max-h-[75dvh] slide-in-from-bottom-4"
+          : // The size middleware still writes an inline width and max height; a sheet ignores both.
+            "fixed inset-x-2 bottom-[max(0.5rem,env(safe-area-inset-bottom))] max-h-[75dvh]! w-auto! slide-in-from-bottom-4"
       )}
     >
       {(state.text || isStreaming) && (
