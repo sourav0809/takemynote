@@ -1,3 +1,4 @@
+import { PaneToggleButton } from "@/components/app-shell/pane-toggle-button";
 import { BrandHomeLink } from "@/components/brand/brand-home-link";
 import { FolderSwitcher } from "@/components/library/folder-switcher";
 import { LibraryFooter } from "@/components/library/library-footer";
@@ -9,7 +10,12 @@ import { NoteSearchBar } from "@/components/note-list/note-search-bar";
 import { useAppState } from "@/hooks/use-app-state";
 
 /** Library layout's left column: folder switcher, search, filters and notes. */
-export function LibraryPane() {
+interface LibraryPaneProps {
+  /** Desktop: hides this column. */
+  onCollapse?: () => void;
+}
+
+export function LibraryPane({ onCollapse }: LibraryPaneProps) {
   const { activeFolder, searchQuery, setSearchQuery, listView, setListView } = useAppState();
   const isScratchpad = activeFolder === "scratchpad";
 
@@ -17,7 +23,10 @@ export function LibraryPane() {
     <aside className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
       <div className="flex h-14 shrink-0 items-center justify-between gap-2 pr-3 pl-4">
         <BrandHomeLink />
-        <NewNoteButton />
+        <div className="flex items-center gap-1">
+          <NewNoteButton />
+          {onCollapse && <PaneToggleButton action="hide" label="Collapse sidebar" onClick={onCollapse} />}
+        </div>
       </div>
 
       <div className="flex shrink-0 flex-col gap-2 px-3 pb-2">

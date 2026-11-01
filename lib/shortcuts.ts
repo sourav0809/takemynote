@@ -4,7 +4,7 @@
  * `event.key` (⌥N types "˜", ⌥S types "ß"). Both the handler and the
  * Settings list read from here, so they can't drift apart.
  */
-export type ShortcutId = "newNote" | "search" | "favorite" | "trash" | "theme";
+export type ShortcutId = "newNote" | "search" | "favorite" | "trash" | "theme" | "sidebars";
 
 export interface ShortcutDefinition {
   id: ShortcutId;
@@ -23,6 +23,7 @@ export const SHORTCUTS: ShortcutDefinition[] = [
   { id: "trash", label: "Move note to trash", keyLabel: "⌫", codes: ["Backspace", "KeyD"] },
   // ⌘⌥L opens Chrome's downloads on a Mac, so T is the documented key.
   { id: "theme", label: "Switch light / dark", keyLabel: "T", codes: ["KeyT", "KeyL"] },
+  { id: "sidebars", label: "Collapse / expand sidebars", keyLabel: "\\", codes: ["Backslash"] },
 ];
 
 export function findShortcut(event: KeyboardEvent): ShortcutDefinition | undefined {

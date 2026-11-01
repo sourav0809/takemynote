@@ -14,6 +14,8 @@ interface Preferences extends StoredPreferences {
     key: K,
     value: StoredPreferences[K]
   ) => void;
+  /** Changes several preferences at once (separate setPreference calls would overwrite each other). */
+  setPreferences: (changes: Partial<StoredPreferences>) => void;
 }
 
 const PreferencesContext = createContext<Preferences | null>(null);
@@ -50,6 +52,7 @@ export function PreferencesProvider({ children }: { children: React.ReactNode })
     () => ({
       ...values,
       setPreference: (key, val) => commitPreferences({ ...values, [key]: val }),
+      setPreferences: (changes) => commitPreferences({ ...values, ...changes }),
     }),
     [values]
   );

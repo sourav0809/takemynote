@@ -145,9 +145,16 @@ Settings → Preferences → Writing area: **Left** (default; the note column st
 
 Defined once in `lib/shortcuts.ts` and used by both the handler and the Settings list. ⌘⌥ / Ctrl+Alt plus N (new), F (search), S (favorite), ⌫ (trash), T (theme). Match on `event.code`, never `event.key`: on a Mac, Option changes the character (⌥N → "˜"). Avoid OS and browser combos: ⌘⌥D toggles the macOS Dock and ⌘⌥L opens Chrome's downloads; D and L remain as hidden aliases. Ignore auto-repeat.
 
+## Collapsible sidebars (desktop)
+
+- The sidebar (Classic's folders, or the Library) **collapses to a 60px icon rail** (`components/app-shell/sidebar-rail.tsx`), never to nothing: the owner asked for "a less width small sidebar". The rail has the logo mark, New note, folder icons (active in the brand blue), and theme, Settings and expand at the bottom, all with tooltips on the right. In Library the rail adds Search, and folders/search expand the sidebar (the notes live there).
+- Classic's note list can be hidden on its own (button at the end of its search row).
+- The page top bar starts with a toggle: "Collapse sidebars" (rail + hide list, for focused writing) or "Expand sidebars" (if anything is collapsed). Also ⌘⌥\. The same toggle sits in the empty state.
+- Stored as `preferences.sidebarCollapsed` / `noteListCollapsed` (in backups). Phones ignore them. Logic in `hooks/use-side-panes.ts`.
+
 ## First-run welcome
 
-`components/onboarding/onboarding-dialog.tsx` appears once per browser, the first time someone opens /notes. Steps: **Welcome** (logo, one line, three facts: private, "/" to format, AI when you ask) → **Pick a layout** (the same cards as Settings, applied live) → **Where should your text sit?** → **Add AI (optional)** (provider, model, key; "Skip for now") → **Light or dark?** (Light / Dark / Match system, applied live) → "Start writing". "Skip" on step 1, or closing the dialog, keeps the defaults (Classic, system theme). Completion is stored as `preferences.onboardingCompleted`, which is included in backups, so restoring on a new device skips it. It renders only after hydration, so returning users never see a flash.
+`components/onboarding/onboarding-dialog.tsx` appears once per browser, the first time someone opens /notes. Steps: **Welcome** (logo, one line, three facts: private, "/" to format, AI when you ask) → **Pick a layout** (the same cards as Settings, applied live) → **Where should your text sit?** → **Add AI (optional)** (provider, model, key; "Skip for now") → **Light or dark?** (Light / Dark / Match system, applied live) → "Start writing". "Skip" on step 1, or closing the dialog, keeps the defaults (Classic, system theme). Completion is stored as `preferences.onboardingCompleted`, which is included in backups, so restoring on a new device skips it. It renders only after hydration, so returning users never see a flash. **Sound:** each Continue / Back / Start writing plays a heartbeat, "dhuk-dhuk" (`public/sounds/onboarding-heartbeat.mp3`: a felt-drum thump generated with Google's Lyria, muffled below ~350 Hz and cut to ~120 ms so it reads as a pulse, doubled into a lub-dub with a small stereo room; `components/onboarding/use-onboarding-sound.ts`). Every beat is identical (pitch changes made it sound like a dholak); Back is quieter; Start writing is two beats. "Skip" and closing are silent. **This is the only sound in the app; the owner asked for no sounds anywhere else.**
 
 ## Templates
 

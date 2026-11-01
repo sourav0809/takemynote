@@ -1,5 +1,6 @@
 import { ChevronLeft, MoreHorizontal, Star } from "lucide-react";
 
+import { SidePanesToggle } from "@/components/app-shell/pane-toggle-button";
 import { NoteCategoryMenu } from "@/components/editor/note-category-menu";
 import { NoteDropdownMenuItems } from "@/components/note-list/note-context-menu-items";
 import { Button } from "@/components/ui/button";
@@ -41,7 +42,10 @@ export function PageTopBar({ note, onBack, backLabel }: PageTopBarProps) {
           {backLabel}
         </Button>
       ) : (
-        <span className="px-2 text-sm text-muted-foreground">{folderLabel}</span>
+        <>
+          <SidePanesToggle className="mr-0.5" />
+          <span className="px-1.5 text-sm text-muted-foreground">{folderLabel}</span>
+        </>
       )}
 
       {canChangeCategory && (

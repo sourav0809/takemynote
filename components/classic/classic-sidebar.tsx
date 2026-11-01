@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 
+import { PaneToggleButton } from "@/components/app-shell/pane-toggle-button";
 import { BrandHomeLink } from "@/components/brand/brand-home-link";
 import { CategoryManagerDialog } from "@/components/library/category-manager-dialog";
 import { FOLDER_ICONS, FOLDER_ORDER } from "@/components/library/folder-icons";
@@ -20,10 +21,12 @@ const NAV_ITEM_CLASS =
 interface ClassicSidebarProps {
   /** Called after any navigation, so the phone drawer can close itself. */
   onNavigate?: () => void;
+  /** Desktop: hides this column. */
+  onCollapse?: () => void;
 }
 
 /** Classic layout's first column: folders with counts, categories, settings. */
-export function ClassicSidebar({ onNavigate }: ClassicSidebarProps) {
+export function ClassicSidebar({ onNavigate, onCollapse }: ClassicSidebarProps) {
   const { activeFolder, activeCategoryId, setActiveCategory } = useAppState();
   const { data: categories } = useCategories();
   const { counts, selectFolder } = useFolderNavigation();
@@ -36,8 +39,9 @@ export function ClassicSidebar({ onNavigate }: ClassicSidebarProps) {
 
   return (
     <aside className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
-      <div className="flex h-14 shrink-0 items-center gap-2 px-4">
+      <div className="flex h-14 shrink-0 items-center justify-between gap-2 pr-2.5 pl-4">
         <BrandHomeLink />
+        {onCollapse && <PaneToggleButton action="hide" label="Collapse sidebar" onClick={onCollapse} />}
       </div>
 
       <div className="px-3 pb-3" onClickCapture={onNavigate}>

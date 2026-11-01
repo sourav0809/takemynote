@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, Settings } from "lucide-react";
 
 import { AiSetupForm } from "@/components/ai/ai-setup-form";
 import { ThemeOptionCards } from "@/components/onboarding/theme-option-cards";
+import { useOnboardingSound } from "@/components/onboarding/use-onboarding-sound";
 import { WelcomeStep } from "@/components/onboarding/welcome-step";
 import { LayoutOptionCards } from "@/components/settings/layout-picker";
 import { WritingPositionCards } from "@/components/settings/writing-position-picker";
@@ -81,8 +82,14 @@ export function OnboardingDialog() {
   const isOpen = isReady && !onboardingCompleted;
   const currentChoice = step > 0 ? CHOICE_STEPS[step - 1] : null;
   const canSkipStep = currentChoice?.isOptional && !isAiReady;
+  const playSound = useOnboardingSound(isOpen);
   const finish = () => setPreference("onboardingCompleted", true);
+  const startWriting = () => {
+    playSound("finish");
+    finish();
+  };
   const goTo = (nextStep: number) => {
+    playSound(nextStep > step ? "forward" : "back");
     setDirection(nextStep > step ? "forward" : "back");
     setStep(nextStep);
   };
@@ -179,7 +186,7 @@ export function OnboardingDialog() {
                   <ArrowRight />
                 </Button>
               ) : (
-                <Button className="h-10 px-4" onClick={finish}>
+                <Button className="h-10 px-4" onClick={startWriting}>
                   Start writing
                 </Button>
               )}

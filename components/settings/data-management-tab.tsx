@@ -74,6 +74,8 @@ export function DataManagementTab() {
                 scrollPastEnd: preferences.scrollPastEnd,
                 sortBy: preferences.sortBy,
                 textDirection: preferences.textDirection,
+                sidebarCollapsed: preferences.sidebarCollapsed,
+                noteListCollapsed: preferences.noteListCollapsed,
               },
             })
           }

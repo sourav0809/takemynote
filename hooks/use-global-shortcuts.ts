@@ -6,7 +6,9 @@ import { useAppState } from "@/hooks/use-app-state";
 import { useCreateAndOpenNote } from "@/hooks/use-create-and-open-note";
 import { useNoteActions } from "@/hooks/use-note-actions";
 import { useNotes } from "@/hooks/use-notes";
+import { useSidePanes } from "@/hooks/use-side-panes";
 import { useThemeToggle } from "@/hooks/use-theme-toggle";
+import { DESKTOP_MEDIA_QUERY } from "@/lib/constants";
 import { findShortcut } from "@/lib/shortcuts";
 
 export const NOTE_SEARCH_INPUT_ID = "note-search-input";
@@ -18,6 +20,7 @@ export function useGlobalShortcuts(): void {
   const createAndOpenNote = useCreateAndOpenNote();
   const actions = useNoteActions();
   const { toggleTheme } = useThemeToggle();
+  const { toggleAll: toggleSidePanes } = useSidePanes();
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -51,10 +54,16 @@ export function useGlobalShortcuts(): void {
           event.preventDefault();
           toggleTheme();
           break;
+        case "sidebars":
+          // Phones show one pane at a time, so there is nothing to collapse.
+          if (!window.matchMedia(DESKTOP_MEDIA_QUERY).matches) return;
+          event.preventDefault();
+          toggleSidePanes();
+          break;
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [notes, selectedNoteId, createAndOpenNote, actions, toggleTheme]);
+  }, [notes, selectedNoteId, createAndOpenNote, actions, toggleTheme, toggleSidePanes]);
 }

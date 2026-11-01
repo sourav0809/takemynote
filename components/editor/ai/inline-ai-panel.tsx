@@ -79,10 +79,14 @@ function InlineAiPanelContent({ ai }: InlineAiPanelProps) {
     refs: { setFloating, setPositionReference },
     floatingStyles,
     elements,
+    isPositioned,
   } = useFloating({
     open: true,
     placement: "bottom-start",
     strategy: "fixed",
+    // Position with top/left: the entrance animation uses `transform`, which
+    // would otherwise fight the position and fly the panel in from the corner.
+    transform: false,
     whileElementsMounted: autoUpdate,
     middleware: [
       offset(8),
@@ -98,6 +102,11 @@ function InlineAiPanelContent({ ai }: InlineAiPanelProps) {
       }),
     ],
   });
+
+  // The panel stays invisible until placed, and invisible inputs can't take focus.
+  useEffect(() => {
+    if (isPositioned || !isDesktop) inputRef.current?.focus();
+  }, [isPositioned, isDesktop]);
 
   const { getAnchorRect, getEditorElement } = ai;
   useLayoutEffect(() => {
@@ -240,11 +249,20 @@ function InlineAiPanelContent({ ai }: InlineAiPanelProps) {
       onKeyDown={handleKeyDown}
       style={isDesktop ? floatingStyles : undefined}
       className={cn(
-        "z-40 flex flex-col overflow-hidden rounded-2xl border border-border bg-popover text-popover-foreground shadow-xl ring-1 ring-foreground/5 duration-150 animate-in fade-in-0 dark:ring-foreground/10",
+        "z-40 flex flex-col overflow-hidden rounded-2xl border border-border bg-popover text-popover-foreground shadow-xl ring-1 ring-foreground/5 dark:ring-foreground/10",
         isDesktop
-          ? "slide-in-from-top-1"
+          ? // Hidden until floating-ui has placed it, so it never flashes at the
+            // wrong spot; then one soft entrance from just above.
+            cn(
+              "origin-top",
+              isPositioned
+                ? // animation-duration only: `duration-*` also sets transition-duration,
+                  // which would animate left/top from the corner.
+                  "animate-in fade-in-0 zoom-in-[0.98] slide-in-from-top-1.5 ease-out [animation-duration:200ms] motion-reduce:animate-none"
+                : "invisible"
+            )
           : // The size middleware still writes an inline width and max height; a sheet ignores both.
-            "fixed inset-x-2 bottom-[max(0.5rem,env(safe-area-inset-bottom))] max-h-[75dvh]! w-auto! slide-in-from-bottom-4"
+            "fixed inset-x-2 bottom-[max(0.5rem,env(safe-area-inset-bottom))] max-h-[75dvh]! w-auto! ease-out [animation-duration:250ms] animate-in fade-in-0 slide-in-from-bottom-6 motion-reduce:animate-none"
       )}
     >
       {(state.text || isStreaming) && (

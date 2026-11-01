@@ -15,6 +15,10 @@ export interface StoredPreferences {
   scrollPastEnd: boolean;
   sortBy: "updated" | "created" | "title";
   textDirection: "ltr" | "rtl";
+  /** Desktop: the first column (Classic folders, or the Library) is collapsed to an icon rail. */
+  sidebarCollapsed: boolean;
+  /** Desktop, Classic only: the note list column is hidden. */
+  noteListCollapsed: boolean;
 }
 
 export const DEFAULT_PREFERENCES: StoredPreferences = {
@@ -26,6 +30,8 @@ export const DEFAULT_PREFERENCES: StoredPreferences = {
   scrollPastEnd: false,
   sortBy: "updated",
   textDirection: "ltr",
+  sidebarCollapsed: false,
+  noteListCollapsed: false,
 };
 
 export function readPreferences(): StoredPreferences {

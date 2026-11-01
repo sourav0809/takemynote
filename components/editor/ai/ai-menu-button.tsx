@@ -1,4 +1,5 @@
 import { PenSquare, Settings2, Sparkles } from "lucide-react";
+import { useRef } from "react";
 
 import { AI_ACTION_ICONS } from "@/components/editor/ai/ai-action-icons";
 import { Button } from "@/components/ui/button";
@@ -27,6 +28,8 @@ interface AiMenuButtonProps {
 export function AiMenuButton({ isBusy, onRun, onAskAi }: AiMenuButtonProps) {
   const { openSettings } = useAppState();
   const { mod } = usePlatformModifierKeys();
+  // The Ask AI panel takes focus; the menu must not hand it back to this button.
+  const isOpeningPanelRef = useRef(false);
 
   return (
     <DropdownMenu>
@@ -43,9 +46,22 @@ export function AiMenuButton({ isBusy, onRun, onAskAi }: AiMenuButtonProps) {
         <Sparkles className={isBusy ? "animate-pulse" : undefined} />
         <span className="hidden sm:inline">AI</span>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-64">
+      <DropdownMenuContent
+        align="end"
+        className="w-64"
+        finalFocus={() => {
+          const shouldRestore = !isOpeningPanelRef.current;
+          isOpeningPanelRef.current = false;
+          return shouldRestore;
+        }}
+      >
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={onAskAi}>
+          <DropdownMenuItem
+            onClick={() => {
+              isOpeningPanelRef.current = true;
+              onAskAi();
+            }}
+          >
             <PenSquare className="text-primary" />
             <span className="flex flex-col">
               <span>Ask AI to write…</span>
