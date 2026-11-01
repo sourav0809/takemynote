@@ -27,11 +27,25 @@ interface InlineAiSession {
   anchorBlockId: string;
 }
 
-/** CSS Custom Highlight name, styled in globals.css. */
+/** CSS Custom Highlight name. */
 const HIGHLIGHT_NAME = "ai-selection";
+const HIGHLIGHT_STYLE_ID = "ai-selection-highlight";
 
 function supportsHighlights(): boolean {
   return typeof CSS !== "undefined" && "highlights" in CSS;
+}
+
+/**
+ * Adds the highlight colour once. It lives here, not in globals.css, because
+ * Next's CSS parser doesn't know `::highlight()` yet: it warns on every build
+ * and adds a solid-blue fallback.
+ */
+function ensureHighlightStyle(): void {
+  if (document.getElementById(HIGHLIGHT_STYLE_ID)) return;
+  const style = document.createElement("style");
+  style.id = HIGHLIGHT_STYLE_ID;
+  style.textContent = `::highlight(${HIGHLIGHT_NAME}) { background-color: color-mix(in oklch, var(--primary) 20%, transparent); }`;
+  document.head.append(style);
 }
 
 /** Keeps the selection visibly marked while focus is in the AI panel. */
@@ -44,6 +58,7 @@ function highlightRange(editor: NoteBlockEditor, from: number, to: number): void
     const range = document.createRange();
     range.setStart(start.node, start.offset);
     range.setEnd(end.node, end.offset);
+    ensureHighlightStyle();
     CSS.highlights.set(HIGHLIGHT_NAME, new Highlight(range));
   } catch {
     // A missing highlight is cosmetic only.

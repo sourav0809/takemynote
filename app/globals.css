@@ -426,18 +426,29 @@ html:has(.landing) body {
   font-weight: 600;
 }
 
-/* The text being edited by Ask AI stays marked while focus is in the AI panel
-   (CSS Custom Highlight, set in hooks/use-inline-ai.ts). */
-::highlight(ai-selection) {
-  background-color: color-mix(in oklch, var(--primary) 20%, transparent);
-}
-
-/* "Ask AI" in the selection toolbar: the app's blue, with a quiet divider. */
+/* "Ask AI" in the selection toolbar: the app's blue. */
 .bn-formatting-toolbar .ask-ai-button {
   color: var(--primary);
   font-weight: 500;
   gap: 0.375rem;
   margin-inline-end: 0.25rem;
+}
+
+/* BlockNote's toolbar tooltips size to their small container and wrap after
+   every word. Keep them on one line: label, then the shortcut, dimmed. */
+.bn-container [data-slot="tooltip-content"] {
+  flex-direction: row;
+  gap: 0.5rem;
+  max-width: none;
+  padding: 0.375rem 0.625rem;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.bn-container [data-slot="tooltip-content"] > span + span {
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  opacity: 0.6;
 }
 
 /* Horizontal scrollers (the formatting toolbar on phones) without a visible bar. */
