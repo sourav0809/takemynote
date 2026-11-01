@@ -1,7 +1,7 @@
 // Turns a generated logo lockup (mark + wordmark on white) into brand assets:
 // transparent lockup (light + dark), the mark alone, and — with --icons — the
 // favicon, app icons and manifest icons.
-// Usage: node scripts/build-brand.mjs page-tn --icons
+// Usage: node scripts/build-brand.mjs bookmark --icons
 
 import { mkdir, writeFile } from "node:fs/promises";
 import sharp from "sharp";
