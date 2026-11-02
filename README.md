@@ -12,6 +12,8 @@ No sign-up needed: notes stay in your browser, and you can share one with a link
 
 [**Open the app**](https://www.takemynote.online) · [Website](https://www.takemynote.online) · [Report a bug](https://github.com/sourav0809/takemynote/issues/new?template=bug_report.yml) · [Request a feature](https://github.com/sourav0809/takemynote/issues/new?template=feature_request.yml)
 
+<a href="https://www.producthunt.com/products/takemynote?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-takemynote" target="_blank" rel="noopener noreferrer"><img alt="TakeMyNote - A calm notebook that works without an account | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1300554&theme=light&t=1793548234546"></a>
+
 [![License: MIT](https://img.shields.io/badge/license-MIT-1d6fb8.svg)](LICENSE)
 [![CI](https://github.com/sourav0809/takemynote/actions/workflows/ci.yml/badge.svg)](https://github.com/sourav0809/takemynote/actions/workflows/ci.yml)
 [![Next.js](https://img.shields.io/badge/Next.js-16-000?logo=nextdotjs)](https://nextjs.org)

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { CtaLink } from "@/components/landing/cta-link";
+import { ProductHuntBadge } from "@/components/landing/product-hunt-badge";
 import { ProductStage } from "@/components/landing/stage/product-stage";
 import { ROUTES } from "@/lib/constants";
 import heroDunes from "./assets/hero-dunes.webp";
@@ -33,9 +34,13 @@ export function LandingHero() {
         <p className="mt-5 max-w-2xl animate-rise text-lg leading-relaxed text-pretty text-muted sm:mt-6 sm:text-xl">
           A calm notebook with AI on tap. No sign‑up, nothing to install.
         </p>
-        <CtaLink href={ROUTES.notes} size="lg" withArrow className="mt-8 animate-rise sm:mt-9">
-          Start writing
-        </CtaLink>
+        {/* Side by side from sm up, so the dunes still sit just under the button. */}
+        <div className="mt-8 flex animate-rise flex-col items-center gap-3 sm:mt-9 sm:flex-row sm:gap-4">
+          <CtaLink href={ROUTES.notes} size="lg" withArrow>
+            Start writing
+          </CtaLink>
+          <ProductHuntBadge />
+        </div>
       </div>
 
       <div className="mx-auto mt-12 max-w-6xl animate-rise px-3 [perspective:1400px] [animation-delay:150ms] sm:mt-14 sm:px-6 lg:mt-16 lg:px-8">
