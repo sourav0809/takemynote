@@ -41,7 +41,7 @@ export default async function SharedNotePage({ params }: Props) {
     );
   }
 
-  const html = await renderNoteHtml(shared.content);
+  const html = renderNoteHtml(shared.content);
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
