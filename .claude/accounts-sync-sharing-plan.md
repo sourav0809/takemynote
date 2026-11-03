@@ -253,7 +253,7 @@ Limits: note ≤ 1 MB, title ≤ 500, category name ≤ 60, 120 pushes/minute pe
 
 ## 9. Public share page (`/s/:token`)
 
-- Server component: looks up an active share, loads the note, renders it to HTML with `@blocknote/server-util` (read-only, same typography as the app). No editor JavaScript is sent.
+- Server component: looks up an active share, loads the note, renders it to HTML with a small block renderer of our own (`lib/server/render-note.ts`; BlockNote's server editor needed jsdom, which crashed on Vercel), read-only, same typography as the app. No editor JavaScript is sent.
 - Shows title, "Updated <date>", the note, and a footer "Made with TakeMyNote · Start writing".
 - Missing, turned off, deleted, or trashed → a friendly "This note isn't available" page (404 status).
 - `noindex` (shared notes are private-by-link, never in Google). Link previews use the note title, the first ~150 characters, and a generated preview image with the title on the TakeMyNote background.

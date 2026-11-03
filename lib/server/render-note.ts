@@ -91,12 +91,12 @@ function plainText(content: unknown): string {
 
 function renderTable(content: unknown): string {
   if (!isObject(content) || !Array.isArray(content.rows)) return "";
-  const table = content as TableContent;
+  const table = content as unknown as TableContent;
   const headerRows = typeof table.headerRows === "number" ? table.headerRows : 0;
   const rows = (table.rows ?? []).map((row, rowIndex) => {
     const tag = rowIndex < headerRows ? "th" : "td";
     const cells = (row.cells ?? []).map((cell) => {
-      const node = Array.isArray(cell) ? { type: "tableCell", content: cell } : (cell as TableCellNode);
+      const node: TableCellNode = Array.isArray(cell) ? { type: "tableCell", content: cell } : (cell as TableCellNode);
       const colspan = Number(node.props?.colspan) > 1 ? ` colspan="${Number(node.props?.colspan)}"` : "";
       const rowspan = Number(node.props?.rowspan) > 1 ? ` rowspan="${Number(node.props?.rowspan)}"` : "";
       return `<${tag}${colspan}${rowspan}>${renderInline(node.content)}</${tag}>`;
@@ -149,7 +149,8 @@ function renderBlock(block: Block): string {
       return renderTable(block.content) + children;
     case "image": {
       const url = str(props.url);
-      if (!url) return children;
+      // Only secure images load on the page (the allow-list drops anything else).
+      if (!url.startsWith("https://")) return children;
       const caption = str(props.caption);
       const img = `<img src="${escapeHtml(url)}" alt="${escapeHtml(caption || str(props.name))}">`;
       return `<figure>${img}${caption ? `<figcaption>${escapeHtml(caption)}</figcaption>` : ""}</figure>${children}`;
@@ -212,7 +213,7 @@ const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
     "figure", "figcaption", "span", "div", "details", "summary",
   ],
   allowedAttributes: {
-    a: ["href", "title"],
+    a: ["href", "title", "rel", "target"],
     img: ["src", "alt", "width"],
     input: ["type", "checked", "disabled"],
     th: ["colspan", "rowspan"],
