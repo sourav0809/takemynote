@@ -1,4 +1,6 @@
 import type { LucideIcon } from "lucide-react";
+
+import type { StepArtKind } from "@/components/landing/how-it-works-art";
 import { Download, FolderOpen, PencilLine, Slash } from "lucide-react";
 
 export const LANDING_SECTION_IDS = {
@@ -27,7 +29,9 @@ export const SLASH_PREVIEW_ITEMS = [
 ];
 
 export interface Step {
+  /** Phones show the icon on a timeline; larger screens show the picture. */
   icon: LucideIcon;
+  art: StepArtKind;
   title: string;
   description: string;
 }
@@ -35,21 +39,25 @@ export interface Step {
 export const STEPS: Step[] = [
   {
     icon: PencilLine,
+    art: "write",
     title: "Open it and write",
     description: "No account and nothing to install. Your first note is one tap away.",
   },
   {
     icon: Slash,
+    art: "slash",
     title: "Type / to format",
     description: "Headings, task lists, quotes and code blocks, without leaving the keyboard.",
   },
   {
     icon: FolderOpen,
+    art: "tidy",
     title: "Keep it tidy",
     description: "Sort notes into categories, pin the important ones and star favourites.",
   },
   {
     icon: Download,
+    art: "backup",
     title: "Back it up",
     description: "Save everything to one backup file, or export a single note as Markdown.",
   },

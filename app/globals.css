@@ -464,6 +464,12 @@ html:has(.landing) body {
   100% { opacity: 1; scale: 1; rotate: 0deg; }
 }
 
+/* The text cursor in the "How it works" pictures. */
+@keyframes caret-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 /* Horizontal scrollers (the formatting toolbar on phones) without a visible bar. */
 @utility no-scrollbar {
   scrollbar-width: none;

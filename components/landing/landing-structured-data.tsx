@@ -18,6 +18,8 @@ const FEATURES = [
  * Structured data (JSON-LD) for search engines: the app itself (free web app
  * with screenshots and features), who makes it, the site, and the FAQ.
  */
+// next-seo uses scriptKey as the script's id, so keys are prefixed: a plain
+// "faq" would share the FAQ section's id and break the "#faq" nav link.
 export function LandingStructuredData() {
   return (
     <>
@@ -34,17 +36,17 @@ export function LandingStructuredData() {
         featureList={FEATURES}
         offers={{ price: 0, priceCurrency: "USD" }}
         author={{ name: AUTHOR.name, url: AUTHOR.url }}
-        scriptKey="software-application"
+        scriptKey="jsonld-software-application"
       />
       <OrganizationJsonLd
         name={APP_NAME}
         url={SITE_URL}
         logo={absoluteUrl("/icons/icon-512.png")}
         sameAs={SOCIAL_PROFILES}
-        scriptKey="organization"
+        scriptKey="jsonld-organization"
       />
       <JsonLdScript
-        scriptKey="website"
+        scriptKey="jsonld-website"
         data={{
           "@context": "https://schema.org",
           "@type": "WebSite",
@@ -56,7 +58,7 @@ export function LandingStructuredData() {
       />
       <FAQJsonLd
         questions={FAQ_ITEMS.map(({ question, answer }) => ({ question, answer }))}
-        scriptKey="faq"
+        scriptKey="jsonld-faq"
       />
     </>
   );

@@ -1,3 +1,4 @@
+import { StepArt } from "@/components/landing/how-it-works-art";
 import { FACTS, LANDING_SECTION_IDS, STEPS } from "@/components/landing/landing-content";
 import { SectionHeading } from "@/components/landing/section-heading";
 import { cn } from "@/lib/utils";
@@ -16,7 +17,7 @@ export function HowItWorksSection() {
 
       {/* Phones: a compact numbered timeline. sm and up: one card per step. */}
       <ol className="reveal mt-8 grid grid-cols-1 sm:mt-14 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4 lg:gap-5">
-        {STEPS.map(({ icon: Icon, title, description }, index) => (
+        {STEPS.map(({ icon: Icon, art, title, description }, index) => (
           <li
             key={title}
             className={cn(
@@ -34,10 +35,8 @@ export function HowItWorksSection() {
               )}
             </span>
 
-            <div className="hidden h-28 items-center justify-center rounded-[20px] bg-sunken sm:flex">
-              <span className="flex size-11 items-center justify-center rounded-2xl border border-line bg-surface shadow-card">
-                <Icon aria-hidden className="size-5 text-ink-soft" />
-              </span>
+            <div className="hidden h-36 items-center justify-center overflow-hidden rounded-[20px] bg-sunken sm:flex">
+              <StepArt kind={art} />
             </div>
             <div className="pt-1 sm:px-4 sm:pt-5 sm:pb-4">
               <span className="font-mono text-[13px] text-accent-edge">
